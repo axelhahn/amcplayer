@@ -1,0 +1,15 @@
+-------------------------------------------------------------------------------
+
+	AMC 
+	Axels multi channel player
+
+	This is a webbased HTML5 player.
+	It's focus is the handling of media in stereo and surround for a title.
+
+-------------------------------------------------------------------------------
+
+	project home: http://sourceforge.net/p/amcplayer/
+	docs: https://www.axel-hahn.de/docs/amcplayer/index.htm
+	      or see ./example/example1.html
+
+	licence: GNU GPL

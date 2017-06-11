@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Demo AMC Player 1 </title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+		
+        <link rel="stylesheet" type="text/css" href="example.css" />
+        <link rel="stylesheet" type="text/css" href="../mcplayer.min.css" media="screen" />
+        
+    </head>
+    <body>
+        <h1>Demo AMC Player :: first steps</h1>
+        <nav>
+            <a href="example1.html" class="active">Get started</a>
+            <a href="example2.html">API</a>
+            <a href="example3.html">Skins</a>
+            <a href="example4.html">Language</a>
+        </nav>
+
+        <!-- ************************************************************** -->
+        
+        <h2>Preparation</h2>
+        <p>
+			How to run the player?<br />
+			In your html document you need to add a css file in the header and 
+			a javascript at the end.<br />
+                        After loading the player javascript file you can init the player.<br>
+			<br>
+                        <strong>Remark</strong>: for all CSS and JS files exist original sources and
+                        minified versions as well. All examples use the minified files.<br>
+        </p>
+        <h3>Html preview</h3>
+        <pre>
+&lt;head>
+  (...)
+  &lt;link rel="stylesheet" type="text/css" href="../<strong>mcplayer.min.css</strong>" media="screen" />
+&lt;/head>
+&lt;body>
+
+  (...)
+  
+  &lt;script src="../<strong>mcplayer.min.js</strong>">&lt;/script>
+
+  &lt;!-- initialize the player -->
+  &lt;script>
+    <strong>var oMcPlayer=new mcPlayer();</strong>
+    <strong>oMcPlayer.init();</strong>
+  &lt;/script>
+
+&lt;/body>
+</pre>
+        
+		
+        <!-- ************************************************************** -->
+        
+        <h2>Add audios</h2>
+		<p>
+			The song must exist in stereo and surround in 2 formats for both
+			channel types.
+        </p>
+        <h3>Html preview</h3>
+<pre>
+&lt;audio loop="loop"
+	controls="controls"
+	preload="none"
+	title="<strong>[Title]</strong>"
+	>
+	
+	&lt;!-- stereo sources -->
+	&lt;source src="<strong>[song-in-stereo].ogg</strong>" type="audio/ogg" data-ch="2.0" title="2.0" />
+	&lt;source src="<strong>[song-in-stereo].mp3</strong>" type="audio/mp3" data-ch="2.0" title="2.0" />
+
+	&lt;!-- surround sources -->
+	&lt;source src="<strong>[song-in-5.1-surround].m4a</strong>" type="audio/mp4" data-ch="5.1" title="5.1" />
+	&lt;source src="<strong>[song-in-5.1-surround].ogg</strong>" type="audio/ogg" data-ch="5.1" title="5.1" />
+
+	&lt;!-- for fallback add a flashplayer here -->
+
+&lt;/audio>
+</pre>	
+        <!-- ************************************************************** -->
+        
+        <h2>Example audios</h2>
+		<p>
+			The following audios are linked to my website www.axel-hahn.de 
+			They are free for non commercial usage (license: cc 3.0 - by-nc-sa).<br>
+			<a href="https://www.axel-hahn.de/music/axels-songs/" target="_blank">Axels songs</a>
+        </p>
+			<div style="clear: left; padding: 0.5em 1em;">
+				<audio loop="loop"
+					controls="controls"
+					preload="none"
+					title="Ticker"
+					>
+					
+					<!-- stereo sources -->
+					<source src="https://www.axel-hahn.de/axel/download/ticker_2.0_.ogg" type="audio/ogg" data-ch="2.0" title="2.0" />
+					<source src="https://www.axel-hahn.de/axel/download/ticker_2.0_.mp3" type="audio/mp3" data-ch="2.0" title="2.0" />
+
+					<!-- surround sources -->
+					<source src="https://www.axel-hahn.de/axel/download/ticker_5.1_.m4a" type="audio/mp4" data-ch="5.1" title="5.1" />
+					<source src="https://www.axel-hahn.de/axel/download/ticker_5.1_.ogg" type="audio/ogg" data-ch="5.1" title="5.1" />
+
+					<!-- for fallback add a flashplayer here -->
+
+				</audio>
+				Ticker
+			</div>
+			
+			<div style="clear: left; padding: 0.5em 1em;">
+				<audio loop="loop"
+					controls="controls"
+					preload="none"
+					title="Let's Play"
+					>
+					
+					<!-- stereo sources -->
+					<source src="https://www.axel-hahn.de/axel/download/lets-play_2.0_.ogg" type="audio/ogg" data-ch="2.0" title="2.0" />
+					<source src="https://www.axel-hahn.de/axel/download/lets-play_2.0_.mp3" type="audio/mp3" data-ch="2.0" title="2.0" />
+
+					<!-- surround sources -->
+					<source src="https://www.axel-hahn.de/axel/download/lets-play_5.1_.m4a" type="audio/mp4" data-ch="5.1" title="5.1" />
+					<source src="https://www.axel-hahn.de/axel/download/lets-play_5.1_.ogg" type="audio/ogg" data-ch="5.1" title="5.1" />
+
+					<!-- for fallback add a flashplayer here -->
+
+				</audio>
+				Let's Play 
+			</div>
+			
+			
+			<div style="clear: left; padding: 0.5em 1em;">
+				<audio loop="loop"
+					controls="controls"
+					preload="none"
+					title="Lift Control"
+					>
+					
+					<!-- stereo sources -->
+					<source src="https://www.axel-hahn.de/axel/download/lift-control_2.0_.ogg" type="audio/ogg" data-ch="2.0" title="2.0" />
+					<source src="https://www.axel-hahn.de/axel/download/lift-control_2.0_.mp3" type="audio/mp3" data-ch="2.0" title="2.0" />
+
+					<!-- surround sources -->
+					<source src="https://www.axel-hahn.de/axel/download/lift-control_5.1_.m4a" type="audio/mp4" data-ch="5.1" title="5.1" />
+					<source src="https://www.axel-hahn.de/axel/download/lift-control_5.1_.ogg" type="audio/ogg" data-ch="5.1" title="5.1" />
+
+					<!-- for fallback add a flashplayer here -->
+
+				</audio>
+				Lift Control
+			</div>
+			
+			<div style="clear: left; padding: 0.5em 1em;">
+				<audio loop="loop"
+					controls="controls"
+					preload="none"
+					title="November"
+					>
+					
+					<!-- stereo sources -->
+					<source src="https://www.axel-hahn.de/axel/download/november_2.0_.ogg" type="audio/ogg" data-ch="2.0" title="2.0" />
+					<source src="https://www.axel-hahn.de/axel/download/november_2.0_.mp3" type="audio/mp3" data-ch="2.0" title="2.0" />
+
+					<!-- surround sources -->
+					<source src="https://www.axel-hahn.de/axel/download/november_5.1_.m4a" type="audio/mp4" data-ch="5.1" title="5.1" />
+					<source src="https://www.axel-hahn.de/axel/download/november_5.1_.ogg" type="audio/ogg" data-ch="5.1" title="5.1" />
+
+					<!-- for fallback add a flashplayer here -->
+
+				</audio>
+				November
+			</div>
+			
+			<div style="clear: left; padding: 0.5em 1em;">
+				<audio loop="loop"
+					controls="controls"
+					preload="none"
+					title="Give me a BIT more"
+					>
+					
+					<!-- stereo sources -->
+					<source src="https://www.axel-hahn.de/axel/download/gimme-a-bit-more_2.0_.ogg" type="audio/ogg" data-ch="2.0" title="2.0" />
+					<source src="https://www.axel-hahn.de/axel/download/gimme-a-bit-more_2.0_.mp3" type="audio/mp3" data-ch="2.0" title="2.0" />
+
+					<!-- surround sources -->
+					<source src="https://www.axel-hahn.de/axel/download/gimme-a-bit-more_5.1_.m4a" type="audio/mp4" data-ch="5.1" title="5.1" />
+					<source src="https://www.axel-hahn.de/axel/download/gimme-a-bit-more_5.1_.ogg" type="audio/ogg" data-ch="5.1" title="5.1" />
+
+					<!-- for fallback add a flashplayer here -->
+
+				</audio>
+				Give me a BIT more
+			</div>
+			
+        
+        <!-- ************************************************************** -->
+        
+
+        
+		<script src="../mcplayer.min.js"></script>
+                <script>
+                    var oMcPlayer=new mcPlayer();
+                    oMcPlayer.init();
+                </script>
+
+		<br /><br /><br /><br />
+        <hr>
+        DOCS: <a href="https://www.axel-hahn.de/docs/amcplayer/index.htm" target="_blank">https://www.axel-hahn.de/docs/amcplayer/index.htm</a>        
+    </body>
+</html>

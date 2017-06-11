@@ -1,0 +1,56 @@
+/*
+
+  amc player SKIN :: BOTTOMBAR
+
+*/
+
+#mcpwrapper{
+    left:0;
+    bottom:0;
+    width: 100%;
+    padding:0;
+}
+#mcpwrapper>.mcpbox{
+    background: linear-gradient(to bottom, #dca,#a86);
+    display: none;
+}
+#mcplayer{
+    margin:0.5em;
+}
+#mcpprogressdiv{clear: none; float: left; margin-left: 1em; position: relative; left: 0;}
+#mcpprogresscanvas{height: 1.5em; width: 400px;}
+
+#mcpvolumediv{clear: none; float: left; margin-left: 1em; }
+#mcpvolumecanvas{height: 1.5em;}
+#mcpchannels{clear: none; float: left; margin: 0 2em 0 2em; }
+#mcptime{float: left; display: block; position: relative; right: 0; top: 0.5em; margin-left: 1em;}
+#mcpoptions{margin-right: 1em;}
+
+#mcplayer a{padding:0.3em;}
+
+#mcpdownloads, #mcpplaylist{bottom: 4em;}
+/*
+#mcplayer a, #mcpabout a, #mcpdownloads a, #mcpplaylist a{color: #486;}
+#mcplayer a,#mcptime{color: #a86;}
+    
+#mcplayer .active a,
+#mcplayer a.active,
+#mcpplaylist li.active a{
+    background: linear-gradient(to bottom, #8ca, #6a8);
+    color:#fff;
+}
+
+
+#mcpvolumecanvas,
+#mcpprogresscanvas{
+    background: linear-gradient(to bottom, #dca, #edb, #dca);
+}
+
+#mcpmaximize{background: #a86; color:#fff;}
+.mcpsystembutton{
+    background: #a86;
+}
+.mcpsystembutton>a{color:#fff !important;}
+.songbtnactive{
+}
+*/

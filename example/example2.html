@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Demo AMC Player 2</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link rel="stylesheet" type="text/css" href="example.css" />
+        <link rel="stylesheet" type="text/css" href="../mcplayer.min.css" media="screen" />
+        
+    </head>
+    <body>
+        <h1>Demo AMC Player :: API</h1>
+        <nav>
+            <a href="example1.html">Get started</a>
+            <a href="example2.html" class="active">API</a>
+            <a href="example3.html">Skins</a>
+            <a href="example4.html">Language</a>
+        </nav>
+
+        <!-- ************************************************************** -->
+
+        <h2>Example audios</h2>
+        <p>
+            The following audios are linked to my website https://www.axel-hahn.de 
+            They are free for non commercial usage (license: cc 3.0 - by-nc-sa).
+            This is the same set like in the introction.<br>
+            <a href="https://www.axel-hahn.de/music/axels-songs/" target="_blank">Axels songs</a>
+        </p>
+        <div style="clear: left; padding: 0.5em 1em;">
+            <audio loop="loop"
+                   controls="controls"
+                   preload="none"
+                   title="Ticker"
+                   >
+
+                <!-- stereo sources -->
+                <source src="https://www.axel-hahn.de/axel/download/ticker_2.0_.ogg" type="audio/ogg" data-ch="2.0" title="2.0" />
+                <source src="https://www.axel-hahn.de/axel/download/ticker_2.0_.mp3" type="audio/mp3" data-ch="2.0" title="2.0" />
+
+                <!-- surround sources -->
+                <source src="https://www.axel-hahn.de/axel/download/ticker_5.1_.m4a" type="audio/mp4" data-ch="5.1" title="5.1" />
+                <source src="https://www.axel-hahn.de/axel/download/ticker_5.1_.ogg" type="audio/ogg" data-ch="5.1" title="5.1" />
+
+                <!-- for fallback add a flashplayer here -->
+
+            </audio>
+            Ticker
+        </div>
+
+        <div style="clear: left; padding: 0.5em 1em;">
+            <audio loop="loop"
+                   controls="controls"
+                   preload="none"
+                   title="Let's Play"
+                   >
+
+                <!-- stereo sources -->
+                <source src="https://www.axel-hahn.de/axel/download/lets-play_2.0_.ogg" type="audio/ogg" data-ch="2.0" title="2.0" />
+                <source src="https://www.axel-hahn.de/axel/download/lets-play_2.0_.mp3" type="audio/mp3" data-ch="2.0" title="2.0" />
+
+                <!-- surround sources -->
+                <source src="https://www.axel-hahn.de/axel/download/lets-play_5.1_.m4a" type="audio/mp4" data-ch="5.1" title="5.1" />
+                <source src="https://www.axel-hahn.de/axel/download/lets-play_5.1_.ogg" type="audio/ogg" data-ch="5.1" title="5.1" />
+
+                <!-- for fallback add a flashplayer here -->
+
+            </audio>
+            Let's Play 
+        </div>
+
+
+        <div style="clear: left; padding: 0.5em 1em;">
+            <audio loop="loop"
+                   controls="controls"
+                   preload="none"
+                   title="Lift Control"
+                   >
+
+                <!-- stereo sources -->
+                <source src="https://www.axel-hahn.de/axel/download/lift-control_2.0_.ogg" type="audio/ogg" data-ch="2.0" title="2.0" />
+                <source src="https://www.axel-hahn.de/axel/download/lift-control_2.0_.mp3" type="audio/mp3" data-ch="2.0" title="2.0" />
+
+                <!-- surround sources -->
+                <source src="https://www.axel-hahn.de/axel/download/lift-control_5.1_.m4a" type="audio/mp4" data-ch="5.1" title="5.1" />
+                <source src="https://www.axel-hahn.de/axel/download/lift-control_5.1_.ogg" type="audio/ogg" data-ch="5.1" title="5.1" />
+
+                <!-- for fallback add a flashplayer here -->
+
+            </audio>
+            Lift Control
+        </div>
+
+        <div style="clear: left; padding: 0.5em 1em;">
+            <audio loop="loop"
+                   controls="controls"
+                   preload="none"
+                   title="November"
+                   >
+
+                <!-- stereo sources -->
+                <source src="https://www.axel-hahn.de/axel/download/november_2.0_.ogg" type="audio/ogg" data-ch="2.0" title="2.0" />
+                <source src="https://www.axel-hahn.de/axel/download/november_2.0_.mp3" type="audio/mp3" data-ch="2.0" title="2.0" />
+
+                <!-- surround sources -->
+                <source src="https://www.axel-hahn.de/axel/download/november_5.1_.m4a" type="audio/mp4" data-ch="5.1" title="5.1" />
+                <source src="https://www.axel-hahn.de/axel/download/november_5.1_.ogg" type="audio/ogg" data-ch="5.1" title="5.1" />
+
+                <!-- for fallback add a flashplayer here -->
+
+            </audio>
+            November
+        </div>
+
+        <div style="clear: left; padding: 0.5em 1em;">
+            <audio loop="loop"
+                   controls="controls"
+                   preload="none"
+                   title="Give me a BIT more"
+                   >
+
+                <!-- stereo sources -->
+                <source src="https://www.axel-hahn.de/axel/download/gimme-a-bit-more_2.0_.ogg" type="audio/ogg" data-ch="2.0" title="2.0" />
+                <source src="https://www.axel-hahn.de/axel/download/gimme-a-bit-more_2.0_.mp3" type="audio/mp3" data-ch="2.0" title="2.0" />
+
+                <!-- surround sources -->
+                <source src="https://www.axel-hahn.de/axel/download/gimme-a-bit-more_5.1_.m4a" type="audio/mp4" data-ch="5.1" title="5.1" />
+                <source src="https://www.axel-hahn.de/axel/download/gimme-a-bit-more_5.1_.ogg" type="audio/ogg" data-ch="5.1" title="5.1" />
+
+                <!-- for fallback add a flashplayer here -->
+
+            </audio>
+            Give me a BIT more
+        </div>
+
+        <!-- ************************************************************** -->
+
+        <h2>Player Actions</h2>
+
+        <p>
+            Play a song based on a number:<br>
+            <button onclick="oMcPlayer.setSong(0)">oMcPlayer.setSong(0)</button>
+            <button onclick="oMcPlayer.setSong(1)">oMcPlayer.setSong(1)</button>
+            <button onclick="oMcPlayer.setSong(2)">oMcPlayer.setSong(2)</button>
+            <button onclick="oMcPlayer.setSong(3)">oMcPlayer.setSong(3)</button>
+            <button onclick="oMcPlayer.setSong(4)">oMcPlayer.setSong(4)</button>
+            <br>
+            <br>
+            Navigate to previous/ next song<br>
+            <button onclick="oMcPlayer.setPreviousSong()">oMcPlayer.setPreviousSong()</button>
+            <button onclick="oMcPlayer.setNextSong()">oMcPlayer.setNextSong()</button>
+            <br>
+            <br>
+            player actions play/ pause/ stop/ ...<br>
+            <button onclick="oMcPlayer.playeraction('play')">oMcPlayer.playeraction('play')</button>
+            <button onclick="oMcPlayer.playeraction('pause')">oMcPlayer.playeraction('pause')</button>
+            <button onclick="oMcPlayer.playeraction('stop')">oMcPlayer.playeraction('stop')</button>
+            <button onclick="oMcPlayer.playeraction('backward')">oMcPlayer.playeraction('backward')</button>
+            <button onclick="oMcPlayer.playeraction('forward')">oMcPlayer.playeraction('forward')</button>
+            <br>
+            <br>
+            set a postion (a float value in sec; must be lower duration)<br>
+            <button onclick="oMcPlayer.setAudioPosition(0);">oMcPlayer.setAudioPosition(0)</button>
+            <button onclick="oMcPlayer.setAudioPosition(60);">oMcPlayer.setAudioPosition(60)</button>
+            <button onclick="oMcPlayer.setAudioPosition(180.33);">oMcPlayer.setAudioPosition(180.33)</button>
+            <br>
+            <br>
+            set channel (see getAllChannels() to get available arguments)<br>
+            <button onclick="oMcPlayer.setChannel('2.0');">oMcPlayer.setChannel('2.0')</button>
+            <button onclick="oMcPlayer.setChannel('5.1');">oMcPlayer.setChannel('5.1')</button>
+            <br>
+            <br>
+            <br>
+            playing option repeat playlist<br>
+            <button onclick="oMcPlayer.enableRepeat()">oMcPlayer.enableRepeat()</button>
+            <button onclick="oMcPlayer.disableRepeat()">oMcPlayer.disableRepeat()</button>
+            <button onclick="oMcPlayer.toggleRepeat()">oMcPlayer.toggleRepeat()</button>
+            <br>
+            <br>
+            playing option shuffle playlist; see tasble below to see playlist order<br>
+            <button onclick="oMcPlayer.enableShuffle()">oMcPlayer.enableShuffle()</button>
+            <button onclick="oMcPlayer.disableShuffle()">oMcPlayer.disableShuffle()</button>
+            <button onclick="oMcPlayer.toggleShuffle()">oMcPlayer.toggleShuffle()</button>
+
+        </p>
+
+        <h2>Volume</h2>
+
+        <p>
+            The volume is a float value 0..1<br>
+            <button onclick="oMcPlayer.setVolume(0)">oMcPlayer.setVolume(0)</button>
+            <button onclick="oMcPlayer.setVolume(0.25)">oMcPlayer.setVolume(0.25)</button>
+            <button onclick="oMcPlayer.setVolume(0.5)">oMcPlayer.setVolume(0.5)</button>
+            <button onclick="oMcPlayer.setVolume(0.75)">oMcPlayer.setVolume(0.75)</button>
+            <button onclick="oMcPlayer.setVolume(1)">oMcPlayer.setVolume(1)</button>
+        </p>
+
+
+        <h2>Windows</h2>
+
+        <p>
+            min/ max player window<br>
+            <button onclick="oMcPlayer.maximize()">oMcPlayer.maximize()</button>
+            <button onclick="oMcPlayer.minimize()">oMcPlayer.minimize()</button>
+            <br>
+            <br>
+            <button onclick="oMcPlayer.maximizeBox('about')">oMcPlayer.maximizeBox('about')</button>
+            <button onclick="oMcPlayer.minimizeBox('about')">oMcPlayer.minimizeBox('about')</button>
+            <button onclick="oMcPlayer.toggleBoxAndButton('about')">oMcPlayer.toggleBoxAndButton('about')</button>
+            <br>
+            <button onclick="oMcPlayer.maximizeBox('playlist')">oMcPlayer.maximizeBox('playlist')</button>
+            <button onclick="oMcPlayer.minimizeBox('playlist')">oMcPlayer.minimizeBox('playlist')</button>
+            <button onclick="oMcPlayer.toggleBoxAndButton('playlist')">oMcPlayer.toggleBoxAndButton('playlist')</button>
+            <br>
+            <button onclick="oMcPlayer.maximizeBox('download')">oMcPlayer.maximizeBox('download')</button>
+            <button onclick="oMcPlayer.minimizeBox('download')">oMcPlayer.minimizeBox('download')</button>
+            <button onclick="oMcPlayer.toggleBoxAndButton('download')">oMcPlayer.toggleBoxAndButton('download')</button>
+        </p>
+
+        <h2>Infos</h2>
+        <p>
+            These are realtime infos you can fetch with different getter methods.
+        </p>
+        <table>
+            <tr>
+                <th>item</th>
+                <th>method</th>
+                <th>type</th>
+                <th>response</th>
+            </tr>
+            <tr>
+                <td>Order of songs to play (if shuffled)</td>
+                <td>getPlayorder()</td>
+                <td>array</td>
+                <td><span id="spanPlayorder" class="val-array">...</span></td>
+            </tr>
+            <tr>
+                <td>number of the currently active song in the playlist (if shuffled)</td>
+                <td>getPlaylistId()</td>
+                <td>integer</td>
+                <td><span id="spanPlaylistId" class="val-integer">...</span></td>
+            </tr>
+            <tr>
+                <td>Id of current song; starting with 0</td>
+                <td>getSongId()</td>
+                <td>integer</td>
+                <td><span id="spanCurrentsong" class="val-integer">...</span></td>
+            </tr>
+            <tr>
+                <td>Title of the current song</td>
+                <td>getSongTitle()</td>
+                <td>string</td>
+                <td><span id="spanCurrenttitle" class="val-string">...</span></td>
+            </tr>
+            <tr>
+                <td>Position in the audio; value is in sec</td>
+                <td>getAudioPosition()</td>
+                <td>float</td>
+                <td><span id="spanAudiopos" class="val-float">...</span></td>
+            </tr>
+            <tr>
+                <td>Duration of the audio; value is in sec</td>
+                <td>getAudioDuration()</td>
+                <td>float</td>
+                <td><span id="spanAudioduration" class="val-float">...</span></td>
+            </tr>
+            <tr>
+                <td>get all available Channels of the current song</td>
+                <td>getAllAudioChannels()</td>
+                <td>array</td>
+                <td><span id="spanAllAudiochannels" class="val-array">...</span></td>
+            </tr>
+            <tr>
+                <td>Currently used channels</td>
+                <td>getAudioChannels()</td>
+                <td>string</td>
+                <td><span id="spanAudiochannels" class="val-string">...</span></td>
+            </tr>
+            <tr>
+                <td>Source file; url of the current audio</td>
+                <td>getAudioSrc()</td>
+                <td>string</td>
+                <td><span id="spanAudiosrc" class="val-string">...</span></td>
+            </tr>
+            <tr>
+                <td>is playing</td>
+                <td>isPlaying()</td>
+                <td>boolean</td>
+                <td><span id="spanIsPlaying" class="val-bool">...</span></td>
+            </tr>
+            <tr>
+                <td>is paused</td>
+                <td>isPaused()</td>
+                <td>boolean</td>
+                <td><span id="spanIsPaused" class="val-bool">...</span></td>
+            </tr>
+            <tr>
+                <td>is stopped</td>
+                <td>isStopped()</td>
+                <td>boolean</td>
+                <td><span id="spanIsStopped" class="val-bool">...</span></td>
+            </tr>
+            <tr>
+                <td>Get volume (value 0..1)</td>
+                <td>getVolume()</td>
+                <td>float</td>
+                <td><span id="spanCurrentvolume" class="val-float">...</span></td>
+            </tr>
+            <tr>
+                <td>is muted</td>
+                <td>isMuted()</td>
+                <td>boolean</td>
+                <td><span id="spanIsMuted" class="val-bool">...</span></td>
+            </tr>
+            <tr>
+                <td>current song</td>
+                <td>getSong()</td>
+                <td>hash</td>
+                <td><span id="spanSong" class="val-hash">...</span></td>
+            </tr>
+            <tr>
+                <td>Playlist</td>
+                <td>getPlaylist()</td>
+                <td>hash</td>
+                <td><span id="spanPlaylist" class="val-hash">...</span></td>
+            </tr>
+        </table>
+
+        <script src="../mcplayer.js"></script>
+        <script>
+                // show player
+                var oMcPlayer = new mcPlayer();
+                oMcPlayer.init();
+
+                function updateInfos() {
+                    try {
+                        document.getElementById("spanPlayorder").innerHTML = '<pre>[' + oMcPlayer.getPlayorder().toString() + ']</pre>';
+                        document.getElementById("spanPlaylistId").innerHTML = oMcPlayer.getPlaylistId();
+                        document.getElementById("spanCurrentsong").innerHTML = oMcPlayer.getSongId();
+                        document.getElementById("spanCurrenttitle").innerHTML = oMcPlayer.getSongTitle();
+                        document.getElementById("spanSong").innerHTML = '<pre>' + JSON.stringify(oMcPlayer.getSong(), null, '  ') + '</pre>';
+                        document.getElementById("spanIsPlaying").innerHTML = oMcPlayer.isPlaying();
+                        document.getElementById("spanIsPaused").innerHTML = oMcPlayer.isPaused();
+                        document.getElementById("spanIsStopped").innerHTML = oMcPlayer.isStopped();
+                        document.getElementById("spanIsMuted").innerHTML = oMcPlayer.isMuted();
+                        document.getElementById("spanCurrentvolume").innerHTML = oMcPlayer.getVolume();
+                        document.getElementById("spanAudiopos").innerHTML = oMcPlayer.getAudioPosition();
+                        document.getElementById("spanAudioduration").innerHTML = oMcPlayer.getAudioDuration();
+                        document.getElementById("spanAudiochannels").innerHTML = oMcPlayer.getAudioChannels();
+                        document.getElementById("spanAllAudiochannels").innerHTML = '<pre>[' + oMcPlayer.getAllAudioChannels().toString() + ']</pre>';
+                        document.getElementById("spanAudiosrc").innerHTML = oMcPlayer.getAudioSrc();
+                        document.getElementById("spanPlaylist").innerHTML = '<pre>' + JSON.stringify(oMcPlayer.getPlaylist(), null, '  ') + '</pre>';
+                    } catch (e) {
+                        // 
+                    }
+                    window.setTimeout("updateInfos();", 100);
+                }
+                updateInfos();
+
+        </script>
+
+        <br /><br /><br /><br />
+        <hr>
+        DOCS: <a href="https://www.axel-hahn.de/docs/amcplayer/index.htm" target="_blank">https://www.axel-hahn.de/docs/amcplayer/index.htm</a>        
+    </body>
+</html>

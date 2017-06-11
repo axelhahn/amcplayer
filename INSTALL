@@ -1,0 +1,121 @@
+--------------------------------------------------------------------------------
+
+	INSTALL
+	Axels Multi Channel Player
+	
+	GNU GPL v 3.0
+
+        project home: http://sourceforge.net/p/amcplayer/
+        docs: https://www.axel-hahn.de/docs/amcplayer/index.htm
+--------------------------------------------------------------------------------
+
+
+ABOUT
+  Javascript based audioplayer. It uses html 5 audio tag to play media.
+  Its focus is to play audios with different channels: I have songs
+  in stereo (2.0) and surround (5.1). I wrote this player to switch
+  between stereo- and sourround media.
+
+  
+LICENSE
+  GNU GPL v 3.0
+
+
+STATUS
+  It is still BETA. The basic player works well but I need to fix issues,
+  add functionality and need to write documentation. 
+
+
+DOWNLOAD
+  download package from http://sourceforge.net/projects/amcplayer/
+  Extract all files below a webroot in any subdirectory, i.e.
+  [webroot]/javascript
+
+  OR 
+
+  check it out
+
+    cd [webroot-directory]/javascript
+    svn checkout svn://svn.code.sf.net/p/amcplayer/code/trunk amcplayer
+
+
+EMBED PLAYER IN YOUR WEBSITE
+
+  to your webserver copy:
+    - mcplayer.min.css
+    - mcplayer.min.js
+    - mcplayer_icons.ttf (loaded in mcplayer.min.css)
+	
+  in your html page:
+    - load the css in the header
+    - load the javascript at the end of the document
+
+  example:
+
+  <!doctype html>
+  <html>
+  <head>
+
+    (...)
+    <link rel="stylesheet" type="text/css" 
+	  href="/javascript/mcplayer/mcplayer.min.css" media="screen" />		
+    (...)
+	
+  </head>
+  <body>
+
+    (...)
+    (your audio tags - see below)
+    (...)
+	
+    <script type="text/javascript" 
+	  src="/javascript/mcplayer/mcplayer.min.js"></script>
+  </body>
+  </html>
+
+  remark: 
+  It describes how to make the beta work. It is not the final way.
+
+
+AUDIOS
+
+  The player detects all audio tags in a html document and builds a playlist.
+  
+  What you should know: Different webbrowsers can handle different file 
+  formats. All modern webbrowsers can play stereo audios (mp3 or ogg).
+  Surround audios are not possible to play in Firefox and Opera; it plays in 
+  Internet Explorer 9 and Chrome (1).
+  
+  I suggest to add stereo and surround audio sources into a single audio tag.
+  Use the title (2) tag to define the number of channels.
+  I suggest to use encoded sounds
+    - for stereo playback: OGG and MP3 
+	- for surround: OGG and M4A (Mpeg 4 Audio; = AAC)
+  
+  1) related sources (German only)
+  http://www.axel-hahn.de/blog/2012/05/14/html5-audio-und-surround-sound/
+  http://www.axel-hahn.de/demos/html5-audio/tester-audio-formats.php
+  
+  2) The data-NN attribute unfortunatly cannot be handled in the Internet 
+  Explorer 9. That's why I decided to use the title tag
+
+  
+  Use attribut preload="none" in your audio tag - otherwise a browser tries 
+  to prefetch all files of your songs in your page.
+
+  
+  example:
+
+  <audio loop="loop" 
+    controls="controls"
+    preload="none"
+    title="My nice Song"
+    >
+    <source src="/download/song_2.0_.ogg" type="audio/ogg" data-ch="2.0" title="2.0" />
+    <source src="/download/song_2.0_.mp3" type="audio/mp3" data-ch="2.0" title="2.0" />
+    <source src="/download/song_5.1_.m4a" type="audio/mp4" data-ch="5.1" title="5.1" />
+    <source src="/download/song_5.1_.ogg" type="audio/ogg" data-ch="5.1" title="5.1" />
+  </audio>
+	
+	
+--------------------------------------------------------------------------------

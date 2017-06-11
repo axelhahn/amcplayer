@@ -1,0 +1,26 @@
+body{background:#fff; border: 1px solid #eee; box-shadow: 0 0 3em #ccc; color:#444; font-family:"arial"; margin: 2em 10% 10em; padding: 1em;}
+a{color:#339;}
+button{background:#f8f8f8; border-radius: 0.3em; border: 1px solid #ccc; padding: 1em;}
+form{ border: 2px dashed #ccc; margin: 2em 0; padding: 1em;}
+form:after{content: 'form' ; float: right; margin-top: 1.5em; background: #eee; padding: 0.5em 1em;}
+h1{margin: 0; color:#569; color:#78b;font-size: 250%;}
+h2{margin: 3em 0 2em; color:#569;}
+hr{border: none; border-top: 2px solid #abc;}
+nav{background: #e0e8f8; background: linear-gradient(#fff, #e0e8f8); padding: 0.5em}
+nav a{text-decoration: none; border: 0px solid #e0e8f0; color:#67a ;padding: 0.5em;}
+nav a.active{background: #fff; border-top: 2px solid #fc3; }
+nav a:hover{text-decoration: underline;}
+pre{ background:#eee; padding: 1em;}
+pre strong{ background:#fc3; color:#000; }
+
+p.info{background: #fff4e0; border-left: 3px dotted; color: #a98; font-size: 105%; padding: 1em; margin: 0;}
+
+th{background:#c0c8d8; text-align: left; padding: 1em;}
+td{vertical-align: top;}
+
+.val-array{color:#088;}
+.val-bool{background:#fef; color:#808; padding: 0 0.5em;}
+.val-float{background:#eff; color:#088; padding: 0 0.5em;}
+.val-hash{color:#408;}
+.val-integer{background:#efe; color:#0a0; padding: 0 0.5em;}
+.val-string{background:#eef; color:#00f; padding: 0 0.5em;} .val-string:before{content: '"';}.val-string:after{content: '"';}

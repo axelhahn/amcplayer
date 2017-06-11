@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Demo AMC Player 3</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link rel="stylesheet" type="text/css" href="example.css" />
+        <!--
+        <link rel="stylesheet" type="text/css" href="../mcplayer.min.css" media="screen" />
+        -->
+        <script src="functions.js"></script>
+
+    </head>
+    <body>
+        <div id="morehead">
+            
+        </div>
+        <h1>Demo AMC Player :: Look and feel</h1>
+        <nav>
+            <a href="example1.html">Get started</a>
+            <a href="example2.html">API</a>
+            <a href="example3.html" class="active">Skins</a>
+            <a href="example4.html">Language</a>
+        </nav>
+
+        <!-- ************************************************************** -->
+
+        <h2>Player Color</h2>
+        <p>
+            With the shipped CSS you get a default skin.<br>
+            You can create custom skins with overriding the CSS elements.
+            To give you an entry point you can have a look to the css files in
+            the <strong>skins</strong> directory.<br>
+            <br>
+            Click, to activate:<br>
+        </p>
+        
+        
+        
+        <form>
+            Color set:
+            <select id="selColor" onchange="changeTheme();">
+                <option value="">Default</option>
+                <option value="lightgreen">light green</option>
+                <option value="lightbrown">light brown</option>
+                <option value="lightviolet">light violet</option>
+                <option value="darkgray">dark gray</option>
+            </select>
+            Type:
+            <select id="selType" onchange="changeTheme();">
+                <option value="">Default</option>
+                <option value="bottombar">Bottom side</option>
+            </select>
+        </form>
+        
+        <h3>Html preview</h3>
+        <pre>
+        &lt;head>
+            (...)
+            &lt;link rel="stylesheet" type="text/css" href="mcplayer.min.css" media="screen" />
+            <span id="cssmore">(...)</span>
+        &lt;/head>
+        </pre>
+
+        <!-- ************************************************************** -->
+
+        <h2>Example audios</h2>
+        <p>
+            The following audios are linked to my website https://www.axel-hahn.de 
+            They are free for non commercial usage (license: cc 3.0 - by-nc-sa).
+            This is the same set like in the introction.<br>
+            <a href="https://www.axel-hahn.de/music/axels-songs/" target="_blank">Axels songs</a>
+        </p>
+        <div style="clear: left; padding: 0.5em 1em;">
+            <audio loop="loop"
+                   controls="controls"
+                   preload="none"
+                   title="Ticker"
+                   >
+
+                <!-- stereo sources -->
+                <source src="https://www.axel-hahn.de/axel/download/ticker_2.0_.ogg" type="audio/ogg" data-ch="2.0" title="2.0" />
+                <source src="https://www.axel-hahn.de/axel/download/ticker_2.0_.mp3" type="audio/mp3" data-ch="2.0" title="2.0" />
+
+                <!-- surround sources -->
+                <source src="https://www.axel-hahn.de/axel/download/ticker_5.1_.m4a" type="audio/mp4" data-ch="5.1" title="5.1" />
+                <source src="https://www.axel-hahn.de/axel/download/ticker_5.1_.ogg" type="audio/ogg" data-ch="5.1" title="5.1" />
+
+                <!-- for fallback add a flashplayer here -->
+
+            </audio>
+            Ticker
+        </div>
+
+        <div style="clear: left; padding: 0.5em 1em;">
+            <audio loop="loop"
+                   controls="controls"
+                   preload="none"
+                   title="Let's Play"
+                   >
+
+                <!-- stereo sources -->
+                <source src="https://www.axel-hahn.de/axel/download/lets-play_2.0_.ogg" type="audio/ogg" data-ch="2.0" title="2.0" />
+                <source src="https://www.axel-hahn.de/axel/download/lets-play_2.0_.mp3" type="audio/mp3" data-ch="2.0" title="2.0" />
+
+                <!-- surround sources -->
+                <source src="https://www.axel-hahn.de/axel/download/lets-play_5.1_.m4a" type="audio/mp4" data-ch="5.1" title="5.1" />
+                <source src="https://www.axel-hahn.de/axel/download/lets-play_5.1_.ogg" type="audio/ogg" data-ch="5.1" title="5.1" />
+
+                <!-- for fallback add a flashplayer here -->
+
+            </audio>
+            Let's Play 
+        </div>
+
+
+        <div style="clear: left; padding: 0.5em 1em;">
+            <audio loop="loop"
+                   controls="controls"
+                   preload="none"
+                   title="Lift Control"
+                   >
+
+                <!-- stereo sources -->
+                <source src="https://www.axel-hahn.de/axel/download/lift-control_2.0_.ogg" type="audio/ogg" data-ch="2.0" title="2.0" />
+                <source src="https://www.axel-hahn.de/axel/download/lift-control_2.0_.mp3" type="audio/mp3" data-ch="2.0" title="2.0" />
+
+                <!-- surround sources -->
+                <source src="https://www.axel-hahn.de/axel/download/lift-control_5.1_.m4a" type="audio/mp4" data-ch="5.1" title="5.1" />
+                <source src="https://www.axel-hahn.de/axel/download/lift-control_5.1_.ogg" type="audio/ogg" data-ch="5.1" title="5.1" />
+
+                <!-- for fallback add a flashplayer here -->
+
+            </audio>
+            Lift Control
+        </div>
+
+        <div style="clear: left; padding: 0.5em 1em;">
+            <audio loop="loop"
+                   controls="controls"
+                   preload="none"
+                   title="November"
+                   >
+
+                <!-- stereo sources -->
+                <source src="https://www.axel-hahn.de/axel/download/november_2.0_.ogg" type="audio/ogg" data-ch="2.0" title="2.0" />
+                <source src="https://www.axel-hahn.de/axel/download/november_2.0_.mp3" type="audio/mp3" data-ch="2.0" title="2.0" />
+
+                <!-- surround sources -->
+                <source src="https://www.axel-hahn.de/axel/download/november_5.1_.m4a" type="audio/mp4" data-ch="5.1" title="5.1" />
+                <source src="https://www.axel-hahn.de/axel/download/november_5.1_.ogg" type="audio/ogg" data-ch="5.1" title="5.1" />
+
+                <!-- for fallback add a flashplayer here -->
+
+            </audio>
+            November
+        </div>
+
+        <div style="clear: left; padding: 0.5em 1em;">
+            <audio loop="loop"
+                   controls="controls"
+                   preload="none"
+                   title="Give me a BIT more"
+                   >
+
+                <!-- stereo sources -->
+                <source src="https://www.axel-hahn.de/axel/download/gimme-a-bit-more_2.0_.ogg" type="audio/ogg" data-ch="2.0" title="2.0" />
+                <source src="https://www.axel-hahn.de/axel/download/gimme-a-bit-more_2.0_.mp3" type="audio/mp3" data-ch="2.0" title="2.0" />
+
+                <!-- surround sources -->
+                <source src="https://www.axel-hahn.de/axel/download/gimme-a-bit-more_5.1_.m4a" type="audio/mp4" data-ch="5.1" title="5.1" />
+                <source src="https://www.axel-hahn.de/axel/download/gimme-a-bit-more_5.1_.ogg" type="audio/ogg" data-ch="5.1" title="5.1" />
+
+                <!-- for fallback add a flashplayer here -->
+
+            </audio>
+            Give me a BIT more
+        </div>
+
+        <!-- ************************************************************** -->
+
+
+        <script src="../mcplayer.min.js"></script>
+        
+        <script>
+            
+            // show player and playlist:
+            var oMcPlayer=new mcPlayer();
+            oMcPlayer.init();
+            oMcPlayer.maximize();
+            oMcPlayer.maximizeBox('playlist');
+            oMcPlayer.maximizeBox('download');
+            
+            /*
+             * ------------------------------------------------------------------
+             * 
+             * Hi there,
+             * 
+             * nice to see you here.
+             * But... just wanna tell you:
+             * 
+             * All the javascript code below is not needed to implement the
+             * player. It is to run this example page.
+             * 
+             * ------------------------------------------------------------------
+             */
+            
+            
+            /**
+             * callback of select boxes ... change url an call updater
+             * @returns {Boolean}
+             */
+            function changeTheme(){
+                var sUrl='';
+                var oSelType=document.getElementById('selType');
+                var oSelColor=document.getElementById('selColor');
+                if(oSelType.value){
+                    sUrl+=(sUrl ? '&' : '?') +  'type='+oSelType.value;
+                }
+                if(oSelColor.value){
+                    sUrl+=(sUrl ? '&' : '?') + 'skin='+oSelColor.value;
+                }
+                if(!sUrl){
+                    sUrl='?';
+                }
+                // location.href=sUrl;
+                window.history.pushState('dummy', 'Title', sUrl);
+                UpdateCss();
+                return false;
+            }
+
+            /**
+             * check query params and insert css code for the demo
+             * @returns {undefined}
+             */
+            function UpdateCss(){
+                var oSelType=document.getElementById('selType');
+                var oSelColor=document.getElementById('selColor');
+                var query = getQueryParams();
+                var sPreview='';
+
+                clearCss();
+                
+                if(query.type){
+                    var cssfile='../skins/mcplayer-'+query.type.replace(/[^a-z]/g, '')+'.min.css';
+                    var link=addCss(cssfile);
+                    sPreview+='<strong>'+link.outerHTML.replace(/\</, '&lt;')+'</strong><br>            ';
+                    // oSelType.value=query.type;
+                    for ( var i = 0; i < oSelType.options.length; i++ ){
+                      var oOption = oSelType.options[i];
+                      if ( query.type.indexOf( oOption.value ) !== -1 ){
+                        oOption.selected = true;
+                      }
+                    }
+                }
+                if(query.skin){
+
+                    var cssfile='../skins/mcplayer-'+query.skin.replace(/[^a-z]/g, '')+'.min.css';
+                    var link=addCss(cssfile);
+                    sPreview+='<strong>'+link.outerHTML.replace(/\</, '&lt;')+'</strong>';
+                    
+                    for ( var i = 0; i < oSelColor.options.length; i++ ){
+                      var oOption = oSelColor.options[i];
+                      if ( query.skin.indexOf( oOption.value ) !== -1 ){
+                        oOption.selected = true;
+                      }
+                    }
+                    
+                }
+                document.getElementById('cssmore').innerHTML=sPreview;
+            }
+
+            /**
+             * reset css div
+             * @returns {undefined}
+             */
+            function clearCss(){
+                var head  = document.getElementById('morehead');
+                
+                head.innerHTML='';
+                addCss('../mcplayer.min.css');
+            }
+            
+            /**
+             * helper function to add a css line; it returns the link object
+             * @param {type} cssfile
+             * @returns {addCss.link|Element}
+             */
+            function addCss(cssfile){
+                var link  = document.createElement('link');
+                link.rel  = 'stylesheet';
+                link.type = 'text/css';
+                link.href = cssfile;
+                link.media = 'screen';
+                var head  = document.getElementById('morehead');
+                head.appendChild(link);
+                return link;
+            }
+            
+            
+            window.onload = function () {
+                UpdateCss()
+            }
+            
+            
+        </script>
+
+        <br /><br /><br /><br />
+        <hr>
+        DOCS: <a href="https://www.axel-hahn.de/docs/amcplayer/index.htm" target="_blank">https://www.axel-hahn.de/docs/amcplayer/index.htm</a>        
+    </body>
+</html>

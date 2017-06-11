@@ -1,0 +1,384 @@
+@charset "UTF-8";
+@font-face {
+    font-family: 'mcplayer_icons';
+    src: url('./mcplayer_icons.ttf') format('truetype');
+    font-weight: normal; font-style: normal;
+}
+
+
+
+#mcpwrapper audio{
+    display: none;
+}
+
+
+#mcphud, #mcpwrapper, #mcpmaximize, #mcpplaylist, #mcpabout, #mcpdownloads
+{
+    z-index: 20000;
+    box-shadow: 0 0 20px #333;
+}
+
+#mcpwrapper{
+    background:#f0f0f0;
+    background: linear-gradient(to bottom, #ddd, #fff, #ddd);
+    border-radius: 3px /*10px 0 0*/;
+    border: 1px solid rgba(0,0,0,0.3);
+    bottom: 20px;
+    color: rgba(0,0,0,0.6);
+    left: 100px;
+    opacity: 1;
+    padding: 5px 5px 0 5px;
+    position: fixed;
+    transition: all 0.5s ease-out;
+    width: 570px;
+}
+#mcpwrapper.minimized{
+    opacity: 0;
+    left: 0px;
+    bottom: -100px;
+}
+
+
+#mcpabout a, #mcpdownloads a, #mcpplaylist a{color: #08c;}
+
+#mcplayer .active a,
+#mcplayer a.active,
+#mcpplaylist li.active a{
+    /* background: rgba(200, 200, 255, 0.4); */
+    background: rgb(195,217,255); /* Old browsers */
+    background: linear-gradient(to bottom, #9cf, #56a, #9cf);
+    color:#fff;
+}
+
+
+#mcpplayeraudios{}
+#mcphud{
+    background:rgba(0,0,0,0.7); 
+    border-radius: 10px;
+    border: 2px solid rgba(255,255,255,0.7);
+    bottom: 50%; 
+    color: #fff; 
+    display:block;
+    font-size:1%;
+    opacity: 0;
+    padding: 10px; 
+    position: fixed; 
+    right: -50%;
+    text-align:center; 
+    transition: all 0.5s ease-out;
+    width: 50%; 
+}
+#mcphud.active{
+    right: 25%;
+    font-size: 100%;
+    opacity: 1;
+}
+
+/* ============================================================
+
+============================================================ */
+
+#mcplayer{
+    margin-top: 5px;
+    clear: both;
+    border: 0px solid;
+    float: left;
+    width: 100%;
+}
+
+
+/* player buttons */
+#mcplayer a{
+    background: linear-gradient(to bottom, #eee, #fff, #ddd);
+    border-radius: 5px;
+    border: 1px solid rgba(0,0,0,0.1);
+    box-sizing: content-box;
+    color:#56a;
+    float: left;
+    margin-bottom: 5px;
+    margin-right: 5px;
+    padding: 2px 4px;
+    text-align: center;
+    text-decoration: none;
+    transition: all 0.2s ease-out;
+    width: 20px;
+}
+#mcplayer a:hover{
+    background: linear-gradient(to bottom, #ccc, #eee, #ccc);
+}
+
+#mcplayer a.active{
+    color:#fc6;
+    /*
+    text-shadow: -1px -1px rgba(0,0,0,0.3), 1px 1px 0 rgba(255,255,255,0.6);
+    */
+}
+#mcplayer #mcpplayerbtndiv>a,
+#mcplayer #mcpoptions>a{
+    font-family: mcplayer_icons;
+}
+
+/* ============================================================
+bars for volume and progress
+============================================================ */
+
+
+#mcpvolumecanvas,
+#mcpprogresscanvas{
+    background: linear-gradient(to bottom, #bce,#def,#bce);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 5px;
+    cursor:pointer;
+    display: block;
+    color: #ffffff;
+}
+#mcpprogressdiv{ left: 260px;position: absolute;}
+#mcpprogresscanvas{
+    height: 1.0em;
+    margin-top: 3px;
+    width: 210px;
+}
+
+#mcpvolumediv{ clear: left; float: left;}
+#mcpvolumediv a{ float: left; font-family: mcplayer_icons;}
+#mcpvolumecanvas{
+    float: left;
+    height: 0.7em;
+    margin-right: 5px;
+    margin-top: 3px;
+    width: 100px;
+}
+
+#mcpprogressbar{
+    background: rgba(255,255,255,0.3);
+    display: none;
+    height: 10px;
+    width: 10px; 
+}
+#mcptime{position: absolute; right: 10px; top: 27px;}
+
+
+/* ============================================================
+additional buttons for channels, options, dialogs
+============================================================ */
+
+#mcpchannels{float: left; margin-left: 80px;}
+#mcpchannels ul{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+#mcpchannels ul li{
+    float: left;
+    margin: 0 4px 0 0;
+    padding: 0;
+}
+#mcpchannels a{
+    padding: 2px;font-size: 90%;    
+}
+
+#mcpoptions{
+    border: 0px solid rgba(0,0,0,0.1);
+    float: right; 
+}
+
+
+/* ============================================================
+
+    Boxen
+
+============================================================ */
+.mcpsystembutton{
+    float: right; margin-top: -15px;
+    border-radius: 5px;
+}
+.mcpsystembutton a{text-decoration: none; color:#89a !important;}
+.mcpsystembutton a:hover{text-decoration: none;}
+.mpcbox{}
+
+/* ============================================================
+
+    Playlist
+
+============================================================ */
+#mcpabout,
+#mcpdownloads,
+#mcpplaylist{
+    background:#f0f0f0;
+    border-radius: 3px;
+    border: 1px solid rgba(0,0,0,0.3);
+    bottom: 140px;
+    color: rgba(0,0,0,0.6);
+    opacity: 0;
+    padding: 5px;
+    position: fixed;
+    transition: all 0.25s ease-out;
+    width: 300px;
+}
+#mcpabout{width: 40%; left: 30%; bottom: -20em; right: auto;}
+#mcpabout.visible{opacity: 1; bottom: 150px;}
+
+#mcpplaylist{right: -310px;}
+#mcpplaylist.visible{opacity: 1; right: 10px;}
+
+#mcpdownloads{right: -310px;}
+#mcpdownloads.visible{opacity: 1; right: 370px;}
+
+
+#mcpdownloads ul,
+#mcpplaylist ul{
+    background:rgba(255,255,255,0.5);
+    border-radius: 0 0 2px 2px;
+    border: 2px solid rgba(0,0,0,0.1);
+    list-style: none;
+    margin: 0px;
+    max-height: 400px;
+    overflow: auto;
+    overflow: auto; 
+    padding: 5px;
+}
+#mcpplaylist li{}
+#mcpplaylist .active{
+}
+#mcpplaylist li a{
+    background: none;
+    border: 0px;
+    display: block;
+    margin: 0;
+    padding: 0 5px;
+    text-decoration: none;
+}
+#mcpplaylist li a:hover{
+    background: rgba(0,0,0,0.05);
+}
+#mcpplaylist li.active a{}
+
+#mcpdownloads ul ul{border: none;}
+#mcpdownloads ul ul li{margin-left: 20px;}
+
+/* ============================================================
+
+============================================================ */
+#mcpfooter, .mcpbox{
+    background: linear-gradient(to bottom, #9be, #56a, #9cf);
+    border-radius: 2px 2px 0 0 ;
+    clear: both;
+    color: #eee;
+    margin: 0;
+    padding: 0px 5px;
+    text-align: left;
+    text-shadow: 1px 1px 0 #666;
+}
+#mcptitle:before{
+    content: ':: ';
+}
+#mcptitle{color: #fff; font-weight: bold;}
+#mcpmaximize{
+    border-radius: 10px 10px 0 0 ;
+    bottom: 0px;
+    opacity: 1;
+    position: fixed;
+    right: 45%; 
+    text-decoration: none;
+    transition: all 0.5s ease-out;
+}
+#mcpmaximize.hidebutton{
+    bottom: -30px;
+    opacity: 0;
+}
+
+
+#mcpmaximize, .mcpsystembutton{
+    background: rgb(255,197,120); /* Old browsers */
+    background: radial-gradient(center, ellipse cover,  rgba(255,220,180,1) 0%,rgba(251,157,35,1) 100%); /* W3C */
+    border: 1px solid #fff;    
+    padding: 0px 5px; 
+}
+
+#mcpfooter{margin-top: 50px; display: none;}
+
+    /* -------------------------------------
+     * Bar container
+     * ------------------------------------- */
+    .progress-radial{
+      float: left;
+      margin-right: 30px;
+      position: relative;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: 2px solid #fc2;
+      background-color: #eee;
+    }
+
+    /* -------------------------------------
+     * Optional centered circle w/text
+     * ------------------------------------- */  
+    .progress-radial .overlay{
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      background-color: #00f;
+      border-radius: 50%;
+      text-align: center;
+    }
+
+.songbtn, .songbtn:hover{
+    background: rgba(0,0,0,0.1); 
+    border-radius: 50%; 
+    border: 2px solid #fff; 
+    box-shadow: 0 0 10px rgba(0,0,0,0.3); 
+    color:rgba(0,0,0,0.5); 
+    float: left; 
+    padding: 4px; 
+    text-decoration: none;
+                         
+}
+.songbtn:hover{background: rgba(0,0,0,0.15); }
+
+.songbtnactive{
+    background: rgb(255,197,120); /* Old browsers */
+    background: radial-gradient(center, ellipse cover,  rgba(255,197,120,1) 0%,rgba(251,157,35,1) 100%); /* W3C */
+}
+
+
+[class^="icon-"], [class*=" icon-"] {
+    font-family: mcplayer_icons;
+    font-style: normal;
+    speak: none;
+
+    display: inline-block;
+    width: 1.1em;
+    margin-right: .1em;
+    text-align: center;
+}
+
+.the-icons li {
+    font-size: 14px;
+    line-height: 24px;
+    height: 24px;
+}
+
+
+#mcppause:before,.icon-pause:before { content: "⎉"; } /* '\2389' */
+#mcpforward:before, .icon-fast-fw:before { content: "⏩"; } /* '\23e9' */
+#mcpbackward:before, .icon-fast-bw:before { content: "⏪"; } /* '\23ea' */
+#mcpjumpnext:before, .icon-to-end:before { content: "⏭"; } /* '\23ed' */
+#mcpjumpprev:before, .icon-to-start:before { content: "⏮"; } /* '\23ee' */
+#mcpstop:before, .icon-stop:before { content: "▪"; } /* '\25aa' */
+#mcpplay:before, .icon-play:before { content: "▶"; } /* '\25b6' */
+#mcpoptplaylist:before, .icon-th-list:before { content: "☰"; } /* '\2630' */
+.icon-cancel-circle:before { content: "✖"; } /* '\2716' */
+#mcpoptrepeat:before,.icon-cw:before { content: "⟳"; } /* '\27f3' */
+#mcpoptshuffle:before,.icon-cw:before { content: "🔀"; } /* '\1f500' */
+#mcpminimize:before, .icon-down-open-1:before { content: ""; font-family: mcplayer_icons;} /* '\e800' */
+#mcpmaximize:before, .icon-up-open-1:before { content: ""; font-family: mcplayer_icons;} /* '\e801' */
+#mcpoptdownload:before, .icon-install:before { content: ""; } /* '\e778' */
+.icon-off:before { content: ""; } /* '\e78e' */
+.icon-shuffle:before { content: "🔀"; } /* '\1f500' */
+#mcpvolmute:before, .icon-volume-off:before { content: "🔇"; } /* '\1f507' */
+#mcpvolfull:before, .icon-volume-up:before { content: "🔊"; } /* '\1f50a' */
+
+.icon-right-thin:before { content: '\27a1'; } /* 'âž¡' */
+#mcpoptabout:before, .icon-info-circle-1:before { content: '\e802'; } /* 'î ‚' */
+.icon-shuffle:before { content: 'ðŸ”€'; } /* '\1f500' */

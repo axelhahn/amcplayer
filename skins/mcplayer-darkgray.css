@@ -1,0 +1,62 @@
+/*
+
+  amc player SKIN :: DARK GRAY
+
+*/
+
+#mcphud, #mcpwrapper, #mcpmaximize, #mcpplaylist, #mcpabout, #mcpdownloads
+{
+    color:#777;
+    background:#444;
+    text-shadow: none;
+    border-color: rgba(255,255,255,0.2);
+    border-radius: 0;
+    box-shadow: 0 0 20px #000;
+
+}
+#mcphud{color: #abc}
+
+#mcpwrapper a{background: rgba(0,0,0,0.1); color: #888; border-color: rgba(255,255,255,0.1); border-radius: 0;}
+#mcplayer a:hover{background: rgba(255,255,255,0.1);}
+
+
+#mcpabout a, #mcpdownloads a, #mcpplaylist a{
+    color:#889;
+}
+#mcpwrapper .active a,
+#mcpwrapper a.active,
+#mcpplaylist li.active a{background: #89a; color:#334;}
+
+
+#mcptime{color:#999;text-shadow: none;}
+
+#mcpvolumecanvas,
+#mcpprogresscanvas{background: #888; border-radius: 0;}
+
+#mcpminimize{color:#333;}
+
+#mcpdownloads ul, #mcpplaylist ul{
+    background: none;
+}
+
+.mcpsystembutton{
+    background: #333;
+    border: 1px solid #888;    
+    border-radius: 0;
+    padding: 0px 5px; 
+}
+
+
+.mcpbox{
+    background: linear-gradient(to bottom, #345, #567);
+}
+
+.songbtn, .songbtn:hover{
+    border-radius: 0.2em; 
+    background: #333;
+    color:#888;
+}
+.songbtnactive{
+    background: #89a;
+    color: #334;
+}

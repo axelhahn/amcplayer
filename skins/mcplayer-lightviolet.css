@@ -1,0 +1,34 @@
+/*
+
+  amc player SKIN :: LIGHT VIOLET
+
+*/
+
+
+.mcpbox{
+    background: linear-gradient(to bottom, #d8e, #a8b);
+}
+#mcplayer a, #mcpabout a, #mcpdownloads a, #mcpplaylist a{color: #689;}
+#mcplayer a,#mcptime{color: #689;}
+    
+#mcplayer .active a,
+#mcplayer a.active,
+#mcpplaylist li.active a{
+    /* background: rgba(200, 200, 255, 0.4); */
+    background: linear-gradient(to bottom, #8ca, #6a8);
+    color:#fff;
+}
+
+
+#mcpvolumecanvas,
+#mcpprogresscanvas{
+    background: linear-gradient(to bottom, #bde,#cef,#bcd);
+}
+
+#mcpmaximize{background: #a86; color:#fff;}
+.mcpsystembutton{
+    background: #ea6;
+}
+.mcpsystembutton>a{color:#fff !important;}
+.songbtnactive{
+}
