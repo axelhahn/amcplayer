@@ -5,7 +5,7 @@
 	
 	GNU GPL v 3.0
 
-        project home: http://sourceforge.net/p/amcplayer/
+        project home: https://sourceforge.net/p/amcplayer/
         docs: https://www.axel-hahn.de/docs/amcplayer/index.htm
 --------------------------------------------------------------------------------
 
@@ -27,7 +27,7 @@ STATUS
 
 
 DOWNLOAD
-  download package from http://sourceforge.net/projects/amcplayer/
+  download package from https://sourceforge.net/projects/amcplayer/
   Extract all files below a webroot in any subdirectory, i.e.
   [webroot]/javascript
 

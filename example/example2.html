@@ -229,19 +229,13 @@
                 <th>response</th>
             </tr>
             <tr>
-                <td>Order of songs to play (if shuffled)</td>
-                <td>getPlayorder()</td>
-                <td>array</td>
-                <td><span id="spanPlayorder" class="val-array">...</span></td>
+                <td>current song</td>
+                <td>getSong()</td>
+                <td>hash</td>
+                <td><span id="spanSong" class="val-hash">...</span></td>
             </tr>
             <tr>
-                <td>number of the currently active song in the playlist (if shuffled)</td>
-                <td>getPlaylistId()</td>
-                <td>integer</td>
-                <td><span id="spanPlaylistId" class="val-integer">...</span></td>
-            </tr>
-            <tr>
-                <td>Id of current song; starting with 0</td>
+                <td>Id of current song in the playlist; starting with 0</td>
                 <td>getSongId()</td>
                 <td>integer</td>
                 <td><span id="spanCurrentsong" class="val-integer">...</span></td>
@@ -265,7 +259,7 @@
                 <td><span id="spanAudioduration" class="val-float">...</span></td>
             </tr>
             <tr>
-                <td>get all available Channels of the current song</td>
+                <td>get all available channels of the current song</td>
                 <td>getAllAudioChannels()</td>
                 <td>array</td>
                 <td><span id="spanAllAudiochannels" class="val-array">...</span></td>
@@ -313,10 +307,48 @@
                 <td><span id="spanIsMuted" class="val-bool">...</span></td>
             </tr>
             <tr>
-                <td>current song</td>
-                <td>getSong()</td>
-                <td>hash</td>
-                <td><span id="spanSong" class="val-hash">...</span></td>
+                <td>is list repeated</td>
+                <td>isRepeatlist()</td>
+                <td>boolean</td>
+                <td><span id="spanIsRepeatlist" class="val-bool">...</span></td>
+            </tr>
+            <tr>
+                <td>is shuffled</td>
+                <td>isShuffled()</td>
+                <td>boolean</td>
+                <td><span id="spanIsShuffled" class="val-bool">...</span></td>
+            </tr>
+            
+            <tr>
+                <td>is box about visible</td>
+                <td>isVisibleBoxAbout()</td>
+                <td>boolean</td>
+                <td><span id="spanIsVisibleBoxAbout" class="val-bool">...</span></td>
+            </tr>
+            <tr>
+                <td>is box download visible</td>
+                <td>isVisibleBoxDownload()</td>
+                <td>boolean</td>
+                <td><span id="spanIsVisibleBoxDownload" class="val-bool">...</span></td>
+            </tr>
+            <tr>
+                <td>is box playlist visible</td>
+                <td>isVisibleBoxPlaylist()</td>
+                <td>boolean</td>
+                <td><span id="spanIsVisibleBoxPlaylist" class="val-bool">...</span></td>
+            </tr>
+            
+            <tr>
+                <td>Order of songs to play (it is randomized if isShuffled() is true)</td>
+                <td>getPlayorder()</td>
+                <td>array</td>
+                <td><span id="spanPlayorder" class="val-array">...</span></td>
+            </tr>
+            <tr>
+                <td>number of the currently active song in the playlist (if shuffled)</td>
+                <td>getPlaylistId()</td>
+                <td>integer</td>
+                <td><span id="spanPlaylistId" class="val-integer">...</span></td>
             </tr>
             <tr>
                 <td>Playlist</td>
@@ -343,6 +375,11 @@
                         document.getElementById("spanIsPaused").innerHTML = oMcPlayer.isPaused();
                         document.getElementById("spanIsStopped").innerHTML = oMcPlayer.isStopped();
                         document.getElementById("spanIsMuted").innerHTML = oMcPlayer.isMuted();
+                        document.getElementById("spanIsShuffled").innerHTML = oMcPlayer.isShuffled();
+                        document.getElementById("spanIsRepeatlist").innerHTML = oMcPlayer.isRepeatlist();
+                        document.getElementById("spanIsVisibleBoxAbout").innerHTML = oMcPlayer.isVisibleBoxAbout();
+                        document.getElementById("spanIsVisibleBoxDownload").innerHTML = oMcPlayer.isVisibleBoxDownload();
+                        document.getElementById("spanIsVisibleBoxPlaylist").innerHTML = oMcPlayer.isVisibleBoxPlaylist();
                         document.getElementById("spanCurrentvolume").innerHTML = oMcPlayer.getVolume();
                         document.getElementById("spanAudiopos").innerHTML = oMcPlayer.getAudioPosition();
                         document.getElementById("spanAudioduration").innerHTML = oMcPlayer.getAudioDuration();

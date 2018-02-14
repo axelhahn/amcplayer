@@ -215,7 +215,7 @@ additional buttons for channels, options, dialogs
     transition: all 0.25s ease-out;
     width: 300px;
 }
-#mcpabout{width: 40%; left: 30%; bottom: -20em; right: auto;}
+#mcpabout{width: 40%; left: 30%; bottom: -30em; right: auto;}
 #mcpabout.visible{opacity: 1; bottom: 150px;}
 
 #mcpplaylist{right: -310px;}

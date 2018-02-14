@@ -39,7 +39,7 @@
  * mcPlayer ... Multi Channel Player
  * 
  * @author    Axel Hahn
- * @version   0.23
+ * @version   0.24
  *
  * @this mcPlayer
  * 
@@ -56,8 +56,8 @@ var mcPlayer = function () {
     // settings
     this.cfg = {
         about: {
-            version: '0.23',
-            label: 'AMC Player - v0.23',
+            version: '0.24',
+            label: 'AMC Player - v0.24',
             description: '<strong>A</strong>xels <strong>M</strong>ulti <strong>C</strong>hannel <strong>Player</strong>.<br><br>This is a webbased HTML5 player.<br>It\'s focus is the handling of media in stereo and surround for a title.',
             labeldownload: 'Download:<br>',
             download: 'http://sourceforge.net/projects/amcplayer/files/latest/download',
@@ -183,17 +183,17 @@ var mcPlayer = function () {
         }
     };
 
-    this.oAudio = false;         // current audio object
-    this.sCurrentChannel = false;  // current audio - one of false | "2.0"| "6.1"
+    this.oAudio = false;           // current audio object
+    this.sCurrentChannel = false;  // current audio - one of false | "2.0"| "5.1"
     this.iMaxVol = 1;
 
-    this.iCurrentTime = false; // aktuelle Abspielposition - bei Wechsel der Audioquelle
-    this.bIsFading = false;    // Flag: erfolgt gerade ein X-Fading?
+    this.iCurrentTime = false;     // aktuelle Abspielposition - bei Wechsel der Audioquelle
+    this.bIsFading = false;        // Flag: erfolgt gerade ein X-Fading?
 
-    this.iVolInc = 0.02;       // X-Fading: Schrittweite der Lautstaerke-Aenderung 
-    this.iTimer = 20;          // X-Fading: Intervall der Lautstaerke-Aenderung 
+    this.iVolInc = 0.02;           // X-Fading: Schrittweite der Lautstaerke-Aenderung 
+    this.iTimer = 20;              // X-Fading: Intervall der Lautstaerke-Aenderung 
 
-    this.iHudTimer = 5;        // time to display hud message in s; false to disable
+    this.iHudTimer = 5;            // time to display hud message in s; false to disable
     this.iRemoveTimer = 2;
 
 
@@ -204,7 +204,7 @@ var mcPlayer = function () {
     this.iPlaylistId = -1;
     // this.PlIndex = -1;
     
-    this.bRepeatPlaylist = 1;
+    // this.bRepeatPlaylist = 1;
     // this.bRepeatSong = false;
 
     
@@ -253,8 +253,9 @@ var mcPlayer = function () {
         for (var i = 0; i < oAudioList.length; i++) {
             sTitle = oAudioList[i].title;
             oAudioList[i].style.display = "none";
-            if (!sTitle)
+            if (!sTitle){
                 sTitle = 'audio #' + (i + 1);
+            }
             aSong = {
                 title: oAudioList[i].title,
                 sources: {}
@@ -264,8 +265,9 @@ var mcPlayer = function () {
                 if (o.tagName === "SOURCE") {
                     sChannels = "any";
                     // if (o.dataset && o.dataset.ch)sChannels=o.dataset.ch;
-                    if (o.title)
+                    if (o.title){
                         sChannels = o.title;
+                    }
                     aSource = {
                         src: o.src,
                         type: o.type
@@ -275,7 +277,8 @@ var mcPlayer = function () {
                     dummy = aSong["sources"][sChannels].push(aSource);
                 }
             }
-            a.push(aSong);
+            // a.push(aSong);
+            this.addAudio(aSong);
 
             var newA = document.createElement("A");
             newA.href = '#';
@@ -291,6 +294,49 @@ var mcPlayer = function () {
     };
 
 
+    // ----------------------------------------------------------------------
+    /**
+     * add a song to the playlist
+     * @example
+     *      {
+     *       "title": "Ticker",
+     *       "sources": {
+     *         "2.0": [
+     *           {
+     *             "src": "https://www.axel-hahn.de/axel/download/ticker_2.0_.ogg",
+     *             "type": "audio/ogg"
+     *           },
+     *           {
+     *             "src": "https://www.axel-hahn.de/axel/download/ticker_2.0_.mp3",
+     *             "type": "audio/mp3"
+     *           }
+     *         ],
+     *         "5.1": [
+     *           {
+     *             "src": "https://www.axel-hahn.de/axel/download/ticker_5.1_.m4a",
+     *             "type": "audio/mp4"
+     *           },
+     *           {
+     *             "src": "https://www.axel-hahn.de/axel/download/ticker_5.1_.ogg",
+     *             "type": "audio/ogg"
+     *           }
+     *         ]
+     *       }
+     *     }
+     * @param {array} aSong
+     * @returns {Boolean}
+     */
+    this.addAudio = function (aSong) {
+        if(!aSong["sources"]){
+             return false;
+        }
+        if (!aSong.title){
+            aSong.title='audio ' + (this.aPL.length + 1);
+        }
+        this.aPL.push(aSong);
+        this._generatePlayorder();
+    }
+
 
     // ----------------------------------------------------------------------
     /**
@@ -298,7 +344,7 @@ var mcPlayer = function () {
      * @private
      * @return {html_code} 
      */
-    this.genPlayer = function () {
+    this._genPlayer = function () {
         var s = '';
 
         // add buttons
@@ -342,11 +388,11 @@ var mcPlayer = function () {
             ;            
                 // TODO: fill me with life
                 s+='<a href="#" onclick="'+this.name+'.toggleRepeat(); return false;" id="mcpoptrepeat" '
-                    + (this.bRepeatPlaylist ? 'class="active" ' : '')
-                    +'title="'+this.cfg.aPlayer.buttons["repeat"].title+'"></a>'
+                    + (this.isRepeatlist() ? 'class="active" ' : '')
+                    + 'title="'+this.cfg.aPlayer.buttons["repeat"].title+'"></a>'
                     + '<a href="#" onclick="'+this.name+'.toggleShuffle(); return false;" id="mcpoptshuffle" '
                     + (this.cfg.settings.shuffle ? 'class="active" ' : '')
-                    +'title="'+this.cfg.aPlayer.buttons["shuffle"].title+'"></a>'
+                    + 'title="'+this.cfg.aPlayer.buttons["shuffle"].title+'"></a>'
                     ;
                 var aBtn=['download', 'playlist', 'about'];
                 for (var i=0; i<aBtn.length; i++) {
@@ -367,7 +413,7 @@ var mcPlayer = function () {
      * @private
      * @return {html_code} 
      */
-    this.genAboutbox = function () {
+    this._genAboutbox = function () {
 
         return '<div class="mcpbox">' 
             + this.cfg.about.label + ''
@@ -386,9 +432,9 @@ var mcPlayer = function () {
      * @private
      * @return {html_code} 
      */
-    this.genPlaylist = function () {
+    this._genPlaylist = function () {
 
-        var iActive = this.genPlaylist.arguments[0];
+        var iActive = this._genPlaylist.arguments[0];
         var sHtmlPL = ''
             + '<div class="mcpbox">' + this.cfg.aPlayer.playlist.title + ''
             + '<span class="mcpsystembutton">'
@@ -418,7 +464,7 @@ var mcPlayer = function () {
      * @private
      * @return {html_code} 
      */
-    this.genDownloads = function () {
+    this._genDownloads = function () {
         var sHtml = '';
 
         if (this.aPL.length > 0) {
@@ -460,7 +506,8 @@ var mcPlayer = function () {
      * @returns {undefined}
      */
     this._generatePlaylist = function () {    
-        this.aPL = this._scanAudios(); 
+        // this.aPL = this._scanAudios(); 
+        this._scanAudios(); 
         this._generatePlayorder();
     };
 
@@ -486,7 +533,7 @@ var mcPlayer = function () {
             for (var i=0; i<this.aPL.length; i++){
                 this.aPlayorderList[i]=i;
             }
-            if(this.cfg.settings.shuffle){
+            if(this.isShuffled()){
                 // on shuffling: current song will be the first element
                 if (this.iCurrentSong>=0){
                     this.aPlayorderList.splice(this.iCurrentSong, 1);
@@ -527,13 +574,6 @@ var mcPlayer = function () {
      */
     this._initHtml = function () {
 
-        this.oAPlayermaximize = document.getElementById("mcpmaximize");
-        if (!this.oAPlayermaximize) {
-            document.getElementsByTagName("BODY")[0].innerHTML += '<a href="#" id="mcpmaximize" class="mcpsystembutton hidebutton" onclick="' + this.name + '.maximize(); return false" title="' + this.cfg.aPlayer.buttons["maximize"].title + '">' + this.cfg.aPlayer.buttons["maximize"].label + '</a>';
-            this.oAPlayermaximize = document.getElementById("mcpmaximize");
-        }
-
-
         this.oDivPlayerhud = document.getElementById("mcphud");
         if (!this.oDivPlayerhud) {
             document.getElementsByTagName("BODY")[0].innerHTML += '<div id="mcphud"></div>';
@@ -545,7 +585,7 @@ var mcPlayer = function () {
             document.getElementsByTagName("BODY")[0].innerHTML += '<div id="mcpdownloads"></div>';
             this.oDivDownloads = document.getElementById("mcpdownloads");
         }
-        this.oDivDownloads.innerHTML = this.genDownloads();
+        this.oDivDownloads.innerHTML = this._genDownloads();
 
         this.oDivPlaylist = document.getElementById("mcpplaylist");
         if (!this.oDivPlaylist) {
@@ -553,7 +593,7 @@ var mcPlayer = function () {
             document.getElementsByTagName("BODY")[0].innerHTML += '<div id="mcpplaylist"></div>';
             this.oDivPlaylist = document.getElementById("mcpplaylist");
         }
-        this.oDivPlaylist.innerHTML = this.genPlaylist();
+        this.oDivPlaylist.innerHTML = this._genPlaylist();
 
 
         this.oDivPlayerwrapper = document.getElementById("mcpwrapper");
@@ -574,13 +614,18 @@ var mcPlayer = function () {
         if (!this.oDivPlayer) {
             this.oDivPlayerwrapper.innerHTML += '<div id="mcplayer"></div>';
             this.oDivPlayer = document.getElementById("mcplayer");
-            this.oDivPlayer.innerHTML = this.genPlayer();
+            this.oDivPlayer.innerHTML = this._genPlayer();
         }
         this.oDivFooter = document.getElementById("mcpfooter");
         if (!this.oDivFooter) {
             this.oDivPlayerwrapper.innerHTML += '<div id="mcpfooter">' + this.about + '</div>';
         }
-        document.getElementsByTagName("BODY")[0].innerHTML += '<div id="mcpabout">' + this.genAboutbox() + '</div>';
+        this.oAPlayermaximize = document.getElementById("mcpmaximize");
+        if (!this.oAPlayermaximize) {
+            document.getElementsByTagName("BODY")[0].innerHTML += '<a href="#" id="mcpmaximize" class="mcpsystembutton hidebutton" onclick="' + this.name + '.maximize(); return false" title="' + this.cfg.aPlayer.buttons["maximize"].title + '">' + this.cfg.aPlayer.buttons["maximize"].label + '</a>';
+            this.oAPlayermaximize = document.getElementById("mcpmaximize");
+        }
+        document.getElementsByTagName("BODY")[0].innerHTML += '<div id="mcpabout">' + this._genAboutbox() + '</div>';
 
     };
 
@@ -626,7 +671,7 @@ var mcPlayer = function () {
      * @param  {string}  sMsg  message to show in hud
      * @return {boolean}
      */
-    this.showInfo = function (sMsg) {
+    this._showInfo = function (sMsg) {
         if (!this.iHudTimer){
             return false;
         }
@@ -634,7 +679,7 @@ var mcPlayer = function () {
         this.iRemoveTimer = this.iHudTimer * 1000;
         o.className = 'active';
         o.innerHTML = sMsg;
-        this.decHudTimer();
+        this._decHudTimer();
         return true;
     };
 
@@ -645,7 +690,7 @@ var mcPlayer = function () {
      * @private
      * @return nothing
      */
-    this.hideInfo = function () {
+    this._hideInfo = function () {
         var o = document.getElementById("mcphud");
         o.className = '';
         return true;
@@ -657,30 +702,43 @@ var mcPlayer = function () {
      * @private
      * @return nothing
      */
-    this.decHudTimer = function () {
+    this._decHudTimer = function () {
         this.iRemoveTimer = this.iRemoveTimer - 100;
         // this.showInfo(this.iRemoveTimer);
         if (this.iRemoveTimer > 0) {
-            window.setTimeout(this.name + ".decHudTimer()", 100);
+            window.setTimeout(this.name + "._decHudTimer()", 100);
         } else {
-            this.hideInfo();
+            this._hideInfo();
             this.iRemoveTimer = false;
         }
     };
-
+    
     // ----------------------------------------------------------------------
     /**
-     * toggle visibility of a box (download, playlist, about)
+     * helper function for visible boxes
+     * @see toggleBoxAndButton()
+     * @see isVisible()
      * @private
-     * @param {string}  sBaseId    sBaseId of the div and the button
+     * @param {string}  sBaseId    sBaseId of the div and the button; one of download|playlist|about
      * @param {string}  sMode      optional: force action; one of minimize|maximize; default behaviuor is toggle
      * @return {boolean}
      */
-    this.toggleBoxAndButton = function (sBaseId, sMode) {
-        var oDiv=(this.cfg.aPlayer.buttons[sBaseId] && this.cfg.aPlayer.buttons[sBaseId].box)
+    this._togglehelperGetDiv = function (sBaseId) {
+        return (this.cfg.aPlayer.buttons[sBaseId] && this.cfg.aPlayer.buttons[sBaseId].box)
             ? document.getElementById(this.cfg.aPlayer.buttons[sBaseId].box)
             : false
-            ;
+            ;      
+    };
+
+    /**
+     * toggle visibility of a box (download, playlist, about)
+     * @private
+     * @param {string}  sBaseId    sBaseId of the div and the button; one of download|playlist|about
+     * @param {string}  sMode      optional: force action; one of minimize|maximize; default behaviuor is toggle
+     * @return {boolean}
+     */
+    this._toggleBoxAndButton = function (sBaseId, sMode) {
+        var oDiv=this._togglehelperGetDiv(sBaseId);
         
         var oBtn = document.getElementById('mcpopt'+sBaseId);
         if(!sMode){
@@ -704,6 +762,37 @@ var mcPlayer = function () {
         }
         return true;
     };
+    
+    /**
+     * return if a dialog box is visible
+     * @param {string}  sBaseId    sBaseId of the div and the button; one of download|playlist|about
+     * @returns {Boolean}
+     */
+    this.isVisibleBox = function (sBaseId){
+        var oDiv=this._togglehelperGetDiv(sBaseId);
+        return !!oDiv.className;
+    };
+    /**
+     * return if about dialog box is visible
+     * @returns {Boolean}
+     */
+    this.isVisibleBoxAbout = function (){
+        return this.isVisibleBox('about');
+    };
+    /**
+     * return if download dialog box is visible
+     * @returns {Boolean}
+     */
+    this.isVisibleBoxDownload = function (){
+        return this.isVisibleBox('download');
+    };
+    /**
+     * return if playlist dialog box is visible
+     * @returns {Boolean}
+     */
+    this.isVisibleBoxPlaylist = function (){
+        return this.isVisibleBox('playlist');
+    };
 
     // ----------------------------------------------------------------------
     /**
@@ -711,29 +800,30 @@ var mcPlayer = function () {
      * @returns {undefined}
      */
     this.toggleRepeat = function () {
-        this.bRepeatPlaylist=this.bRepeatPlaylist ? false : true;
-        if (this.bRepeatPlaylist){
-            return this.enableRepeat();
-        } else {
+        if (this.isRepeatlist()){
             return this.disableRepeat();
+        } else {
+            return this.enableRepeat();
         }
     };
 
+    // ----------------------------------------------------------------------
     /**
      * enable playing option repeat playlist
      * @returns {undefined}
      */
     this.enableRepeat = function () {
-        this.bRepeatPlaylist=true;
-        this.toggleBoxAndButton('repeat', 'maximize');
+        this.cfg.settings.repeatlist=true;
+        this._toggleBoxAndButton('repeat', 'maximize');
     };
+    // ----------------------------------------------------------------------
     /**
      * disable playing option repeat playlist
      * @returns {undefined}
      */
     this.disableRepeat = function () {
-        this.bRepeatPlaylist=false;
-        this.toggleBoxAndButton('repeat', 'minimize');
+        this.cfg.settings.repeatlist=false;
+        this._toggleBoxAndButton('repeat', 'minimize');
     };
     
     // ----------------------------------------------------------------------
@@ -742,7 +832,7 @@ var mcPlayer = function () {
      * @returns {undefined}
      */
     this.toggleShuffle = function () {
-        if (this.cfg.settings.shuffle){
+        if (this.isShuffled()){
             return this.disableShuffle();
         } else {
             return this.enableShuffle();
@@ -757,7 +847,7 @@ var mcPlayer = function () {
     this.enableShuffle = function () {
         this.cfg.settings.shuffle=true;
         this._generatePlayorder();
-        this.toggleBoxAndButton('shuffle', 'maximize');
+        this._toggleBoxAndButton('shuffle', 'maximize');
     };
     // ----------------------------------------------------------------------
     /**
@@ -767,7 +857,7 @@ var mcPlayer = function () {
     this.disableShuffle = function () {
         this.cfg.settings.shuffle=false;
         this._generatePlayorder();
-        this.toggleBoxAndButton('shuffle', 'minimize');
+        this._toggleBoxAndButton('shuffle', 'minimize');
     };
 
     // ----------------------------------------------------------------------
@@ -780,7 +870,7 @@ var mcPlayer = function () {
      * @return {boolean}
      */
     this.minimizeBox = function (sBaseId) {
-        return this.toggleBoxAndButton(sBaseId,'minimize');
+        return this._toggleBoxAndButton(sBaseId,'minimize');
     };
 
     // ----------------------------------------------------------------------
@@ -792,7 +882,7 @@ var mcPlayer = function () {
      * @return {boolean}
      */
     this.maximizeBox = function (sBaseId) {
-        return this.toggleBoxAndButton(sBaseId,'maximize');
+        return this._toggleBoxAndButton(sBaseId,'maximize');
     };
 
 
@@ -913,8 +1003,8 @@ var mcPlayer = function () {
             // if this.cfg.settings.shuffle is active then shuffle again
             this._generatePlayorder();
             // repeat the list
-            if (this.bRepeatPlaylist){
-                this.setSong(this.aPlayorderList[(this.cfg.settings.shuffle ? 1 : 0)]);
+            if (this.isRepeatlist()){
+                this.setSong(this.aPlayorderList[(this.isShuffled() ? 1 : 0)]);
             }
         }
     };
@@ -1017,7 +1107,7 @@ var mcPlayer = function () {
         this._findPlaylistId();
         
         // update playlist: highlight correct song
-        document.getElementById("mcpplaylist").innerHTML = this.genPlaylist(sSongId);
+        document.getElementById("mcpplaylist").innerHTML = this._genPlaylist(sSongId);
 
         // update links in the document
         var oAList = document.getElementsByTagName("A");
@@ -1042,7 +1132,7 @@ var mcPlayer = function () {
         this.playeraction("play", true);
 
         document.getElementById("mcptitle").innerHTML = this.aPL[sSongId]["title"];
-        this.showInfo((sSongId + 1) + "/ " + this.aPL.length + "<br>&laquo;" + this.aPL[sSongId]["title"] + "&raquo;");
+        this._showInfo((sSongId + 1) + "/ " + this.aPL.length + "<br>&laquo;" + this.aPL[sSongId]["title"] + "&raquo;");
 
         if (this.cfg.settings.autoopen){
             this.maximize();
@@ -1328,16 +1418,6 @@ var mcPlayer = function () {
         this._fade(0, sChannelId);
     };
 
-    // ----------------------------------------------------------------------
-    /**
-     * fadein an audio
-     * @private
-     * @param  {string}   sChannelId      number of audio ... one of "2.0" | "5.1"
-     * @return {boolean}
-     */
-    this._fadeIn = function (sChannelId) {
-        return this._fade(this.cfg.settings.volume, sChannelId);
-    };
 
 
 // --------------------------------------------------------------------------------
@@ -1461,7 +1541,8 @@ var mcPlayer = function () {
 
     // ----------------------------------------------------------------------
     /**
-     * get id of the currently active song
+     * get id of the currently active song; first song starts with 0;
+     * value -1 means player did not start to play yet.
      * @returns {Number}
      */
     this.getSongId = function () {
@@ -1490,16 +1571,51 @@ var mcPlayer = function () {
     };
 
 
+    /**
+     * get boolean value - volume is muted?
+     * @returns {Boolean}
+     */
     this.isMuted = function() {
         return (this.oAudio && (this.oAudio.muted || !this.oAudio.volume));
     };
 
-    this.isPlaying = function() {
-        return (this.oAudio && !this.oAudio.paused);
-    };
+    /**
+     * get boolean value - playing audio is paused?
+     * @returns {Boolean}
+     */
     this.isPaused = function() {
         return (this.oAudio && this.oAudio.paused && this.oAudio.currentTime!==0);
     };
+    /**
+     * get boolean value - audio is playing? It returns true if audio is
+     * playing and false if paused or stopped.
+     * @returns {Boolean}
+     */
+    this.isPlaying = function() {
+        return (this.oAudio && !this.oAudio.paused);
+    };
+    /**
+     * get boolean value - is shuffling mode on?
+     * @returns {Boolean}
+     */
+    this.isRepeatlist = function() {
+        return (this.cfg.settings.repeatlist
+            ? !!this.cfg.settings.repeatlist
+            : false);
+    };
+    /**
+     * get boolean value - is shuffling mode on?
+     * @returns {Boolean}
+     */
+    this.isShuffled = function() {
+        return (this.cfg.settings.shuffle
+            ? this.cfg.settings.shuffle
+            : false);
+    };
+    /**
+     * get boolean value - playing audio is stopped
+     * @returns {Boolean}
+     */
     this.isStopped = function() {
         return (!this.oAudio || this.oAudio.currentTime===0);
     };
@@ -1545,7 +1661,7 @@ var mcPlayer = function () {
      * @return {boolean}
      */
     this.init = function () {
-        this._getName();            // detect name of the ocject variable that initialized the player
+        this._getName();            // detect name of the object variable that initialized the player
         this._generatePlaylist();   // scan audios on webpage
         this._initHtml();           // generate html for the player
         return true;
