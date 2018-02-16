@@ -345,6 +345,12 @@
                 <td><span id="spanPlayorder" class="val-array">...</span></td>
             </tr>
             <tr>
+                <td>Count of items in the Playlist</td>
+                <td>getPlaylistCount()</td>
+                <td>integer</td>
+                <td><span id="spanPlaylistCount" class="val-integer">...</span></td>
+            </tr>
+            <tr>
                 <td>number of the currently active song in the playlist (if shuffled)</td>
                 <td>getPlaylistId()</td>
                 <td>integer</td>
@@ -386,6 +392,7 @@
                         document.getElementById("spanAudiochannels").innerHTML = oMcPlayer.getAudioChannels();
                         document.getElementById("spanAllAudiochannels").innerHTML = '<pre>[' + oMcPlayer.getAllAudioChannels().toString() + ']</pre>';
                         document.getElementById("spanAudiosrc").innerHTML = oMcPlayer.getAudioSrc();
+                        document.getElementById("spanPlaylistCount").innerHTML = oMcPlayer.getPlaylistCount();
                         document.getElementById("spanPlaylist").innerHTML = '<pre>' + JSON.stringify(oMcPlayer.getPlaylist(), null, '  ') + '</pre>';
                     } catch (e) {
                         // 

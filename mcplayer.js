@@ -39,7 +39,7 @@
  * mcPlayer ... Multi Channel Player
  * 
  * @author    Axel Hahn
- * @version   0.24
+ * @version   0.25
  *
  * @this mcPlayer
  * 
@@ -56,15 +56,15 @@ var mcPlayer = function () {
     // settings
     this.cfg = {
         about: {
-            version: '0.24',
-            label: 'AMC Player - v0.24',
+            version: '0.25',
+            label: 'AMC Player - v0.25',
             description: '<strong>A</strong>xels <strong>M</strong>ulti <strong>C</strong>hannel <strong>Player</strong>.<br><br>This is a webbased HTML5 player.<br>It\'s focus is the handling of media in stereo and surround for a title.',
             labeldownload: 'Download:<br>',
             download: 'http://sourceforge.net/projects/amcplayer/files/latest/download',
             labellicense: 'License: ',
             license: 'GPL 3.0',
             labelurl: 'Project url:<br>',   
-            url: 'http://sourceforge.net/p/amcplayer/',
+            url: 'https://github.com/axelhahn/amcplayer/',
             labeldocurl: 'Documentation:<br>',
             docurl: 'https://www.axel-hahn.de/docs/amcplayer/index.htm'
         },
@@ -732,12 +732,11 @@ var mcPlayer = function () {
 
     /**
      * toggle visibility of a box (download, playlist, about)
-     * @private
      * @param {string}  sBaseId    sBaseId of the div and the button; one of download|playlist|about
      * @param {string}  sMode      optional: force action; one of minimize|maximize; default behaviuor is toggle
      * @return {boolean}
      */
-    this._toggleBoxAndButton = function (sBaseId, sMode) {
+    this.toggleBoxAndButton = function (sBaseId, sMode) {
         var oDiv=this._togglehelperGetDiv(sBaseId);
         
         var oBtn = document.getElementById('mcpopt'+sBaseId);
@@ -814,7 +813,7 @@ var mcPlayer = function () {
      */
     this.enableRepeat = function () {
         this.cfg.settings.repeatlist=true;
-        this._toggleBoxAndButton('repeat', 'maximize');
+        this.toggleBoxAndButton('repeat', 'maximize');
     };
     // ----------------------------------------------------------------------
     /**
@@ -823,7 +822,7 @@ var mcPlayer = function () {
      */
     this.disableRepeat = function () {
         this.cfg.settings.repeatlist=false;
-        this._toggleBoxAndButton('repeat', 'minimize');
+        this.toggleBoxAndButton('repeat', 'minimize');
     };
     
     // ----------------------------------------------------------------------
@@ -847,7 +846,7 @@ var mcPlayer = function () {
     this.enableShuffle = function () {
         this.cfg.settings.shuffle=true;
         this._generatePlayorder();
-        this._toggleBoxAndButton('shuffle', 'maximize');
+        this.toggleBoxAndButton('shuffle', 'maximize');
     };
     // ----------------------------------------------------------------------
     /**
@@ -857,7 +856,7 @@ var mcPlayer = function () {
     this.disableShuffle = function () {
         this.cfg.settings.shuffle=false;
         this._generatePlayorder();
-        this._toggleBoxAndButton('shuffle', 'minimize');
+        this.toggleBoxAndButton('shuffle', 'minimize');
     };
 
     // ----------------------------------------------------------------------
@@ -870,7 +869,7 @@ var mcPlayer = function () {
      * @return {boolean}
      */
     this.minimizeBox = function (sBaseId) {
-        return this._toggleBoxAndButton(sBaseId,'minimize');
+        return this.toggleBoxAndButton(sBaseId,'minimize');
     };
 
     // ----------------------------------------------------------------------
@@ -882,7 +881,7 @@ var mcPlayer = function () {
      * @return {boolean}
      */
     this.maximizeBox = function (sBaseId) {
-        return this._toggleBoxAndButton(sBaseId,'maximize');
+        return this.toggleBoxAndButton(sBaseId,'maximize');
     };
 
 
@@ -1511,10 +1510,15 @@ var mcPlayer = function () {
      * @return {array}
      */
     this.getPlaylist = function () {
-        if (!this.aPL || !this.aPL.length) {
-            return false;
-        }
-        return this.aPL;
+        return (!this.aPL || !this.aPL.length) ? false : this.aPL;
+    };
+    // ----------------------------------------------------------------------
+    /**
+     * get playlist with all songtitles and its sources
+     * @return {array}
+     */
+    this.getPlaylistCount = function () {
+        return (this.aPL ? this.aPL.length : false);
     };
 
     // ----------------------------------------------------------------------

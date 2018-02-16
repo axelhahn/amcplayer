@@ -1,0 +1,47 @@
+@charset "UTF-8";
+
+@font-face {
+  font-family: 'mcplayer_icons';
+  src: url("../font/mcplayer_icons.eot");
+  src: url("../font/mcplayer_icons.eot?#iefix") format('embedded-opentype'), url("../font/mcplayer_icons.woff") format('woff'), url("../font/mcplayer_icons.ttf") format('truetype'), url("../font/mcplayer_icons.svg#mcplayer_icons") format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+[class^="icon-"]:before,
+[class*=" icon-"]:before {
+  font-family: 'mcplayer_icons';
+  font-style: normal;
+  font-weight: normal;
+  speak: none;
+  display: inline-block;
+  text-decoration: inherit;
+  width: 1em;
+  margin-right: 0.2em;
+  text-align: center;
+  opacity: 0.7;
+/* Uncomment for 3D effect */
+/* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
+/* fix buttons height */
+  line-height: 1em;
+/* you can be more comfortable with increased icons size */
+/* font-size: 120%; */
+}
+
+.icon-pause:before { content: '\2389'; } /* '⎉' */
+.icon-fast-fw:before { content: '\23e9'; } /* '⏩' */
+.icon-fast-bw:before { content: '\23ea'; } /* '⏪' */
+.icon-to-end:before { content: '\23ed'; } /* '⏭' */
+.icon-to-start:before { content: '\23ee'; } /* '⏮' */
+.icon-stop:before { content: '\25aa'; } /* '▪' */
+.icon-play:before { content: '\25b6'; } /* '▶' */
+.icon-th-list:before { content: '\2630'; } /* '☰' */
+.icon-right-thin:before { content: '\27a1'; } /* '➡' */
+.icon-cw:before { content: '\27f3'; } /* '⟳' */
+.icon-info-circle-1:before { content: '\e802'; } /* '' */
+.icon-down-open-1:before { content: '\e800'; } /* '' */
+.icon-up-open-1:before { content: '\e801'; } /* '' */
+.icon-install:before { content: '\e778'; } /* '' */
+.icon-off:before { content: '\e78e'; } /* '' */
+.icon-shuffle:before { content: '🔀'; } /* '\1f500' */
+.icon-volume-off:before { content: '🔇'; } /* '\1f507' */
+.icon-volume-up:before { content: '🔊'; } /* '\1f50a' */
