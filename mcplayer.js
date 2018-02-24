@@ -686,15 +686,11 @@ var mcPlayer = function () {
      * @return nothing
      */
     this.maximize = function () {
-        
-        
+        o = document.getElementById("mcpwrapper");
+        o.setAttribute('style','');
         if (this.cfg.settings.movable && typeof addi !== 'undefined') {
-            // window.setTimeout('addi.load(document.getElementById("mcpwrapper"));', 10);
             addi.load(document.getElementById("mcpwrapper"));
-        }  else {
-            document.getElementById("mcpwrapper").setAttribute('style', '');            
         }
-        
         document.getElementById("mcpmaximize").className = 'hidebutton';
     };
 
