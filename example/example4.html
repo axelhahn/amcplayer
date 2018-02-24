@@ -5,47 +5,97 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <script src="functions.js"></script>
         <link rel="stylesheet" type="text/css" href="example.css" />
+        <!--
         <link rel="stylesheet" type="text/css" href="../mcplayer.min.css" media="screen" />
+        -->
+        <script src="functions.js"></script>
 
     </head>
     <body>
-        <h1>Demo AMC Player :: Language</h1>
+        <div id="morehead">
+            
+        </div>
+        <h1>Demo AMC Player :: Look and feel</h1>
         <nav>
             <a href="example1.html">Get started</a>
-            <a href="example2.html">API</a>
-            <a href="example3.html">Skins</a>
-            <a href="example4.html" class="active">Language</a>
+            <a href="example2.html">Drag and drop</a>
+            <a href="example3.html">API</a>
+            <a href="example4.html" class="active">Skins</a>
+            <a href="example5.html">Language</a>
         </nav>
 
         <!-- ************************************************************** -->
 
-        <h2>Set a Language</h2>
-        <p>
-            With the shipped javascript you get an English interface.<br>
-            To load a language you need to include a language file from
-            the <strong>lang</strong> directory. <br>
-            The language file contains all texts in the variable <em>aAmcLang</em>.
-            This needs to be set as variable.<br>
-            <br>
-            In this example the German languagefile is loaded.<br>
-        </p>
-
+            <h2>Live demo for skin selection</h2>
+        
+        
+            <form style="width: 90%; ">
+                <p>
+                    Click, to activate / switch color sets and layout types.<br>
+                </p>
+                <table><tr>
+                    <td>
+                        Color set:
+                        <select id="selColor" onchange="changeTheme();">
+                            <option value="">Default</option>
+                            <option value="lightgreen">light green</option>
+                            <option value="lightbrown">light brown</option>
+                            <option value="lightviolet">light violet</option>
+                            <option value="darkgray">dark gray</option>
+                        </select>
+                        <p><strong>Player Color</strong>
+                            With the shipped CSS you get a default skin.<br>
+                            You can create custom skins with overriding the CSS elements.
+                            To give you an entry point you can have a look to the css files in
+                            the <strong>skins</strong> directory.<br>
+                        </p>
+                    </td>
+                    <td>
+                        Type:
+                        <select id="selType" onchange="changeTheme();">
+                            <option value="">Default</option>
+                            <option value="bottombar">Bottom side</option>
+                        </select>
+                        <p>
+                            <strong>Layout Types</strong>
+                            The player is shipped with 2 style types: window like and as bottom bar.<br>
+                            The bottom bar is activated in the same way: by loading a css file.
+                            That it is fixed is done with css property <em>bottom:0</em><br>
+                            <br>
+                            remark: If you use a style with drag and drop support (for playlist, download window) but
+                            the main window must be unmovable, then you can switch it with true/ false:
+                        </p>
+                        <pre>oMcPlayer.makeMainwindowMovable(false);</pre>
+                    </td>
+                </tr>
+                </table>
+            </form>
+        
+        <div style="clear: both;"></div>
+        
         <h3>Html preview</h3>
         <pre>
+        &lt;head>
             (...)
-            &lt;script src="mcplayer.min.js">&lt;/script>
-        
-            &lt;!-- load a lang file ... it contains data in aAmcLang -->
-            &lt;script src="<strong>lang/mcplayer-de.min.js</strong>">&lt;/script>
+            &lt;link rel="stylesheet" type="text/css" href="mcplayer.min.css" media="screen" />
+            <span id="cssmore">(...)</span>
+        &lt;/head>
+        &lt;body>
 
-            &lt;script>
-                var oMcPlayer=new mcPlayer(<strong>aAmcLang</strong>);
-                oMcPlayer.init();
-            &lt;/script>
+          (...)
 
-            <span id="preview1placeholder">(...)</span>
+          &lt;script src="../addi.min.js">&lt;/script>
+          &lt;script src="../mcplayer.min.js">&lt;/script>
+
+          &lt;!-- initialize the player -->
+          &lt;script>
+            var oMcPlayer=new mcPlayer();
+            oMcPlayer.init();
+            <span id="playermore">(...)</span>
+          &lt;/script>
+
+        &lt;/body>
         </pre>
 
         <!-- ************************************************************** -->
@@ -166,16 +216,141 @@
         <!-- ************************************************************** -->
 
 
+        <script src="../addi.min.js"></script>
         <script src="../mcplayer.min.js"></script>
         
-        <!-- load a lang file ... it contains data in aAmcLang -->
-        <script src="../lang/mcplayer-de.min.js"></script>
-        
         <script>
-            var oMcPlayer=new mcPlayer(aAmcLang);
+            
+            // show player and playlist:
+            var oMcPlayer=new mcPlayer();
             oMcPlayer.init();
-            oMcPlayer.maximizeBox('playlist');
-            oMcPlayer.maximizeBox('download');
+            
+            /*
+             * ------------------------------------------------------------------
+             * 
+             * Hi there,
+             * 
+             * nice to see you here.
+             * But... just wanna tell you:
+             * 
+             * All the javascript code below is not needed to implement the
+             * player. It is to run this example page.
+             * 
+             * ------------------------------------------------------------------
+             */
+            
+            
+            /**
+             * callback of select boxes ... change url an call updater
+             * @returns {Boolean}
+             */
+            function changeTheme(){
+                var sUrl='';
+                var oSelType=document.getElementById('selType');
+                var oSelColor=document.getElementById('selColor');
+                if(oSelType.value){
+                    sUrl+=(sUrl ? '&' : '?') +  'type='+oSelType.value;
+                }
+                if(oSelColor.value){
+                    sUrl+=(sUrl ? '&' : '?') + 'skin='+oSelColor.value;
+                }
+                if(!sUrl){
+                    sUrl='?';
+                }
+                // location.href=sUrl;
+                window.history.pushState('dummy', 'Title', sUrl);
+                UpdateCss();
+                return false;
+            }
+
+            /**
+             * check query params and insert css code for the demo
+             * @returns {undefined}
+             */
+            function UpdateCss(){
+                var oSelType=document.getElementById('selType');
+                var oSelColor=document.getElementById('selColor');
+                var query = getQueryParams();
+                var sPreview='';
+                var sPlayerMore='';
+
+                clearCss();
+                
+                if(query.type){
+                    var cssfile='../skins/mcplayer-'+query.type.replace(/[^a-z]/g, '')+'.min.css';
+                    var link=addCss(cssfile);
+                    sPreview+='<strong>'+link.outerHTML.replace(/\</, '&lt;')+'</strong><br>            ';
+                    // oSelType.value=query.type;
+                    for ( var i = 0; i < oSelType.options.length; i++ ){
+                      var oOption = oSelType.options[i];
+                      if ( query.type.indexOf( oOption.value ) !== -1 ){
+                        oOption.selected = true;
+                      }
+                    }
+                    switch (query.type) {
+                        case 'bottombar':
+                            oMcPlayer.makeMainwindowMovable(false);
+                            sPlayerMore+='<strong>oMcPlayer.makeMainwindowMovable(false);</strong>';
+                            break;
+                       default:
+                            oMcPlayer.makeMainwindowMovable(true);
+                            break;
+                    }
+                    
+                } else {
+                    oMcPlayer.makeMainwindowMovable(true);
+                }
+                if(query.skin){
+
+                    var cssfile='../skins/mcplayer-'+query.skin.replace(/[^a-z]/g, '')+'.min.css';
+                    var link=addCss(cssfile);
+                    sPreview+='<strong>'+link.outerHTML.replace(/\</, '&lt;')+'</strong>';
+                    
+                    for ( var i = 0; i < oSelColor.options.length; i++ ){
+                      var oOption = oSelColor.options[i];
+                      if ( query.skin.indexOf( oOption.value ) !== -1 ){
+                        oOption.selected = true;
+                      }
+                    }
+                    
+                }
+                document.getElementById('cssmore').innerHTML=sPreview;
+                document.getElementById('playermore').innerHTML=sPlayerMore;
+            }
+
+            /**
+             * reset css div
+             * @returns {undefined}
+             */
+            function clearCss(){
+                var head  = document.getElementById('morehead');
+                
+                head.innerHTML='';
+                addCss('../mcplayer.min.css');
+            }
+            
+            /**
+             * helper function to add a css line; it returns the link object
+             * @param {type} cssfile
+             * @returns {addCss.link|Element}
+             */
+            function addCss(cssfile){
+                var link  = document.createElement('link');
+                link.rel  = 'stylesheet';
+                link.type = 'text/css';
+                link.href = cssfile;
+                link.media = 'screen';
+                var head  = document.getElementById('morehead');
+                head.appendChild(link);
+                return link;
+            }
+            
+            
+            window.onload = function () {
+                UpdateCss();
+            }
+            
+            
         </script>
 
         <br /><br /><br /><br />

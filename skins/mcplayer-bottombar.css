@@ -7,12 +7,12 @@
 #mcpwrapper{
     left:0;
     bottom:0;
+    height: 3.5em;
     width: 100%;
     padding:0;
 }
 #mcpwrapper>.mcpbox{
-    background: linear-gradient(to bottom, #dca,#a86);
-    display: none;
+    display: none; visibility: hidden;
 }
 #mcplayer{
     margin:0.5em;
@@ -28,8 +28,8 @@
 
 #mcplayer a{padding:0.3em;}
 
-#mcpdownloads, #mcpplaylist{bottom: 4em;}
 /*
+#mcpdownloads, #mcpplaylist{bottom: 4em;}
 #mcplayer a, #mcpabout a, #mcpdownloads a, #mcpplaylist a{color: #486;}
 #mcplayer a,#mcptime{color: #a86;}
     

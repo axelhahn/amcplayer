@@ -185,7 +185,7 @@ additional buttons for channels, options, dialogs
 
 /* ============================================================
 
-    Boxen
+    system buttons on top right
 
 ============================================================ */
 .mcpsystembutton{
@@ -198,31 +198,33 @@ additional buttons for channels, options, dialogs
 
 /* ============================================================
 
-    Playlist
+    boxes
 
 ============================================================ */
 #mcpabout,
 #mcpdownloads,
 #mcpplaylist{
     background:#f0f0f0;
+    background: linear-gradient(to bottom,#ddd,#fff,#ddd);
     border-radius: 3px;
     border: 1px solid rgba(0,0,0,0.3);
-    bottom: 140px;
+    /*bottom: 140px;*/
     color: rgba(0,0,0,0.6);
-    opacity: 0;
+    opacity: 1;
+    top: 70px;
     padding: 5px;
     position: fixed;
-    transition: all 0.25s ease-out;
+    transition: all 0.5s ease-out;
     width: 300px;
 }
-#mcpabout{width: 40%; left: 30%; bottom: -30em; right: auto;}
-#mcpabout.visible{opacity: 1; bottom: 150px;}
+#mcpabout{width: 40%; left: 10%; right: auto;}
+#mcpabout.Xvisible{opacity: 1; bottom: 150px;}
 
-#mcpplaylist{right: -310px;}
-#mcpplaylist.visible{opacity: 1; right: 10px;}
+#mcpplaylist{right: 10px;}
+#mcpplaylist.Xvisible{opacity: 1; right: 10px;}
 
-#mcpdownloads{right: -310px;}
-#mcpdownloads.visible{opacity: 1; right: 370px;}
+#mcpdownloads{right: 370px;}
+#mcpdownloads.Xvisible{opacity: 1; right: 370px;}
 
 
 #mcpdownloads ul,
@@ -290,7 +292,7 @@ additional buttons for channels, options, dialogs
 
 #mcpmaximize, .mcpsystembutton{
     background: rgb(255,197,120); /* Old browsers */
-    background: radial-gradient(center, ellipse cover,  rgba(255,220,180,1) 0%,rgba(251,157,35,1) 100%); /* W3C */
+    background: radial-gradient(circle at center, rgba(255,220,180,1) 0%,rgba(251,157,35,1) 100%); /* W3C */
     border: 1px solid #fff;    
     padding: 0px 5px; 
 }
@@ -338,15 +340,13 @@ additional buttons for channels, options, dialogs
 
 .songbtnactive{
     background: rgb(255,197,120); /* Old browsers */
-    background: radial-gradient(center, ellipse cover,  rgba(255,197,120,1) 0%,rgba(251,157,35,1) 100%); /* W3C */
+    background: radial-gradient(circle at center, rgba(255,197,120,1) 0%,rgba(251,157,35,1) 100%); /* W3C */
 }
 
 
 [class^="icon-"], [class*=" icon-"] {
     font-family: mcplayer_icons;
     font-style: normal;
-    speak: none;
-
     display: inline-block;
     width: 1.1em;
     margin-right: .1em;

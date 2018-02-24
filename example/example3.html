@@ -6,63 +6,19 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
         <link rel="stylesheet" type="text/css" href="example.css" />
-        <!--
         <link rel="stylesheet" type="text/css" href="../mcplayer.min.css" media="screen" />
-        -->
-        <script src="functions.js"></script>
-
+        
     </head>
     <body>
-        <div id="morehead">
-            
-        </div>
-        <h1>Demo AMC Player :: Look and feel</h1>
+        <h1>Demo AMC Player :: API</h1>
         <nav>
             <a href="example1.html">Get started</a>
-            <a href="example2.html">API</a>
-            <a href="example3.html" class="active">Skins</a>
-            <a href="example4.html">Language</a>
+            <a href="example2.html">Drag and drop</a>
+            <a href="example3.html" class="active">API</a>
+            <a href="example4.html">Skins</a>
+            <a href="example5.html">Language</a>
         </nav>
-
-        <!-- ************************************************************** -->
-
-        <h2>Player Color</h2>
-        <p>
-            With the shipped CSS you get a default skin.<br>
-            You can create custom skins with overriding the CSS elements.
-            To give you an entry point you can have a look to the css files in
-            the <strong>skins</strong> directory.<br>
-            <br>
-            Click, to activate:<br>
-        </p>
         
-        
-        
-        <form>
-            Color set:
-            <select id="selColor" onchange="changeTheme();">
-                <option value="">Default</option>
-                <option value="lightgreen">light green</option>
-                <option value="lightbrown">light brown</option>
-                <option value="lightviolet">light violet</option>
-                <option value="darkgray">dark gray</option>
-            </select>
-            Type:
-            <select id="selType" onchange="changeTheme();">
-                <option value="">Default</option>
-                <option value="bottombar">Bottom side</option>
-            </select>
-        </form>
-        
-        <h3>Html preview</h3>
-        <pre>
-        &lt;head>
-            (...)
-            &lt;link rel="stylesheet" type="text/css" href="mcplayer.min.css" media="screen" />
-            <span id="cssmore">(...)</span>
-        &lt;/head>
-        </pre>
-
         <!-- ************************************************************** -->
 
         <h2>Example audios</h2>
@@ -180,130 +136,273 @@
 
         <!-- ************************************************************** -->
 
+        <h2>Player Actions</h2>
 
-        <script src="../mcplayer.min.js"></script>
-        
+        <p>
+            Play a song based on a number:<br>
+            <button onclick="oMcPlayer.setSong(0)">setSong(0)</button>
+            <button onclick="oMcPlayer.setSong(1)">setSong(1)</button>
+            <button onclick="oMcPlayer.setSong(2)">setSong(2)</button>
+            <button onclick="oMcPlayer.setSong(3)">setSong(3)</button>
+            <button onclick="oMcPlayer.setSong(4)">setSong(4)</button>
+            <br>
+            <br>
+            Navigate to previous/ next song<br>
+            <button onclick="oMcPlayer.setPreviousSong()">setPreviousSong()</button>
+            <button onclick="oMcPlayer.setNextSong()">setNextSong()</button>
+            <br>
+            <br>
+            player actions play/ pause/ stop/ ...<br>
+            <button onclick="oMcPlayer.playeraction('play')">playeraction('play')</button>
+            <button onclick="oMcPlayer.playeraction('pause')">playeraction('pause')</button>
+            <button onclick="oMcPlayer.playeraction('stop')">playeraction('stop')</button>
+            <button onclick="oMcPlayer.playeraction('backward')">playeraction('backward')</button>
+            <button onclick="oMcPlayer.playeraction('forward')">playeraction('forward')</button>
+            <br>
+            <br>
+            set a postion (a float value in sec; must be lower duration)<br>
+            <button onclick="oMcPlayer.setAudioPosition(0);">setAudioPosition(0)</button>
+            <button onclick="oMcPlayer.setAudioPosition(60);">setAudioPosition(60)</button>
+            <button onclick="oMcPlayer.setAudioPosition(180.33);">setAudioPosition(180.33)</button>
+            <br>
+            <br>
+            set channel (see getAllChannels() to get available arguments)<br>
+            <button onclick="oMcPlayer.setChannel('2.0');">setChannel('2.0')</button>
+            <button onclick="oMcPlayer.setChannel('5.1');">setChannel('5.1')</button>
+            <br>
+            <br>
+            <br>
+            playing option repeat playlist<br>
+            <button onclick="oMcPlayer.enableRepeat()">enableRepeat()</button>
+            <button onclick="oMcPlayer.disableRepeat()">disableRepeat()</button>
+            <button onclick="oMcPlayer.toggleRepeat()">toggleRepeat()</button>
+            <br>
+            <br>
+            playing option shuffle playlist; see tasble below to see playlist order<br>
+            <button onclick="oMcPlayer.enableShuffle()">enableShuffle()</button>
+            <button onclick="oMcPlayer.disableShuffle()">disableShuffle()</button>
+            <button onclick="oMcPlayer.toggleShuffle()">toggleShuffle()</button>
+
+        </p>
+
+        <h2>Volume</h2>
+
+        <p>
+            The volume is a float value 0..1<br>
+            <button onclick="oMcPlayer.setVolume(0)">setVolume(0)</button>
+            <button onclick="oMcPlayer.setVolume(0.25)">setVolume(0.25)</button>
+            <button onclick="oMcPlayer.setVolume(0.5)">setVolume(0.5)</button>
+            <button onclick="oMcPlayer.setVolume(0.75)">setVolume(0.75)</button>
+            <button onclick="oMcPlayer.setVolume(1)">setVolume(1)</button>
+        </p>
+
+
+        <h2>Windows</h2>
+
+        <p>
+            min/ max player window<br>
+            <button onclick="oMcPlayer.maximize()">maximize()</button>
+            <button onclick="oMcPlayer.minimize()">minimize()</button>
+            <br>
+            <br>
+            <button onclick="oMcPlayer.maximizeBox('about')">maximizeBox('about')</button>
+            <button onclick="oMcPlayer.minimizeBox('about')">minimizeBox('about')</button>
+            <button onclick="oMcPlayer.toggleBoxAndButton('about')">toggleBoxAndButton('about')</button>
+            <br>
+            <button onclick="oMcPlayer.maximizeBox('playlist')">maximizeBox('playlist')</button>
+            <button onclick="oMcPlayer.minimizeBox('playlist')">minimizeBox('playlist')</button>
+            <button onclick="oMcPlayer.toggleBoxAndButton('playlist')">toggleBoxAndButton('playlist')</button>
+            <br>
+            <button onclick="oMcPlayer.maximizeBox('download')">maximizeBox('download')</button>
+            <button onclick="oMcPlayer.minimizeBox('download')">minimizeBox('download')</button>
+            <button onclick="oMcPlayer.toggleBoxAndButton('download')">toggleBoxAndButton('download')</button>
+        </p>
+
+        <h2>Infos</h2>
+        <p>
+            These are realtime infos you can fetch with different getter methods.
+        </p>
+        <table>
+            <tr>
+                <th>item</th>
+                <th>method</th>
+                <th>type</th>
+                <th>response</th>
+            </tr>
+            <tr>
+                <td>current song</td>
+                <td>getSong()</td>
+                <td>hash</td>
+                <td><span id="spanSong" class="val-hash">...</span></td>
+            </tr>
+            <tr>
+                <td>Id of current song in the playlist; starting with 0</td>
+                <td>getSongId()</td>
+                <td>integer</td>
+                <td><span id="spanCurrentsong" class="val-integer">...</span></td>
+            </tr>
+            <tr>
+                <td>Title of the current song</td>
+                <td>getSongTitle()</td>
+                <td>string</td>
+                <td><span id="spanCurrenttitle" class="val-string">...</span></td>
+            </tr>
+            <tr>
+                <td>Position in the audio; value is in sec</td>
+                <td>getAudioPosition()</td>
+                <td>float</td>
+                <td><span id="spanAudiopos" class="val-float">...</span></td>
+            </tr>
+            <tr>
+                <td>Duration of the audio; value is in sec</td>
+                <td>getAudioDuration()</td>
+                <td>float</td>
+                <td><span id="spanAudioduration" class="val-float">...</span></td>
+            </tr>
+            <tr>
+                <td>get all available channels of the current song</td>
+                <td>getAllAudioChannels()</td>
+                <td>array</td>
+                <td><span id="spanAllAudiochannels" class="val-array">...</span></td>
+            </tr>
+            <tr>
+                <td>Currently used channels</td>
+                <td>getAudioChannels()</td>
+                <td>string</td>
+                <td><span id="spanAudiochannels" class="val-string">...</span></td>
+            </tr>
+            <tr>
+                <td>Source file; url of the current audio</td>
+                <td>getAudioSrc()</td>
+                <td>string</td>
+                <td><span id="spanAudiosrc" class="val-string">...</span></td>
+            </tr>
+            <tr>
+                <td>is playing</td>
+                <td>isPlaying()</td>
+                <td>boolean</td>
+                <td><span id="spanIsPlaying" class="val-bool">...</span></td>
+            </tr>
+            <tr>
+                <td>is paused</td>
+                <td>isPaused()</td>
+                <td>boolean</td>
+                <td><span id="spanIsPaused" class="val-bool">...</span></td>
+            </tr>
+            <tr>
+                <td>is stopped</td>
+                <td>isStopped()</td>
+                <td>boolean</td>
+                <td><span id="spanIsStopped" class="val-bool">...</span></td>
+            </tr>
+            <tr>
+                <td>Get volume (value 0..1)</td>
+                <td>getVolume()</td>
+                <td>float</td>
+                <td><span id="spanCurrentvolume" class="val-float">...</span></td>
+            </tr>
+            <tr>
+                <td>is muted</td>
+                <td>isMuted()</td>
+                <td>boolean</td>
+                <td><span id="spanIsMuted" class="val-bool">...</span></td>
+            </tr>
+            <tr>
+                <td>is list repeated</td>
+                <td>isRepeatlist()</td>
+                <td>boolean</td>
+                <td><span id="spanIsRepeatlist" class="val-bool">...</span></td>
+            </tr>
+            <tr>
+                <td>is shuffled</td>
+                <td>isShuffled()</td>
+                <td>boolean</td>
+                <td><span id="spanIsShuffled" class="val-bool">...</span></td>
+            </tr>
+            
+            <tr>
+                <td>is box about visible</td>
+                <td>isVisibleBoxAbout()</td>
+                <td>boolean</td>
+                <td><span id="spanIsVisibleBoxAbout" class="val-bool">...</span></td>
+            </tr>
+            <tr>
+                <td>is box download visible</td>
+                <td>isVisibleBoxDownload()</td>
+                <td>boolean</td>
+                <td><span id="spanIsVisibleBoxDownload" class="val-bool">...</span></td>
+            </tr>
+            <tr>
+                <td>is box playlist visible</td>
+                <td>isVisibleBoxPlaylist()</td>
+                <td>boolean</td>
+                <td><span id="spanIsVisibleBoxPlaylist" class="val-bool">...</span></td>
+            </tr>
+            
+            <tr>
+                <td>Order of songs to play (it is randomized if isShuffled() is true)</td>
+                <td>getPlayorder()</td>
+                <td>array</td>
+                <td><span id="spanPlayorder" class="val-array">...</span></td>
+            </tr>
+            <tr>
+                <td>Count of items in the Playlist</td>
+                <td>getPlaylistCount()</td>
+                <td>integer</td>
+                <td><span id="spanPlaylistCount" class="val-integer">...</span></td>
+            </tr>
+            <tr>
+                <td>number of the currently active song in the playlist (if shuffled)</td>
+                <td>getPlaylistId()</td>
+                <td>integer</td>
+                <td><span id="spanPlaylistId" class="val-integer">...</span></td>
+            </tr>
+            <tr>
+                <td>Playlist</td>
+                <td>getPlaylist()</td>
+                <td>hash</td>
+                <td><span id="spanPlaylist" class="val-hash">...</span></td>
+            </tr>
+        </table>
+
+        <script src="../addi.js"></script>
+        <script src="../mcplayer.js"></script>
         <script>
-            
-            // show player and playlist:
-            var oMcPlayer=new mcPlayer();
-            oMcPlayer.init();
-            oMcPlayer.maximize();
-            oMcPlayer.maximizeBox('playlist');
-            oMcPlayer.maximizeBox('download');
-            
-            /*
-             * ------------------------------------------------------------------
-             * 
-             * Hi there,
-             * 
-             * nice to see you here.
-             * But... just wanna tell you:
-             * 
-             * All the javascript code below is not needed to implement the
-             * player. It is to run this example page.
-             * 
-             * ------------------------------------------------------------------
-             */
-            
-            
-            /**
-             * callback of select boxes ... change url an call updater
-             * @returns {Boolean}
-             */
-            function changeTheme(){
-                var sUrl='';
-                var oSelType=document.getElementById('selType');
-                var oSelColor=document.getElementById('selColor');
-                if(oSelType.value){
-                    sUrl+=(sUrl ? '&' : '?') +  'type='+oSelType.value;
-                }
-                if(oSelColor.value){
-                    sUrl+=(sUrl ? '&' : '?') + 'skin='+oSelColor.value;
-                }
-                if(!sUrl){
-                    sUrl='?';
-                }
-                // location.href=sUrl;
-                window.history.pushState('dummy', 'Title', sUrl);
-                UpdateCss();
-                return false;
-            }
+                // show player
+                var oMcPlayer = new mcPlayer();
+                oMcPlayer.init();
 
-            /**
-             * check query params and insert css code for the demo
-             * @returns {undefined}
-             */
-            function UpdateCss(){
-                var oSelType=document.getElementById('selType');
-                var oSelColor=document.getElementById('selColor');
-                var query = getQueryParams();
-                var sPreview='';
-
-                clearCss();
-                
-                if(query.type){
-                    var cssfile='../skins/mcplayer-'+query.type.replace(/[^a-z]/g, '')+'.min.css';
-                    var link=addCss(cssfile);
-                    sPreview+='<strong>'+link.outerHTML.replace(/\</, '&lt;')+'</strong><br>            ';
-                    // oSelType.value=query.type;
-                    for ( var i = 0; i < oSelType.options.length; i++ ){
-                      var oOption = oSelType.options[i];
-                      if ( query.type.indexOf( oOption.value ) !== -1 ){
-                        oOption.selected = true;
-                      }
+                function updateInfos() {
+                    try {
+                        document.getElementById("spanPlayorder").innerHTML = '<pre>[' + oMcPlayer.getPlayorder().toString() + ']</pre>';
+                        document.getElementById("spanPlaylistId").innerHTML = oMcPlayer.getPlaylistId();
+                        document.getElementById("spanCurrentsong").innerHTML = oMcPlayer.getSongId();
+                        document.getElementById("spanCurrenttitle").innerHTML = oMcPlayer.getSongTitle();
+                        document.getElementById("spanSong").innerHTML = '<pre>' + JSON.stringify(oMcPlayer.getSong(), null, '  ') + '</pre>';
+                        document.getElementById("spanIsPlaying").innerHTML = oMcPlayer.isPlaying();
+                        document.getElementById("spanIsPaused").innerHTML = oMcPlayer.isPaused();
+                        document.getElementById("spanIsStopped").innerHTML = oMcPlayer.isStopped();
+                        document.getElementById("spanIsMuted").innerHTML = oMcPlayer.isMuted();
+                        document.getElementById("spanIsShuffled").innerHTML = oMcPlayer.isShuffled();
+                        document.getElementById("spanIsRepeatlist").innerHTML = oMcPlayer.isRepeatlist();
+                        document.getElementById("spanIsVisibleBoxAbout").innerHTML = oMcPlayer.isVisibleBoxAbout();
+                        document.getElementById("spanIsVisibleBoxDownload").innerHTML = oMcPlayer.isVisibleBoxDownload();
+                        document.getElementById("spanIsVisibleBoxPlaylist").innerHTML = oMcPlayer.isVisibleBoxPlaylist();
+                        document.getElementById("spanCurrentvolume").innerHTML = oMcPlayer.getVolume();
+                        document.getElementById("spanAudiopos").innerHTML = oMcPlayer.getAudioPosition();
+                        document.getElementById("spanAudioduration").innerHTML = oMcPlayer.getAudioDuration();
+                        document.getElementById("spanAudiochannels").innerHTML = oMcPlayer.getAudioChannels();
+                        document.getElementById("spanAllAudiochannels").innerHTML = '<pre>[' + oMcPlayer.getAllAudioChannels().toString() + ']</pre>';
+                        document.getElementById("spanAudiosrc").innerHTML = oMcPlayer.getAudioSrc();
+                        document.getElementById("spanPlaylistCount").innerHTML = oMcPlayer.getPlaylistCount();
+                        document.getElementById("spanPlaylist").innerHTML = '<pre>' + JSON.stringify(oMcPlayer.getPlaylist(), null, '  ') + '</pre>';
+                    } catch (e) {
+                        // 
                     }
+                    window.setTimeout("updateInfos();", 100);
                 }
-                if(query.skin){
+                updateInfos();
 
-                    var cssfile='../skins/mcplayer-'+query.skin.replace(/[^a-z]/g, '')+'.min.css';
-                    var link=addCss(cssfile);
-                    sPreview+='<strong>'+link.outerHTML.replace(/\</, '&lt;')+'</strong>';
-                    
-                    for ( var i = 0; i < oSelColor.options.length; i++ ){
-                      var oOption = oSelColor.options[i];
-                      if ( query.skin.indexOf( oOption.value ) !== -1 ){
-                        oOption.selected = true;
-                      }
-                    }
-                    
-                }
-                document.getElementById('cssmore').innerHTML=sPreview;
-            }
-
-            /**
-             * reset css div
-             * @returns {undefined}
-             */
-            function clearCss(){
-                var head  = document.getElementById('morehead');
-                
-                head.innerHTML='';
-                addCss('../mcplayer.min.css');
-            }
-            
-            /**
-             * helper function to add a css line; it returns the link object
-             * @param {type} cssfile
-             * @returns {addCss.link|Element}
-             */
-            function addCss(cssfile){
-                var link  = document.createElement('link');
-                link.rel  = 'stylesheet';
-                link.type = 'text/css';
-                link.href = cssfile;
-                link.media = 'screen';
-                var head  = document.getElementById('morehead');
-                head.appendChild(link);
-                return link;
-            }
-            
-            
-            window.onload = function () {
-                UpdateCss()
-            }
-            
-            
         </script>
 
         <br /><br /><br /><br />

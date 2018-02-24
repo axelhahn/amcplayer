@@ -39,7 +39,7 @@
  * mcPlayer ... Multi Channel Player
  * 
  * @author    Axel Hahn
- * @version   0.25
+ * @version   0.26
  *
  * @this mcPlayer
  * 
@@ -56,8 +56,8 @@ var mcPlayer = function () {
     // settings
     this.cfg = {
         about: {
-            version: '0.25',
-            label: 'AMC Player - v0.25',
+            version: '0.26',
+            label: 'AMC Player - v0.26',
             description: '<strong>A</strong>xels <strong>M</strong>ulti <strong>C</strong>hannel <strong>Player</strong>.<br><br>This is a webbased HTML5 player.<br>It\'s focus is the handling of media in stereo and surround for a title.',
             labeldownload: 'Download:<br>',
             download: 'http://sourceforge.net/projects/amcplayer/files/latest/download',
@@ -177,6 +177,7 @@ var mcPlayer = function () {
         },
         settings:{
             autoopen: 1,
+            movable: 1,   // v0.26
             repeatlist: 1,
             shuffle: 0,
             volume: 0.9
@@ -567,22 +568,16 @@ var mcPlayer = function () {
 
     // ----------------------------------------------------------------------
     /**
-     * scan AUDIO tags and its sources in a document to create an
-     * object with all current songs
+     * init html code of the player - by creating all missing elements
      * @private
      * @return nothing
      */
     this._initHtml = function () {
 
-        this.oDivPlayerhud = document.getElementById("mcphud");
-        if (!this.oDivPlayerhud) {
-            document.getElementsByTagName("BODY")[0].innerHTML += '<div id="mcphud"></div>';
-            this.oDivPlayerhud = document.getElementById("mcphud");
-        }
-
+        var styleTop=' style="top: '+((document.documentElement.clientHeight + 100)+'px')+';"';
         this.oDivDownloads = document.getElementById("mcpdownloads");
         if (!this.oDivDownloads) {
-            document.getElementsByTagName("BODY")[0].innerHTML += '<div id="mcpdownloads"></div>';
+            document.getElementsByTagName("BODY")[0].innerHTML += '<div id="mcpdownloads" class="draggable saveposition"'+styleTop+'></div>';
             this.oDivDownloads = document.getElementById("mcpdownloads");
         }
         this.oDivDownloads.innerHTML = this._genDownloads();
@@ -590,7 +585,7 @@ var mcPlayer = function () {
         this.oDivPlaylist = document.getElementById("mcpplaylist");
         if (!this.oDivPlaylist) {
             // this.oDivPlayerwrapper.innerHTML+='<div id="mcpplaylist"></div>';
-            document.getElementsByTagName("BODY")[0].innerHTML += '<div id="mcpplaylist"></div>';
+            document.getElementsByTagName("BODY")[0].innerHTML += '<div id="mcpplaylist" class="draggable saveposition"'+styleTop+'></div>';
             this.oDivPlaylist = document.getElementById("mcpplaylist");
         }
         this.oDivPlaylist.innerHTML = this._genPlaylist();
@@ -598,12 +593,12 @@ var mcPlayer = function () {
 
         this.oDivPlayerwrapper = document.getElementById("mcpwrapper");
         if (!this.oDivPlayerwrapper) {
-            document.getElementsByTagName("BODY")[0].innerHTML += '<div id="mcpwrapper"></div>';
+            document.getElementsByTagName("BODY")[0].innerHTML += '<div id="mcpwrapper"'+(this.cfg.settings.movable ? 'class="draggable saveposition"' :'')+'></div>';
             this.oDivPlayerwrapper = document.getElementById("mcpwrapper");
         }
         this.oDivHeader = document.getElementById("mcpheader");
         if (!this.oDivHeader) {
-            this.oDivPlayerwrapper.innerHTML += '<div class="mcpbox">' + this.cfg.about.label + ' <span id="mcptitle"></span><span class="mcpsystembutton"><a href="#" class="icon-down-open-1" onclick="' + this.name + '.minimize(); return false" title="' + this.cfg.aPlayer.buttons["minimize"].title + '">' + this.cfg.aPlayer.buttons["minimize"].label + '</a></span></div>';
+            this.oDivPlayerwrapper.innerHTML += '<div id="mcpheader" class="mcpbox">' + this.cfg.about.label + ' <span id="mcptitle"></span><span class="mcpsystembutton"><a href="#" class="icon-down-open-1" onclick="' + this.name + '.minimize(); return false" title="' + this.cfg.aPlayer.buttons["minimize"].title + '">' + this.cfg.aPlayer.buttons["minimize"].label + '</a></span></div>';
         }
 
         if (!this.oDivAudios) {
@@ -624,9 +619,14 @@ var mcPlayer = function () {
         if (!this.oAPlayermaximize) {
             document.getElementsByTagName("BODY")[0].innerHTML += '<a href="#" id="mcpmaximize" class="mcpsystembutton hidebutton" onclick="' + this.name + '.maximize(); return false" title="' + this.cfg.aPlayer.buttons["maximize"].title + '">' + this.cfg.aPlayer.buttons["maximize"].label + '</a>';
             this.oAPlayermaximize = document.getElementById("mcpmaximize");
+        }        
+        document.getElementsByTagName("BODY")[0].innerHTML += '<div id="mcpabout" class="draggable saveposition"'+styleTop+'>' + this._genAboutbox() + '</div>';
+        this.oDivPlayerhud = document.getElementById("mcphud");
+        if (!this.oDivPlayerhud) {
+            document.getElementsByTagName("BODY")[0].innerHTML += '<div id="mcphud"></div>';
+            this.oDivPlayerhud = document.getElementById("mcphud");
         }
-        document.getElementsByTagName("BODY")[0].innerHTML += '<div id="mcpabout">' + this._genAboutbox() + '</div>';
-
+        
     };
 
     // ----------------------------------------------------------------------
@@ -638,7 +638,9 @@ var mcPlayer = function () {
      */
     this.minimize = function () {
         o = document.getElementById("mcpwrapper");
-        o.className = 'minimized';
+        // o.className += ' minimized';
+        // o.setAttribute('style','');
+        o.style.top=(document.documentElement.clientHeight + 100) + 'px';
 
         this.minimizeBox('about');
         this.minimizeBox('download');
@@ -648,19 +650,43 @@ var mcPlayer = function () {
         o.className = '';
     };
 
+    this.makeMainwindowMovable = function(bMove) {
+        this.cfg.settings.movable=bMove;
+        o=document.getElementById("mcpwrapper");
+        if(this.cfg.settings.movable){
+            o.className='draggable saveposition';
+            if (typeof addi !== 'undefined') {
+                addi.initDiv(o);
+            }
+        } else {
+            o.className='';
+            if (typeof addi !== 'undefined') {
+                addi.resetDiv(o);
+            }
+            this.maximize(); 
+            o.setAttribute('style', '');
+            
+        }
+    };
     // ----------------------------------------------------------------------
     /**
-     * show player GUI
+     * show/ maximize the player GUI
      * @example
      * &lt;a href="#" onclick="oMcPlayer.maximize(); return false;"&gt;show the player&lt;/a&gt;
      * 
      * @return nothing
      */
     this.maximize = function () {
-        o = document.getElementById("mcpwrapper");
-        o.className = '';
-        o = document.getElementById("mcpmaximize");
-        o.className = 'hidebutton';
+        
+        
+        if (this.cfg.settings.movable && typeof addi !== 'undefined') {
+            // window.setTimeout('addi.load(document.getElementById("mcpwrapper"));', 10);
+            addi.load(document.getElementById("mcpwrapper"));
+        }  else {
+            document.getElementById("mcpwrapper").setAttribute('style', '');            
+        }
+        
+        document.getElementById("mcpmaximize").className = 'hidebutton';
     };
 
 
@@ -741,19 +767,25 @@ var mcPlayer = function () {
         
         var oBtn = document.getElementById('mcpopt'+sBaseId);
         if(!sMode){
-            sMode=(oDiv.className ? 'minimize' : 'maximize')
+            sMode=(oBtn.className.indexOf('active')<0 ? 'maximize': 'minimize')
         }
         
         if (sMode==='minimize') {
             if (oDiv) {
-                oDiv.className = '';
+                oDiv.style.top=(document.documentElement.clientHeight + 10) + 'px';
+                oDiv.style.opacity=0.1;
             }
             if (oBtn) {
                 oBtn.className = '';
             }
         } else if (sMode==='maximize') {
             if (oDiv) {
-                oDiv.className = 'visible';
+                // oDiv.className += ' visible';
+                oDiv.setAttribute('style', '');
+                oDiv.style.opacity=1;
+                if (typeof addi !== 'undefined') {
+                    addi.load(oDiv);
+                }
             }
             if (oBtn) {
                 oBtn.className = 'active';
@@ -1667,9 +1699,17 @@ var mcPlayer = function () {
     this.init = function () {
         this._getName();            // detect name of the object variable that initialized the player
         this._generatePlaylist();   // scan audios on webpage
-        this._initHtml();           // generate html for the player
+        this._initHtml();           // generate html for the player        
+        if (typeof addi !== 'undefined') {
+            addi.init();
+        }
+        this.minimizeBox('about');
+        this.minimizeBox('download');
+        this.minimizeBox('playlist');
         return true;
     };
+    
+    
 
     // ----------------------------------------------------------------------
     // MAIN
