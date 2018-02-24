@@ -805,8 +805,9 @@ var mcPlayer = function () {
      * @returns {Boolean}
      */
     this.isVisibleBox = function (sBaseId){
-        var oDiv=this._togglehelperGetDiv(sBaseId);
-        return !!oDiv.className;
+        // var oDiv=this._togglehelperGetDiv(sBaseId);
+        var oBtn = document.getElementById('mcpopt'+sBaseId);
+        return !!oBtn.className;
     };
     /**
      * return if about dialog box is visible
