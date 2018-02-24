@@ -650,6 +650,15 @@ var mcPlayer = function () {
         o.className = '';
     };
 
+    // ----------------------------------------------------------------------
+    /**
+     * set if make the main player window is movable.
+     * This method is useful if you added drag and drop support (addi.min.js)
+     * for the windows but the main player is fixed on the bottom.
+     * 
+     * @param {boolean} bMove  flag true/ false
+     * @returns {undefined}
+     */
     this.makeMainwindowMovable = function(bMove) {
         this.cfg.settings.movable=bMove;
         o=document.getElementById("mcpwrapper");
