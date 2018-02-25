@@ -6,7 +6,7 @@
  *   (named "draggable" by default - but you can use any other name)
  * 
  * @author    Axel Hahn
- * @version   1.0
+ * @version   0.02
  *
  * @this addi
  * 
@@ -65,9 +65,10 @@ var addi = function(){
          * @returns {addiaddi.addiAnonym$0.getVisibl_getVisiblePositionym$2}
          */
         _fixVisiblePosition : function(oDiv2Drag,xpos,ypos){
-            var iMaxX=document.documentElement.clientWidth-oDiv2Drag.clientWidth;
-            var iMaxY=document.documentElement.clientHeight-oDiv2Drag.clientHeight;
-            
+            // get screensize and max position of a div
+            var iMaxX=document.body.style.width  ? document.body.style.width-oDiv2Drag.clientWidth : xpos;
+            var iMaxY=document.body.style.height ? document.body.style.height-oDiv2Drag.clientHeight : ypos;
+
             xpos=Math.max(0,xpos);
             xpos=Math.min(iMaxX,xpos);
             
@@ -138,7 +139,7 @@ var addi = function(){
          * @param {object} oDiv2Drag  movable object
          * @returns {undefined}
          */
-        initDiv: function(oDiv2Drag){
+        initDiv: function(oDiv2Drag,oDiv2Click){
             var sDivId=oDiv2Drag.id;
             if(!sDivId){
                 // oDiv2Drag.id=''
@@ -146,16 +147,18 @@ var addi = function(){
             }
             // add events
             // using atributes instead of addEventListener
-            oDiv2Drag.onmousedown = function (event) {
+            o=(oDiv2Click ? oDiv2Click : oDiv2Drag);
+            o.onmousedown = function (event) {
                 addi.startMoving(document.getElementById(sDivId),event);
             };
-            oDiv2Drag.onmouseup = function () {
+            o.onmouseup = function () {
                 addi.stopMoving(document.getElementById(sDivId));
             };
-            oDiv2Drag.setAttribute('draggable', 'true');
+            // for FF only:
+            // oDiv2Drag.setAttribute('draggable', 'true');
             
             // restore last position
-            if (oDiv2Drag.className.indexOf('saveposition')>=0){
+            if (oDiv2Drag.className.indexOf('saveposition')!==false){
                 this.load(oDiv2Drag);
             }
         },
@@ -201,13 +204,13 @@ var addi = function(){
         save : function(oDiv2Drag){
             aData={
                 left: oDiv2Drag.style.left.replace('px',''),
-                top: oDiv2Drag.style.top.replace('px','')
+                top:  oDiv2Drag.style.top.replace('px','')
             };
             localStorage.setItem(this._getVarname(oDiv2Drag.id),JSON.stringify(aData));
         },
 
         /**
-         * called by onmousemove event
+         * called by onmousedown event
          * 
          * @param {object} oDiv2Drag  movable object
          * @param {object} evt        event
@@ -245,7 +248,8 @@ var addi = function(){
             return true;
         },
         /**
-         * called on mouse up
+         * called on mouse up event
+         * 
          * @param {object} oDiv2Drag  movable object
          * @returns {undefined}
          */
@@ -259,11 +263,12 @@ var addi = function(){
             document.onmousemove = function(){};
         },
         /**
-         * reset style, onmousedown, onmouseup to make a div unmovable
+         * reset style, onmousedown, onmouseup to make divs unmovable
          * @param {string} sClass  optional: class of draggable elements; default: "draggable"
+         * @param {bool}   bRemoveLocalstorage  flag: remove saved local variable too
          * @returns {undefined}
          */
-        reset : function(sClass){
+        reset : function(sClass,bRemoveLocalstorage){
             if(sClass){
                 this._dragClass='draggable';
             }
@@ -277,14 +282,19 @@ var addi = function(){
         },
         /**
          * reset a single div and make it unmovable
-         * @param {object} oDiv2Drag  movable object
+         * @param {object} oDiv2Drag            movable object 
+         * @param {bool}   bRemoveLocalstorage  flag: remove saved local variable too
          * @returns {undefined}
          */
-        resetDiv : function(oDiv2Drag){
+        resetDiv : function(oDiv2Drag, bRemoveLocalstorage){
             oDiv2Drag.onmousemove = null;
             oDiv2Drag.onmouseup = null;
             oDiv2Drag.onmousedown = null;
-            oDiv2Drag.removeAttribute('draggable');
+            // FF only
+            // oDiv2Drag.removeAttribute('draggable');
+            if(bRemoveLocalstorage){
+                localStorage.delItem(this._getVarname(oDiv2Drag.id));
+            }
         }
     };
 }();

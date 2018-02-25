@@ -1,4 +1,4 @@
-body{background:#fff; border: 1px solid #eee; box-shadow: 0 0 3em #ccc; color:#666; font-family:"verdana","arial"; margin: 2em 10% 10em; padding: 1em;}
+body{background:#fff; border: 1px solid #eee; box-shadow: 0 0 5em #cde; color:#666; font-family:"verdana","arial"; margin: 2em 10% 10em; padding: 1em;}
 a{color:#339;}
 button{background:#f8f8f8; border-radius: 0.3em; border: 1px solid #ccc; padding: 0.3em 1em;}
 button:hover{background:#ccc; }
@@ -10,7 +10,7 @@ h3{color:#79b;}
 hr{border: none; border-top: 2px solid #abc;}
 nav{background: #e0e8f8; background: linear-gradient(#fff,#e0f0f8,#d0d4f8); padding: 1.5em 1.0em 0.7em 1.0em;}
 nav a{text-decoration: none; border: 0px solid #e0e8f0; color:#67a ;padding: 0.7em; margin-top: 1em; }
-nav a.active{background: #fff; border-top: 3px solid #fc3; box-shadow: 0 0 1em #fff;}
+nav a.active{background: #fff; border-top: 3px solid #fc3; box-shadow: 0.3em 0.5em 1em #fff, -0.3em 0.5em 1em #fff;}
 nav a:hover{text-decoration: underline;}
 pre{ background:#eee; padding: 1em;}
 pre strong{ background:#fc3; color:#000; }

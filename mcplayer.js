@@ -39,7 +39,7 @@
  * mcPlayer ... Multi Channel Player
  * 
  * @author    Axel Hahn
- * @version   0.26
+ * @version   0.27
  *
  * @this mcPlayer
  * 
@@ -336,7 +336,7 @@ var mcPlayer = function () {
         }
         this.aPL.push(aSong);
         this._generatePlayorder();
-    }
+    };
 
 
     // ----------------------------------------------------------------------
@@ -424,7 +424,7 @@ var mcPlayer = function () {
             + '<p>' + this.cfg.about.labelurl + '<a href="' + this.cfg.about.url + '" target="_blank">' + this.cfg.about.url + '</a></p>'
             + '<p>' + this.cfg.about.labeldownload + '<a href="' + this.cfg.about.download + '" target="_blank">' + this.cfg.about.download + '</a></p>'
             + '<p>' + this.cfg.about.labeldocurl + '<a href="' + this.cfg.about.docurl + '" target="_blank">' + this.cfg.about.docurl + '</a></p>'
-            + '</div>'
+            + '</div>';
     };
 
     // ----------------------------------------------------------------------
@@ -751,7 +751,6 @@ var mcPlayer = function () {
      * @see isVisible()
      * @private
      * @param {string}  sBaseId    sBaseId of the div and the button; one of download|playlist|about
-     * @param {string}  sMode      optional: force action; one of minimize|maximize; default behaviuor is toggle
      * @return {boolean}
      */
     this._togglehelperGetDiv = function (sBaseId) {
@@ -772,7 +771,7 @@ var mcPlayer = function () {
         
         var oBtn = document.getElementById('mcpopt'+sBaseId);
         if(!sMode){
-            sMode=(oBtn.className.indexOf('active')<0 ? 'maximize': 'minimize')
+            sMode=(oBtn.className.indexOf('active')<0 ? 'maximize': 'minimize');
         }
         
         if (sMode==='minimize') {
@@ -903,7 +902,7 @@ var mcPlayer = function () {
      * 
      * @example
      * &lt;button onclick="oMcPlayer.minimizeBox('download')">hide Downloads&lt;/button>
-     * @param {string} sID name of the div ("download" | "playlist" | "about")
+     * @param {string}  sBaseId  name of the div ("download" | "playlist" | "about")
      * @return {boolean}
      */
     this.minimizeBox = function (sBaseId) {
@@ -915,7 +914,7 @@ var mcPlayer = function () {
      * maximize a box; argument is a base id of a button or div
      * @example
      * &lt;button onclick="oMcPlayer.maximizeBox('download')">show Downloads&lt;/button>
-     * @param {string} sID name of the div ("download" | "playlist" | "about")
+     * @param {string}  sBaseId  name of the div ("download" | "playlist" | "about")
      * @return {boolean}
      */
     this.maximizeBox = function (sBaseId) {
@@ -1055,7 +1054,7 @@ var mcPlayer = function () {
      * &lt;a href="#" onclick="oMcPlayer.setSong(0); return false;"&gt;first song&lt;/a&gt;
      * &lt;a href="#" onclick="oMcPlayer.setSong(1); return false;"&gt;second song&lt;/a&gt;
      * 
-     * @param  {int}  iSongId  number of song to play; the first audio tag in the
+     * @param  {int}  sSongId  number of song to play; the first audio tag in the
      *                         html document has id 0
      * @return {boolean}
      */
@@ -1749,7 +1748,7 @@ mcPlayer.prototype.global = this; // required for getName()
  * @param  from  assoc array 2
  */
 var realMerge = function (to, from) {
-    for (n in from) {
+    for (var n in from) {
         if (typeof to[n] !== 'object') {
             to[n] = from[n];
         } else if (typeof from[n] === 'object') {
