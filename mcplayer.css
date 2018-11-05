@@ -47,7 +47,7 @@
     /* background: rgba(200, 200, 255, 0.4); */
     background: rgb(195,217,255); /* Old browsers */
     background: linear-gradient(to bottom, #9cf, #56a, #9cf);
-    color:#fff;
+    color:#fff; 
 }
 
 
@@ -360,25 +360,19 @@ additional buttons for channels, options, dialogs
 }
 
 
-#mcppause:before,.icon-pause:before { content: "⎉"; } /* '\2389' */
-#mcpforward:before, .icon-fast-fw:before { content: "⏩"; } /* '\23e9' */
-#mcpbackward:before, .icon-fast-bw:before { content: "⏪"; } /* '\23ea' */
-#mcpjumpnext:before, .icon-to-end:before { content: "⏭"; } /* '\23ed' */
-#mcpjumpprev:before, .icon-to-start:before { content: "⏮"; } /* '\23ee' */
-#mcpstop:before, .icon-stop:before { content: "▪"; } /* '\25aa' */
-#mcpplay:before, .icon-play:before { content: "▶"; } /* '\25b6' */
-#mcpoptplaylist:before, .icon-th-list:before { content: "☰"; } /* '\2630' */
-.icon-cancel-circle:before { content: "✖"; } /* '\2716' */
-#mcpoptrepeat:before,.icon-cw:before { content: "⟳"; } /* '\27f3' */
-#mcpoptshuffle:before,.icon-cw:before { content: "🔀"; } /* '\1f500' */
-#mcpminimize:before, .icon-down-open-1:before { content: ""; font-family: mcplayer_icons;} /* '\e800' */
-#mcpmaximize:before, .icon-up-open-1:before { content: ""; font-family: mcplayer_icons;} /* '\e801' */
-#mcpoptdownload:before, .icon-install:before { content: ""; } /* '\e778' */
-.icon-off:before { content: ""; } /* '\e78e' */
-.icon-shuffle:before { content: "🔀"; } /* '\1f500' */
-#mcpvolmute:before, .icon-volume-off:before { content: "🔇"; } /* '\1f507' */
-#mcpvolfull:before, .icon-volume-up:before { content: "🔊"; } /* '\1f50a' */
-
-.icon-right-thin:before { content: '\27a1'; } /* 'âž¡' */
-#mcpoptabout:before, .icon-info-circle-1:before { content: '\e802'; } /* 'î ‚' */
-.icon-shuffle:before { content: 'ðŸ”€'; } /* '\1f500' */
+#mcppause:before,       .icon-pause:before          { content: "⎉"; } /* '\2389' */
+#mcpforward:before,     .icon-fast-fw:before        { content: "⏩"; } /* '\23e9' */
+#mcpbackward:before,    .icon-fast-bw:before        { content: "⏪"; } /* '\23ea' */
+#mcpjumpnext:before,    .icon-to-end:before         { content: "⏭"; } /* '\23ed' */
+#mcpjumpprev:before,    .icon-to-start:before       { content: "⏮"; } /* '\23ee' */
+#mcpstop:before,        .icon-stop:before           { content: "▪"; } /* '\25aa' */
+#mcpplay:before,        .icon-play:before           { content: "▶"; } /* '\25b6' */
+#mcpoptplaylist:before, .icon-th-list:before        { content: "☰"; } /* '\2630' */
+#mcpoptrepeat:before,   .icon-cw:before             { content: "⟳"; } /* '\27f3' */
+#mcpoptshuffle:before,  .icon-cw:before             { content: "🔀"; } /* '\1f500' */
+#mcpminimize:before,    .icon-down-open-1:before    { content: ""; font-family: mcplayer_icons;} /* '\e800' */
+#mcpmaximize:before,    .icon-up-open-1:before      { content: ""; font-family: mcplayer_icons;} /* '\e801' */
+#mcpoptdownload:before, .icon-install:before        { content: ""; } /* '\e778' */
+#mcpvolmute:before,     .icon-volume-off:before     { content: "🔇"; } /* '\1f507' */
+#mcpvolfull:before,     .icon-volume-up:before      { content: "🔊"; } /* '\1f50a' */
+#mcpoptabout:before,    .icon-info-circle-1:before  { content: '\e802'; } /* 'î ‚' */

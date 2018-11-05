@@ -67,7 +67,8 @@ var aAmcLang = {
                 title: 'Zufallswiedergabe'
             },
             download: {
-                title: 'Download anzeigen/ ausblenden'
+                title: 'Download anzeigen/ ausblenden',
+                noentry: 'Bitte ein Audio w&auml;hlen, um dessen Downloads zu zeigen.'
             },
             maximize: {
                 label: 'Player',

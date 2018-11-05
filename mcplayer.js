@@ -39,7 +39,7 @@
  * mcPlayer ... Multi Channel Player
  * 
  * @author    Axel Hahn
- * @version   0.27
+ * @version   0.28
  *
  * @this mcPlayer
  * 
@@ -56,8 +56,8 @@ var mcPlayer = function () {
     // settings
     this.cfg = {
         about: {
-            version: '0.27',
-            label: 'AMC Player - v0.27',
+            version: '0.28',
+            label: 'AMC Player - v0.28',
             description: '<strong>A</strong>xels <strong>M</strong>ulti <strong>C</strong>hannel <strong>Player</strong>.<br><br>This is a webbased HTML5 player.<br>It\'s focus is the handling of media in stereo and surround for a title.',
             labeldownload: 'Download:<br>',
             download: 'http://sourceforge.net/projects/amcplayer/files/latest/download',
@@ -172,7 +172,8 @@ var mcPlayer = function () {
                 title: 'Playlist'
             },
             download: {
-                title: 'Download audio files'
+                title: 'Download audio files',
+                noentry: 'Select an audio first to show its downloads.'
             }
         },
         settings:{
@@ -248,17 +249,24 @@ var mcPlayer = function () {
         var a = new Array();
         var aSource = false;
         var sChannels = false;
-        var sTitle = false;
         var aSong = false;
         var o = false;
         for (var i = 0; i < oAudioList.length; i++) {
-            sTitle = oAudioList[i].title;
             oAudioList[i].style.display = "none";
-            if (!sTitle){
-                sTitle = 'audio #' + (i + 1);
-            }
             aSong = {
-                title: oAudioList[i].title,
+                title: oAudioList[i].dataset.title 
+                    ? oAudioList[i].dataset.title 
+                    : oAudioList[i].title 
+                        ? oAudioList[i].title 
+                        : 'audio #' + (i + 1)
+                    ,
+                artist: oAudioList[i].dataset.artist ? oAudioList[i].dataset.artist : false,
+                album:  oAudioList[i].dataset.album  ? oAudioList[i].dataset.album  : false,
+                year:   oAudioList[i].dataset.year   ? oAudioList[i].dataset.year   : false,
+                image:  oAudioList[i].dataset.image  ? oAudioList[i].dataset.image  : false,
+                genre:  oAudioList[i].dataset.genre  ? oAudioList[i].dataset.genre  : false,
+                bpm:    oAudioList[i].dataset.bpm    ? oAudioList[i].dataset.bpm    : false,
+                url:    oAudioList[i].dataset.url    ? oAudioList[i].dataset.url    : false,
                 sources: {}
             };
             for (var j = 0; j < oAudioList[i].children.length; j++) {
@@ -283,7 +291,7 @@ var mcPlayer = function () {
 
             var newA = document.createElement("A");
             newA.href = '#';
-            newA.title = this.cfg.links.play.title + ': ' + sTitle;
+            newA.title = this.cfg.links.play.title + ': ' + aSong.title;
             // newA.innerHTML= this.playlink.replace('[title]', sTitle);
             newA.innerHTML = this.playlink.replace('[title]', "");
             newA.setAttribute('onclick', this.name + '.setSong(' + i + '); /* ' + this.name + '.maximize(); */ return false;');
@@ -435,7 +443,6 @@ var mcPlayer = function () {
      */
     this._genPlaylist = function () {
 
-        var iActive = this._genPlaylist.arguments[0];
         var sHtmlPL = ''
             + '<div class="mcpbox">' + this.cfg.aPlayer.playlist.title + ''
             + '<span class="mcpsystembutton">'
@@ -448,7 +455,7 @@ var mcPlayer = function () {
             sHtmlPL += '<ul>';
             for (var i = 0; i < this.aPL.length; i++) {
                 sHtmlPL += '<li' 
-                        + (iActive === i ? ' class="active"' : '')
+                        + (this.iCurrentSong === i ? ' class="active"' : '')
                         + '><a href="#" onclick="' + this.name + '.setSong(' + i + '); return false;">' 
                         + (this.aPL[i]["title"] ? this.aPL[i]["title"] : "Audio #" + (i + 1))
                         + '</a></li>';
@@ -476,25 +483,39 @@ var mcPlayer = function () {
                 + '</div>'
                 + '<ul>'
                 ;
-            for (var i = 0; i < this.aPL.length; i++) {
-                sSong = this.aPL[i]["title"];
-                if (!sSong)
-                    sSong = "Audio #" + (i + 1);
-                sHtml += '<li>' + sSong + '<ul>';
-                for (var sChannel in this.aPL[i]["sources"]) {
-                    sHtml += '<li>' + sChannel + ': ';
-                    for (j = 0; j < this.aPL[i]["sources"][sChannel].length; j++) {
-                        sSrc = this.aPL[i]["sources"][sChannel][j]["src"];
-                        sExt = this.aPL[i]["sources"][sChannel][j]["type"].replace('audio/', '');
-                        // sExt='';
-                        if (!sExt)
-                            sExt = this.aPL[i]["sources"][sChannel][j]["src"].replace(/^.*\/|\.[^.]*$/g, '');
-
-                        sHtml += '<a href="' + this.aPL[i]["sources"][sChannel][j]["src"] + '">' + sExt + '</a> | ';
+            if(this.iCurrentSong===-1){
+                sHtml += '<li>' + this.cfg.aPlayer.download.noentry + '</li>';
+            } else {
+                for (var i = 0; i < this.aPL.length; i++) {
+                    sSong = this.aPL[i]["title"];
+                    if (!sSong){
+                        sSong = "Audio #" + (i + 1);
                     }
-                    sHtml += '</li>';
+                    if(this.iCurrentSong===-1 || this.iCurrentSong==i){
+                        sHtml += '<li '
+                            + (this.iCurrentSong==i ? ' class="active"' : '')
+                            +'>' + sSong 
+                            + '<ul>'
+                            ;
+                        for (var sChannel in this.aPL[i]["sources"]) {
+                            sHtml += '<li>' + sChannel + ': ';
+                            for (j = 0; j < this.aPL[i]["sources"][sChannel].length; j++) {
+                                sSrc = this.aPL[i]["sources"][sChannel][j]["src"];
+                                sExt = this.aPL[i]["sources"][sChannel][j]["type"].replace('audio/', '');
+                                // sExt='';
+                                if (!sExt)
+                                    sExt = this.aPL[i]["sources"][sChannel][j]["src"].replace(/^.*\/|\.[^.]*$/g, '');
+
+                                sHtml += (j>0 ? ' | ' : '')
+                                            +'<a href="' + this.aPL[i]["sources"][sChannel][j]["src"] 
+                                        + '" title="'+sSong+' ('+sChannel+'; '+sExt+')'+"\n"+this.aPL[i]["sources"][sChannel][j]["src"]+'"'
+                                        +'>' + sExt + '</a>';
+                            }
+                            sHtml += '</li>';
+                        }
+                        sHtml += '</ul></li>';
+                    }
                 }
-                sHtml += '</ul></li>';
             }
             sHtml += '</ul>';
         }
@@ -1143,7 +1164,9 @@ var mcPlayer = function () {
         this._findPlaylistId();
         
         // update playlist: highlight correct song
-        document.getElementById("mcpplaylist").innerHTML = this._genPlaylist(sSongId);
+        document.getElementById("mcpplaylist").innerHTML = this._genPlaylist();
+        document.getElementById("mcpdownloads").innerHTML = this._genDownloads();
+        
 
         // update links in the document
         var oAList = document.getElementsByTagName("A");
@@ -1592,12 +1615,79 @@ var mcPlayer = function () {
     
     // ----------------------------------------------------------------------
     /**
+     * get array element of the currently active song
+     * @private
+     * @param  {string}   sKey   key of song item; one of title|artist|album|year|image
+     * @returns {string}
+     */
+    this._getSongItem = function (sKey) {
+        console.log('_getSongItem - ' + sKey);
+        var oSong = this.getSong();
+        return oSong ? oSong[sKey] : false;
+    };
+    // ----------------------------------------------------------------------
+    /**
      * get title of the currently active song
      * @returns {string}
      */
     this.getSongTitle = function () {
-        var oSong = this.getSong();
-        return oSong ? oSong['title'] : false;
+        return this._getSongItem('title');
+    };
+    // ----------------------------------------------------------------------
+    /**
+     * get artist of the currently active song
+     * @returns {string}
+     */
+    this.getSongArtist = function () {
+        return this._getSongItem('artist');
+    };
+    // ----------------------------------------------------------------------
+    /**
+     * get album of the currently active song
+     * @returns {string}
+     */
+    this.getSongAlbum = function () {
+        return this._getSongItem('album');
+    };
+    // ----------------------------------------------------------------------
+    /**
+     * get publishing year of the currently active song
+     * @returns {string}
+     */
+    this.getSongYear = function () {
+        return this._getSongItem('year');
+    };
+    // ----------------------------------------------------------------------
+    /**
+     * get publishing year of the currently active song
+     * @returns {string}
+     */
+    this.getSongImage = function () {
+        return this._getSongItem('image');
+    };
+    // ----------------------------------------------------------------------
+    /**
+     * get publishing year of the currently active song
+     * @returns {string}
+     */
+    this.getSongGenre = function () {
+        return this._getSongItem('genre');
+    };
+    // ----------------------------------------------------------------------
+    /**
+     * get publishing year of the currently active song
+     * @returns {string}
+     */
+    this.getSongBpm = function () {
+        return this._getSongItem('bpm');
+    };
+    // ----------------------------------------------------------------------
+    /**
+     * get url for the song i.e. where to buy it
+     * @returns {string}
+     */
+    this.getSongUrl = function () {
+        return this._getSongItem('url');
     };
     
     // ----------------------------------------------------------------------
@@ -1725,9 +1815,11 @@ var mcPlayer = function () {
     }
 
     this.canPlaySurround();
-    if(localStorage){
+    try{
         this.sCurrentChannel = localStorage.getItem("amcp.channels") ? localStorage.getItem("amcp.channels") : false;
         this.cfg.settings.volume = localStorage.getItem("amcp.volume") ? localStorage.getItem("amcp.volume") : 1;
+    } catch(e){
+        // nop
     }
 
     // this.showInfo("<strong>" + this.aPL.length + "</strong> AUDIOs");

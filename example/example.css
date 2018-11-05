@@ -8,7 +8,7 @@ h1{margin: 0; color:#569; color:#78b;font-size: 250%;}
 h2{margin: 2em 0 2em; color:#569;}
 h3{color:#79b;}
 hr{border: none; border-top: 2px solid #abc;}
-nav{background: #e0e8f8; background: linear-gradient(#fff,#e0f0f8,#d0d4f8); padding: 1.5em 1.0em 0.7em 1.0em;}
+nav{background: #e0e8f8; background: linear-gradient(#fff,#e0f0f8,#d0d4f8); padding: 2em 1.0em 0.7em 1.0em;}
 nav a{text-decoration: none; border: 0px solid #e0e8f0; color:#67a ;padding: 0.7em; margin-top: 1em; }
 nav a.active{background: #fff; border-top: 3px solid #fc3; box-shadow: 0.3em 0.5em 1em #fff, -0.3em 0.5em 1em #fff;}
 nav a:hover{text-decoration: underline;}
