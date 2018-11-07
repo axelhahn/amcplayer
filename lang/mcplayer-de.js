@@ -92,6 +92,9 @@ var aAmcLang = {
         download: {
             title: 'Audios herunterladen',
             noentry: 'Bitte ein Audio w&auml;hlen oder abspielen, um dessen Downloads zu zeigen.'
+        },
+        songinfo: {
+            bpm: 'BPM'
         }
     }
 };

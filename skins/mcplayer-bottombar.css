@@ -17,6 +17,7 @@
 #mcplayer{
     margin:0.5em;
 }
+#mcpplayersonginfo{display: none;}
 #mcpprogressdiv{clear: none; float: left; margin-left: 1em; position: relative; left: 0;}
 #mcpprogresscanvas{height: 1.5em; width: 400px;}
 

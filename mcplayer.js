@@ -56,8 +56,8 @@ var mcPlayer = function () {
     // settings
     this.cfg = {
         about: {
-            version: '0.28',
-            label: 'AMC Player - v0.28',
+            version: '0.29',
+            label: 'AMC Player - v0.29',
             description: '<strong>A</strong>xels <strong>M</strong>ulti <strong>C</strong>hannel <strong>Player</strong>.<br><br>This is a webbased HTML5 player.<br>It\'s focus is the handling of media in stereo and surround for a title.',
             labeldownload: 'Download:<br>',
             download: 'http://sourceforge.net/projects/amcplayer/files/latest/download',
@@ -174,12 +174,16 @@ var mcPlayer = function () {
             download: {
                 title: 'Download audio files',
                 noentry: 'Select an audio first to show its downloads.'
+            },
+            songinfo: {
+                bpm: 'bpm'
             }
         },
         settings:{
             autoopen: 1,
-            movable: 1,   // v0.26
+            movable: 1,       // v0.26
             repeatlist: 1,
+            showsonginfos: 1, // v0.29
             shuffle: 0,
             volume: 0.9
         }
@@ -356,6 +360,7 @@ var mcPlayer = function () {
     this._genPlayer = function () {
         var s = '';
 
+        s += '<div id="mcpplayersonginfo"></div>';
         // add buttons
         var aTmp = new Array("play", "pause", "stop", "backward", "forward");
         if (this.aPL.length>1) {
@@ -369,13 +374,13 @@ var mcPlayer = function () {
         }
         s += '</div>'
         
-            + '<span id="mcptime"><span id="mcptimeplayed">-:--</span>/ <span id="mcptimetotal">-:--</span></span>'
     
             + '<div id="mcpprogressdiv"'
                 + (this.cfg.aPlayer.bars["progress"].visible ? '' : 'style="display: none"')
                 + '><canvas id="mcpprogresscanvas" title="' + this.cfg.aPlayer.bars["progress"].title + '"></canvas>'
                 + '<div id="mcpprogressbar"></div>'
-            +'</div>'
+            + '</div>'
+            + '<span id="mcptime"><span id="mcptimeplayed">-:--</span>/ <span id="mcptimetotal">-:--</span></span>'
     
             + '<div id="mcpvolumediv" title="volume">'
                 + '<a href="#" id="mcpvolmute" onclick="' + this.name + '.setVolume(0); return false;" ' 
@@ -464,6 +469,40 @@ var mcPlayer = function () {
         }
         return sHtmlPL;
     };
+    /**
+     * generate html code details of then current song
+     * @private
+     * @return {html_code} 
+     */
+    this._genSonginfos = function () {
+
+        if(!this.cfg.settings.showsonginfos){
+            return '';
+        }
+        var sHtml = '';
+        if (
+            this.getSongImage()
+            +this.getSongArtist()
+        ){
+            sHtml += '<div>';
+            sHtml += this.getSongImage()  ? '<img src="'+this.getSongImage()+'">' : '';
+            sHtml += this.getSongTitle()  ? '<div class="title">'+this.getSongTitle()+'</div>' : '';
+            sHtml += this.getSongArtist() ? '<div class="artist">'+this.getSongArtist()+'</div>' : '';
+            sHtml += this.getSongAlbum()  ? '<div class="album">'+this.getSongAlbum()+'</div>' : '';
+            sHtml += this.getSongYear()   ? '<div class="year">'+this.getSongYear()+'</div>' : '';
+            sHtml += this.getSongBpm()    ? '<div class="bpm">'+this.getSongBpm()+this.cfg.aPlayer.songinfo.bpm+'</div>' : '';
+        
+            // TODO:
+            // this.getSongGenre()
+            // this.getSongUrl()
+        
+            sHtml += '<div style="clear: both;"></div>';
+            sHtml += '</div>';
+        }
+        
+        return sHtml;
+    };
+
 
     // ----------------------------------------------------------------------
     /**
@@ -1166,6 +1205,7 @@ var mcPlayer = function () {
         // update playlist: highlight correct song
         document.getElementById("mcpplaylist").innerHTML = this._genPlaylist();
         document.getElementById("mcpdownloads").innerHTML = this._genDownloads();
+        document.getElementById("mcpplayersonginfo").innerHTML = this._genSonginfos();
         
 
         // update links in the document

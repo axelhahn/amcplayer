@@ -19,6 +19,15 @@
 #mcpwrapper a{background: rgba(0,0,0,0.1); color: #888; border-color: rgba(255,255,255,0.1); border-radius: 0;}
 #mcplayer a:hover{background: rgba(255,255,255,0.1);}
 
+#mcpplayersonginfo>div{
+    border-bottom: 1px solid #666;
+}
+#mcpplayersonginfo .title{
+    color:rgba(200,200,255,0.2);
+    color:#89a;
+    text-shadow: 1px 1px 0 #000;
+}
+#mcpplayersonginfo .bpm{font-size: 80%; font-style: italic; margin-top: 1em; color:rgba(255,255,255,0.2);}
 
 #mcpabout a, #mcpdownloads a, #mcpplaylist a{
     color:#889;
