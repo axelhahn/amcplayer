@@ -431,6 +431,12 @@
                 <td>boolean</td>
                 <td><span id="spanIsVisibleBoxPlaylist" class="val-bool">...</span></td>
             </tr>
+            <tr>
+                <td>is player window visible</td>
+                <td>isVisiblePlayer()</td>
+                <td>boolean</td>
+                <td><span id="spanIsVisiblePlayer" class="val-bool">...</span></td>
+            </tr>
             
             <tr>
                 <td>Order of songs to play (it is randomized if isShuffled() is true)</td>
@@ -490,6 +496,7 @@
                         document.getElementById("spanIsVisibleBoxAbout").innerHTML = oMcPlayer.isVisibleBoxAbout();
                         document.getElementById("spanIsVisibleBoxDownload").innerHTML = oMcPlayer.isVisibleBoxDownload();
                         document.getElementById("spanIsVisibleBoxPlaylist").innerHTML = oMcPlayer.isVisibleBoxPlaylist();
+                        document.getElementById("spanIsVisiblePlayer").innerHTML = oMcPlayer.isVisiblePlayer();
                         document.getElementById("spanCurrentvolume").innerHTML = oMcPlayer.getVolume();
                         document.getElementById("spanAudiopos").innerHTML = oMcPlayer.getAudioPosition();
                         document.getElementById("spanAudioduration").innerHTML = oMcPlayer.getAudioDuration();

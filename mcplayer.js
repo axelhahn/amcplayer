@@ -39,7 +39,7 @@
  * mcPlayer ... Multi Channel Player
  * 
  * @author    Axel Hahn
- * @version   0.28
+ * @version   0.30
  *
  * @this mcPlayer
  * 
@@ -56,8 +56,8 @@ var mcPlayer = function () {
     // settings
     this.cfg = {
         about: {
-            version: '0.29',
-            label: 'AMC Player - v0.29',
+            version: '0.30',
+            label: 'AMC Player - v0.30',
             description: '<strong>A</strong>xels <strong>M</strong>ulti <strong>C</strong>hannel <strong>Player</strong>.<br><br>This is a webbased HTML5 player.<br>It\'s focus is the handling of media in stereo and surround for a title.',
             labeldownload: 'Download:<br>',
             download: 'http://sourceforge.net/projects/amcplayer/files/latest/download',
@@ -173,17 +173,18 @@ var mcPlayer = function () {
             },
             download: {
                 title: 'Download audio files',
-                noentry: 'Select an audio first to show its downloads.'
+                noentry: 'Select or play an audio first to show its downloads.'
             },
             songinfo: {
                 bpm: 'bpm'
             }
         },
         settings:{
-            autoopen: 1,
+            autoopen: false,
             movable: 1,       // v0.26
             repeatlist: 1,
             showsonginfos: 1, // v0.29
+            showhud: 1,       // v0.30
             shuffle: 0,
             volume: 0.9
         }
@@ -199,7 +200,7 @@ var mcPlayer = function () {
     this.iVolInc = 0.02;           // X-Fading: Schrittweite der Lautstaerke-Aenderung 
     this.iTimer = 20;              // X-Fading: Intervall der Lautstaerke-Aenderung 
 
-    this.iHudTimer = 5;            // time to display hud message in s; false to disable
+    this.iHudTimer = 5;            // time to display hud message in s
     this.iRemoveTimer = 2;
 
 
@@ -432,7 +433,8 @@ var mcPlayer = function () {
         return '<div class="mcpbox">' 
             + this.cfg.about.label + ''
             + '<span class="mcpsystembutton"><a href="#" class="icon-down-open-1" onclick="' + this.name + '.toggleBoxAndButton(\'about\', \'minimize\'); return false;" title="' + this.cfg.aPlayer.buttons["minimize"].title + '">' + this.cfg.aPlayer.buttons["minimize"].label + '</a></span></div><div>'
-            + '<p>' + this.cfg.about.description + '</p>'
+            + '<div class="title">' + this.cfg.about.label + '</div>'
+            + '<p>' + this.cfg.about.description + '</p><hr>'
             + '<p>' + this.cfg.about.labellicense + '' + this.cfg.about.license + '</p>'
             + '<p>' + this.cfg.about.labelurl + '<a href="' + this.cfg.about.url + '" target="_blank">' + this.cfg.about.url + '</a></p>'
             + '<p>' + this.cfg.about.labeldownload + '<a href="' + this.cfg.about.download + '" target="_blank">' + this.cfg.about.download + '</a></p>'
@@ -706,8 +708,7 @@ var mcPlayer = function () {
         this.minimizeBox('download');
         this.minimizeBox('playlist');
 
-        o = document.getElementById("mcpmaximize");
-        o.className = '';
+        document.getElementById("mcpmaximize").className = '';
     };
 
     // ----------------------------------------------------------------------
@@ -757,13 +758,17 @@ var mcPlayer = function () {
 
     // ----------------------------------------------------------------------
     /**
-     * show info in HUD div
+     * show info in HUD div if 
+     * - option showhud was set
+     * - option autoopen is false
+     * - player is invisible (minimized) 
+     * 
      * @private
      * @param  {string}  sMsg  message to show in hud
      * @return {boolean}
      */
     this._showInfo = function (sMsg) {
-        if (!this.iHudTimer){
+        if (!this.cfg.settings.showhud || this.cfg.settings.autoopen || this.isVisiblePlayer() ){
             return false;
         }
         var o = document.getElementById("mcphud");
@@ -888,6 +893,14 @@ var mcPlayer = function () {
      */
     this.isVisibleBoxPlaylist = function (){
         return this.isVisibleBox('playlist');
+    };
+    /**
+     * return if player window is visible
+     * @since v0.30
+     * @returns {Boolean}
+     */
+    this.isVisiblePlayer = function (){
+        return document.getElementById("mcpmaximize").className>'';
     };
 
     // ----------------------------------------------------------------------
@@ -1430,6 +1443,18 @@ var mcPlayer = function () {
     };
     // ----------------------------------------------------------------------
     /**
+     * set config; override default vars
+     * 
+     * @since v0.30
+     * @param {array} aCfg  array with config items
+     * @return {boolean}
+     */
+    this.setConfig = function (aCfg){
+        this.cfg = realMerge(this.cfg, aCfg);
+    }; 
+    
+    // ----------------------------------------------------------------------
+    /**
      * set volume; it works only if a song is playing
      * @example
      * &lt;button onclick="oMcPlayer.setVolume(0.75)">75%&lt;/button>
@@ -1661,7 +1686,6 @@ var mcPlayer = function () {
      * @returns {string}
      */
     this._getSongItem = function (sKey) {
-        console.log('_getSongItem - ' + sKey);
         var oSong = this.getSong();
         return oSong ? oSong[sKey] : false;
     };
@@ -1851,7 +1875,7 @@ var mcPlayer = function () {
     // ----------------------------------------------------------------------
 
     if(arguments[0]){
-        this.cfg = realMerge(this.cfg, arguments[0]);
+        this.setConfig(arguments[0]);
     }
 
     this.canPlaySurround();
@@ -1861,7 +1885,6 @@ var mcPlayer = function () {
     } catch(e){
         // nop
     }
-
     // this.showInfo("<strong>" + this.aPL.length + "</strong> AUDIOs");
 
     return true;

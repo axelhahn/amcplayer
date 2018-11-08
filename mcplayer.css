@@ -133,6 +133,7 @@
     box-shadow: 0 0 2em #888;
     max-height: 200px;
 }
+#mcpabout .title, 
 #mcpplayersonginfo .title{
     color:rgba(0,0,0,0.3);
     font-size: 200%;
