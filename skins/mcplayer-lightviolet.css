@@ -19,6 +19,10 @@
     color:#fff;
 }
 
+#mcpabout .title, 
+#mcpplayersonginfo .title{
+    color:#6a8;
+}
 
 #mcpvolumecanvas,
 #mcpprogresscanvas{

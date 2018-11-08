@@ -29,7 +29,7 @@
     opacity: 1;
     padding: 5px 5px 0 5px;
     position: fixed;
-    transition: all 0.5s ease-out;
+    transition: all 0.25s ease-out;
     width: 570px;
 }
 #mcpwrapper.minimized{
@@ -65,7 +65,7 @@
     position: fixed; 
     right: -50%;
     text-align:center; 
-    transition: all 0.5s ease-out;
+    transition: all 0.25s ease-out;
     width: 50%; 
 }
 #mcphud.active{
@@ -131,11 +131,12 @@
     float: right;
     border: 1px solid rgba(0,0,0,0.5);
     box-shadow: 0 0 2em #888;
+    height: 200px;
     max-height: 200px;
 }
 #mcpabout .title, 
 #mcpplayersonginfo .title{
-    color:rgba(0,0,0,0.3);
+    color:#56a;
     font-size: 200%;
     font-weight: bold;
     text-shadow: 1px 1px 0 #fff;
@@ -244,7 +245,7 @@ additional buttons for channels, options, dialogs
     top: 70px;
     padding: 5px;
     position: fixed;
-    transition: all 0.5s ease-out;
+    transition: all 0.25s ease-out;
     width: 300px;
 }
 #mcpabout{width: 40%; left: 10%; right: auto;}

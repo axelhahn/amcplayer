@@ -86,6 +86,9 @@ var aAmcLang = {
                 title: 'Abspielposition setzen'
             }
         },
+        about: {
+            title: '&Uuml;ber...'
+        },
         playlist: {
             title: 'Titelliste'
         },

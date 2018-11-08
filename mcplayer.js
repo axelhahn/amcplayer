@@ -39,7 +39,7 @@
  * mcPlayer ... Multi Channel Player
  * 
  * @author    Axel Hahn
- * @version   0.30
+ * @version   0.31
  *
  * @this mcPlayer
  * 
@@ -56,8 +56,8 @@ var mcPlayer = function () {
     // settings
     this.cfg = {
         about: {
-            version: '0.30',
-            label: 'AMC Player - v0.30',
+            version: '0.31',
+            label: 'AMC Player - v0.31',
             description: '<strong>A</strong>xels <strong>M</strong>ulti <strong>C</strong>hannel <strong>Player</strong>.<br><br>This is a webbased HTML5 player.<br>It\'s focus is the handling of media in stereo and surround for a title.',
             labeldownload: 'Download:<br>',
             download: 'http://sourceforge.net/projects/amcplayer/files/latest/download',
@@ -167,6 +167,9 @@ var mcPlayer = function () {
                     visible: true,
                     title: 'Set position'
                 }
+            },
+            about: {
+                title: 'About ...'
             },
             playlist: {
                 title: 'Playlist'
@@ -431,7 +434,7 @@ var mcPlayer = function () {
     this._genAboutbox = function () {
 
         return '<div class="mcpbox">' 
-            + this.cfg.about.label + ''
+            + this.cfg.aPlayer.about.title + ''
             + '<span class="mcpsystembutton"><a href="#" class="icon-down-open-1" onclick="' + this.name + '.toggleBoxAndButton(\'about\', \'minimize\'); return false;" title="' + this.cfg.aPlayer.buttons["minimize"].title + '">' + this.cfg.aPlayer.buttons["minimize"].label + '</a></span></div><div>'
             + '<div class="title">' + this.cfg.about.label + '</div>'
             + '<p>' + this.cfg.about.description + '</p><hr>'
@@ -727,8 +730,11 @@ var mcPlayer = function () {
             o.className='draggable saveposition';
             if (typeof addi !== 'undefined') {
                 addi.initDiv(o);
+            } else {
+                this.cfg.settings.movable=false;
             }
-        } else {
+        }
+        if(!this.cfg.settings.movable){
             o.className='';
             if (typeof addi !== 'undefined') {
                 addi.resetDiv(o);
@@ -1218,8 +1224,18 @@ var mcPlayer = function () {
         // update playlist: highlight correct song
         document.getElementById("mcpplaylist").innerHTML = this._genPlaylist();
         document.getElementById("mcpdownloads").innerHTML = this._genDownloads();
-        document.getElementById("mcpplayersonginfo").innerHTML = this._genSonginfos();
         
+        // show songinfos with adjusting the client height of player window
+        var iHeightSonginfosBefore=document.getElementById("mcpplayersonginfo").clientHeight;
+        var sSonginfos=this._genSonginfos();
+        document.getElementById("mcpplayersonginfo").innerHTML = sSonginfos;
+        
+        document.getElementById("mcptitle").innerHTML = sSonginfos ? '' : this.getSongTitle();
+        var iHeightSonginfosAfter=document.getElementById("mcpplayersonginfo").clientHeight;
+        if (typeof addi !== 'undefined') {
+            o = document.getElementById("mcpwrapper");
+            o.style.top=(o.style.top.replace('px', '')/1)+(iHeightSonginfosBefore-iHeightSonginfosAfter) + 'px';
+        }
 
         // update links in the document
         var oAList = document.getElementsByTagName("A");
@@ -1243,7 +1259,6 @@ var mcPlayer = function () {
         this.setChannel(sFirstChannel);
         this.playeraction("play", true);
 
-        document.getElementById("mcptitle").innerHTML = this.aPL[sSongId]["title"];
         this._showInfo((sSongId + 1) + "/ " + this.aPL.length + "<br>&laquo;" + this.aPL[sSongId]["title"] + "&raquo;");
 
         if (this.cfg.settings.autoopen){
