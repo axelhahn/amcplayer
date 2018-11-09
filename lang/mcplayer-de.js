@@ -40,7 +40,7 @@ var aAmcLang = {
             },
             audiochannels: {
                 title: 'zwischen stereo/ surround umschalten',
-                noswitch: 'stereo/ surround Umschaltung deaktiviert (Opera und Firefox)'
+                noswitch: 'stereo/ surround Umschaltung deaktiviert (Mobilger&auml;t oder Opera Presto Engine)'
             },
             // 
             // volume buttons
