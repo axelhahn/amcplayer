@@ -165,8 +165,8 @@ bars for volume and progress
 }
 #mcpprogressdiv{ left: 260px;position: absolute;}
 #mcpprogresscanvas{
-    height: 1.0em;
-    margin-top: 3px;
+    height: 1.5em;
+    margin-top: 0;
     width: 210px;
 }
 
@@ -174,7 +174,7 @@ bars for volume and progress
 #mcpvolumediv a{ float: left; font-family: mcplayer_icons;}
 #mcpvolumecanvas{
     float: left;
-    height: 0.7em;
+    height: 1.0em;
     margin-right: 5px;
     margin-top: 3px;
     width: 100px;

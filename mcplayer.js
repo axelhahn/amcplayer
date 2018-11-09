@@ -39,7 +39,7 @@
  * mcPlayer ... Multi Channel Player
  * 
  * @author    Axel Hahn
- * @version   0.31
+ * @version   0.32
  *
  * @this mcPlayer
  * 
@@ -56,8 +56,8 @@ var mcPlayer = function () {
     // settings
     this.cfg = {
         about: {
-            version: '0.31',
-            label: 'AMC Player - v0.31',
+            version: '0.32',
+            label: 'AMC Player - v0.32',
             description: '<strong>A</strong>xels <strong>M</strong>ulti <strong>C</strong>hannel <strong>Player</strong>.<br><br>This is a webbased HTML5 player.<br>It\'s focus is the handling of media in stereo and surround for a title.',
             labeldownload: 'Download:<br>',
             download: 'http://sourceforge.net/projects/amcplayer/files/latest/download',
@@ -372,9 +372,10 @@ var mcPlayer = function () {
         }
         s += '<div id="mcpplayerbtndiv">';
         for (var i = 0; i < aTmp.length; i++) {
-            s += '<a href="#" id="mcp' + aTmp[i] + '" onclick="'
-                + '' + this.name + '.playeraction(\'' + aTmp[i] + '\'); return false;'
-                + '" title="' + this.cfg.aPlayer.buttons[aTmp[i]].title + '"></a>';
+            s += '<a href="#" id="mcp' + aTmp[i] + '"'
+                + ' onclick="' + this.name + '.playeraction(\'' + aTmp[i] + '\'); return false;'+ '"'
+                + ' title="' + this.cfg.aPlayer.buttons[aTmp[i]].title + '"'
+                +'></a>';
         }
         s += '</div>'
         
@@ -1232,7 +1233,7 @@ var mcPlayer = function () {
         
         document.getElementById("mcptitle").innerHTML = sSonginfos ? '' : this.getSongTitle();
         var iHeightSonginfosAfter=document.getElementById("mcpplayersonginfo").clientHeight;
-        if (typeof addi !== 'undefined') {
+        if (typeof addi !== 'undefined' && this.cfg.settings.movable) {
             o = document.getElementById("mcpwrapper");
             o.style.top=(o.style.top.replace('px', '')/1)+(iHeightSonginfosBefore-iHeightSonginfosAfter) + 'px';
         }
