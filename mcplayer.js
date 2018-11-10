@@ -717,12 +717,14 @@ var mcPlayer = function () {
      * minimize player GUI and show a maximize icon
      * @example
      * &lt;a href="#" onclick="oMcPlayer.minimize(); return false;"&gt;hide player&lt;/a&gt;
+     * @param {boolean}  bFast     flag to override speed in css transistion
      * @return nothing
      */
-    this.minimize = function () {
+    this.minimize = function (bFast) {
         o = document.getElementById("mcpwrapper");
         // o.className += ' minimized';
         // o.setAttribute('style','');
+        o.style['transition-duration'] = bFast ? '0s' : '';
         o.style.top = (document.documentElement.clientHeight + 100) + 'px';
 
         this.minimizeBox('about');
