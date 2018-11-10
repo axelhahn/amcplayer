@@ -259,7 +259,6 @@ var mcPlayer = function () {
                 bReturn = false;
         })(navigator.userAgent || navigator.vendor || window.opera);
 
-        bReturn = false;
         this.bCanSurround = bReturn;
         return bReturn;
     };
