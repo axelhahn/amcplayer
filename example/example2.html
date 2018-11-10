@@ -10,10 +10,10 @@
         
     </head>
     <body>
-        <h1>Demo AMC Player :: drag and drop</h1>
+        <h1>Demo AMC Player :: Show song infos</h1>
         <nav>
             <a href="example1.html">Get started</a>
-            <a href="example2.html" class="active">Drag and drop</a>
+            <a href="example2.html" class="active">Song infos</a>
             <a href="example3.html">API</a>
             <a href="example4.html">Skins</a>
             <a href="example5.html">Language</a>
@@ -21,41 +21,37 @@
 
         <!-- ************************************************************** -->
         
-        <h2>Add drag and drop functionality</h2>
+        <h2>Add song infos</h2>
         <p>
-            By default there is no drag and drop functionality of the 
-            window like player.<br />
-            The player class detects the existance of my class <em>addi</em> (which is part of the download).<br />
-            You just need to load it before mcplayer.js.<br />
-            <br />
-            In this demo:<br />
+            For each song you can add metadata for artist, album, a cover image and more.<br>
+            These information must be added as data attributes in the audio tag.<br>
+            <br>
+            If such infos were added the player will display them while the song
+            is active.
         </p>
-        <ol>
-            <li>Move your mouse pointer to the main player window. Hold the mouse key down and move the player window around.</li>
-            <li>Open a window i.e. playlist or download - you can move these windows too.</li>
-            <li>Press [F5] to reload the window. The windows you moved keep their position.</li>
-        </ol>
             
         <h3>Html preview</h3>
         <pre>
-&lt;head>
-  (...)
-  &lt;link rel="stylesheet" type="text/css" href="../mcplayer.min.css" media="screen" />
-&lt;/head>
-&lt;body>
+&lt;audio loop="loop"
+	controls="controls"
+	preload="none"
+	title="<strong>[Title]</strong>"
 
-  (...)
-  
-  <strong>&lt;script src="../addi.min.js">&lt;/script></strong>
-  &lt;script src="../mcplayer.min.js">&lt;/script>
+        &lt;!-- optional: more song metadata with html 5 data attributes -->
+        data-<strong>title</strong>="[Title]"
+	data-<strong>artist</strong>="[Name of the artist]"
+	data-<strong>album</strong>="[Name of the album]"
+	data-<strong>year</strong>="[4 digit year]"
+	data-<strong>image</strong>="[url for a cover image]"
+	data-<strong>genre</strong>="[genre]"
+	data-<strong>bpm</strong>="[value for speed in bpm]"
+	data-<strong>url</strong>="[url for the song; i.e. where to buy]"
+	>
+	
+	&lt;!-- audio sources -->
+        ...
 
-  &lt;!-- initialize the player -->
-  &lt;script>
-    var oMcPlayer=new mcPlayer();
-    oMcPlayer.init();
-  &lt;/script>
-
-&lt;/body>
+&lt;/audio>
 </pre>
         
 	
@@ -67,111 +63,157 @@
 			They are free for non commercial usage (license: cc 3.0 - by-nc-sa).<br>
 			<a href="https://www.axel-hahn.de/music/axels-songs/" target="_blank">Axels songs</a>
         </p>
-			<div style="clear: left; padding: 0.5em 1em;">
-				<audio loop="loop"
-					controls="controls"
-					preload="none"
-					title="Ticker"
-					>
-					
-					<!-- stereo sources -->
-					<source src="https://www.axel-hahn.de/axel/download/ticker_2.0_.ogg" type="audio/ogg" data-ch="2.0" title="2.0" />
-					<source src="https://www.axel-hahn.de/axel/download/ticker_2.0_.mp3" type="audio/mp3" data-ch="2.0" title="2.0" />
+        <div style="clear: left; padding: 0.5em 1em;">
+            <audio loop="loop"
+                   controls="controls"
+                   preload="none"
+                   title="Ticker"
+				   
+				   data-title="Ticker"
+				   data-artist="Axel Hahn"
+				   data-album=""
+				   data-year="2017"
+				   data-image="https://www.axel-hahn.de/assets/audio/cover/ticker.jpg"
+				   data-genre="electronic"
+				   data-bpm="120"
+				   data-url=""
+                   >
 
-					<!-- surround sources -->
-					<source src="https://www.axel-hahn.de/axel/download/ticker_5.1_.m4a" type="audio/mp4" data-ch="5.1" title="5.1" />
-					<source src="https://www.axel-hahn.de/axel/download/ticker_5.1_.ogg" type="audio/ogg" data-ch="5.1" title="5.1" />
+                <!-- stereo sources -->
+                <source src="https://www.axel-hahn.de/axel/download/ticker_2.0_.ogg" type="audio/ogg" data-ch="2.0" title="2.0" />
+                <source src="https://www.axel-hahn.de/axel/download/ticker_2.0_.mp3" type="audio/mp3" data-ch="2.0" title="2.0" />
 
-					<!-- for fallback add a flashplayer here -->
+                <!-- surround sources -->
+                <source src="https://www.axel-hahn.de/axel/download/ticker_5.1_.m4a" type="audio/mp4" data-ch="5.1" title="5.1" />
+                <source src="https://www.axel-hahn.de/axel/download/ticker_5.1_.ogg" type="audio/ogg" data-ch="5.1" title="5.1" />
 
-				</audio>
-				Ticker
-			</div>
-			
-			<div style="clear: left; padding: 0.5em 1em;">
-				<audio loop="loop"
-					controls="controls"
-					preload="none"
-					title="Let's Play"
-					>
-					
-					<!-- stereo sources -->
-					<source src="https://www.axel-hahn.de/axel/download/lets-play_2.0_.ogg" type="audio/ogg" data-ch="2.0" title="2.0" />
-					<source src="https://www.axel-hahn.de/axel/download/lets-play_2.0_.mp3" type="audio/mp3" data-ch="2.0" title="2.0" />
+                <!-- for fallback add a flashplayer here -->
 
-					<!-- surround sources -->
-					<source src="https://www.axel-hahn.de/axel/download/lets-play_5.1_.m4a" type="audio/mp4" data-ch="5.1" title="5.1" />
-					<source src="https://www.axel-hahn.de/axel/download/lets-play_5.1_.ogg" type="audio/ogg" data-ch="5.1" title="5.1" />
+            </audio>
+            Ticker
+        </div>
 
-					<!-- for fallback add a flashplayer here -->
+        <div style="clear: left; padding: 0.5em 1em;">
+            <audio loop="loop"
+                   controls="controls"
+                   preload="none"
+                   title="Let's Play"
+				   
+				   data-title="Let's Play"
+				   data-artist="Axel Hahn"
+				   data-album=""
+				   data-year="2017"
+				   data-image="https://www.axel-hahn.de/assets/audio/cover/lets_play.jpg"
+				   data-genre="electronic"
+				   data-bpm="80"
+				   data-url=""
+                   >
 
-				</audio>
-				Let's Play 
-			</div>
-			
-			
-			<div style="clear: left; padding: 0.5em 1em;">
-				<audio loop="loop"
-					controls="controls"
-					preload="none"
-					title="Lift Control"
-					>
-					
-					<!-- stereo sources -->
-					<source src="https://www.axel-hahn.de/axel/download/lift-control_2.0_.ogg" type="audio/ogg" data-ch="2.0" title="2.0" />
-					<source src="https://www.axel-hahn.de/axel/download/lift-control_2.0_.mp3" type="audio/mp3" data-ch="2.0" title="2.0" />
+                <!-- stereo sources -->
+                <source src="https://www.axel-hahn.de/axel/download/lets-play_2.0_.ogg" type="audio/ogg" data-ch="2.0" title="2.0" />
+                <source src="https://www.axel-hahn.de/axel/download/lets-play_2.0_.mp3" type="audio/mp3" data-ch="2.0" title="2.0" />
 
-					<!-- surround sources -->
-					<source src="https://www.axel-hahn.de/axel/download/lift-control_5.1_.m4a" type="audio/mp4" data-ch="5.1" title="5.1" />
-					<source src="https://www.axel-hahn.de/axel/download/lift-control_5.1_.ogg" type="audio/ogg" data-ch="5.1" title="5.1" />
+                <!-- surround sources -->
+                <source src="https://www.axel-hahn.de/axel/download/lets-play_5.1_.m4a" type="audio/mp4" data-ch="5.1" title="5.1" />
+                <source src="https://www.axel-hahn.de/axel/download/lets-play_5.1_.ogg" type="audio/ogg" data-ch="5.1" title="5.1" />
 
-					<!-- for fallback add a flashplayer here -->
+                <!-- for fallback add a flashplayer here -->
 
-				</audio>
-				Lift Control
-			</div>
-			
-			<div style="clear: left; padding: 0.5em 1em;">
-				<audio loop="loop"
-					controls="controls"
-					preload="none"
-					title="November"
-					>
-					
-					<!-- stereo sources -->
-					<source src="https://www.axel-hahn.de/axel/download/november_2.0_.ogg" type="audio/ogg" data-ch="2.0" title="2.0" />
-					<source src="https://www.axel-hahn.de/axel/download/november_2.0_.mp3" type="audio/mp3" data-ch="2.0" title="2.0" />
+            </audio>
+            Let's Play 
+        </div>
 
-					<!-- surround sources -->
-					<source src="https://www.axel-hahn.de/axel/download/november_5.1_.m4a" type="audio/mp4" data-ch="5.1" title="5.1" />
-					<source src="https://www.axel-hahn.de/axel/download/november_5.1_.ogg" type="audio/ogg" data-ch="5.1" title="5.1" />
 
-					<!-- for fallback add a flashplayer here -->
+        <div style="clear: left; padding: 0.5em 1em;">
+            <audio loop="loop"
+                   controls="controls"
+                   preload="none"
+                   title="Lift Control"
 
-				</audio>
-				November
-			</div>
-			
-			<div style="clear: left; padding: 0.5em 1em;">
-				<audio loop="loop"
-					controls="controls"
-					preload="none"
-					title="Give me a BIT more"
-					>
-					
-					<!-- stereo sources -->
-					<source src="https://www.axel-hahn.de/axel/download/gimme-a-bit-more_2.0_.ogg" type="audio/ogg" data-ch="2.0" title="2.0" />
-					<source src="https://www.axel-hahn.de/axel/download/gimme-a-bit-more_2.0_.mp3" type="audio/mp3" data-ch="2.0" title="2.0" />
+				   data-title="Lift Control"
+				   data-artist="Axel Hahn"
+				   data-album=""
+				   data-year="2016"
+				   data-image="https://www.axel-hahn.de/assets/audio/cover/lift-control.jpg"
+				   data-genre="electronic"
+				   data-bpm="125"
+				   data-url=""
+                   >
 
-					<!-- surround sources -->
-					<source src="https://www.axel-hahn.de/axel/download/gimme-a-bit-more_5.1_.m4a" type="audio/mp4" data-ch="5.1" title="5.1" />
-					<source src="https://www.axel-hahn.de/axel/download/gimme-a-bit-more_5.1_.ogg" type="audio/ogg" data-ch="5.1" title="5.1" />
+                <!-- stereo sources -->
+                <source src="https://www.axel-hahn.de/axel/download/lift-control_2.0_.ogg" type="audio/ogg" data-ch="2.0" title="2.0" />
+                <source src="https://www.axel-hahn.de/axel/download/lift-control_2.0_.mp3" type="audio/mp3" data-ch="2.0" title="2.0" />
 
-					<!-- for fallback add a flashplayer here -->
+                <!-- surround sources -->
+                <source src="https://www.axel-hahn.de/axel/download/lift-control_5.1_.m4a" type="audio/mp4" data-ch="5.1" title="5.1" />
+                <source src="https://www.axel-hahn.de/axel/download/lift-control_5.1_.ogg" type="audio/ogg" data-ch="5.1" title="5.1" />
 
-				</audio>
-				Give me a BIT more
-			</div>
+                <!-- for fallback add a flashplayer here -->
+
+            </audio>
+            Lift Control
+        </div>
+
+        <div style="clear: left; padding: 0.5em 1em;">
+            <audio loop="loop"
+                   controls="controls"
+                   preload="none"
+                   title="November"
+				   
+				   data-title="November"
+				   data-artist="Axel Hahn"
+				   data-album=""
+				   data-year="2015"
+				   data-image="https://www.axel-hahn.de/assets/audio/cover/november.jpg"
+				   data-genre="electronic"
+				   data-bpm="125"
+				   data-url=""
+                   >
+
+                <!-- stereo sources -->
+                <source src="https://www.axel-hahn.de/axel/download/november_2.0_.ogg" type="audio/ogg" data-ch="2.0" title="2.0" />
+                <source src="https://www.axel-hahn.de/axel/download/november_2.0_.mp3" type="audio/mp3" data-ch="2.0" title="2.0" />
+
+                <!-- surround sources -->
+                <source src="https://www.axel-hahn.de/axel/download/november_5.1_.m4a" type="audio/mp4" data-ch="5.1" title="5.1" />
+                <source src="https://www.axel-hahn.de/axel/download/november_5.1_.ogg" type="audio/ogg" data-ch="5.1" title="5.1" />
+
+                <!-- for fallback add a flashplayer here -->
+
+            </audio>
+            November
+        </div>
+
+        <div style="clear: left; padding: 0.5em 1em;">
+            <audio loop="loop"
+                   controls="controls"
+                   preload="none"
+                   title="Give me a BIT more"
+				   
+				   data-title="Give me a BIT more"
+				   data-artist="Axel Hahn"
+				   data-album=""
+				   data-year="2015"
+				   data-image="https://www.axel-hahn.de/assets/audio/cover/gimme-a-bit-more.jpg"
+				   data-genre="electronic"
+				   data-bpm="120"
+				   data-url=""
+                   >
+
+                <!-- stereo sources -->
+                <source src="https://www.axel-hahn.de/axel/download/gimme-a-bit-more_2.0_.ogg" type="audio/ogg" data-ch="2.0" title="2.0" />
+                <source src="https://www.axel-hahn.de/axel/download/gimme-a-bit-more_2.0_.mp3" type="audio/mp3" data-ch="2.0" title="2.0" />
+
+                <!-- surround sources -->
+                <source src="https://www.axel-hahn.de/axel/download/gimme-a-bit-more_5.1_.m4a" type="audio/mp4" data-ch="5.1" title="5.1" />
+                <source src="https://www.axel-hahn.de/axel/download/gimme-a-bit-more_5.1_.ogg" type="audio/ogg" data-ch="5.1" title="5.1" />
+
+                <!-- for fallback add a flashplayer here -->
+
+            </audio>
+            Give me a BIT more
+        </div>
+
 			
         
         <!-- ************************************************************** -->

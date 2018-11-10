@@ -10,10 +10,10 @@
         
     </head>
     <body>
-        <h1>Demo AMC Player :: first steps</h1>
+        <h1>Demo AMC Player :: Welcome!</h1>
         <nav>
             <a href="example1.html" class="active">Get started</a>
-            <a href="example2.html">Drag and drop</a>
+            <a href="example2.html">Song infos</a>
             <a href="example3.html">API</a>
             <a href="example4.html">Skins</a>
             <a href="example5.html">Language</a>
@@ -21,15 +21,30 @@
 
         <!-- ************************************************************** -->
         
+        <h2>Welcome</h2>
+        <p>
+            Welcome to the example section of the AMC PLAYER!<br />
+            Here and in the next steps you get code snippets to start and how
+            to enable more functionalities step by step.
+        </p>
+        <script>
+            if(!location.host){
+                document.write('<p class="info">Remark:<br>You opened the example with &quot;file://&quot;<br>All player functionalities work. But the icons in the player buttons are available only if the player is used in a website and opened with http(s).</p>');
+            }
+        </script>
+
         <h2>Preparation</h2>
         <p>
-			How to run the player?<br />
-			In your html document you need to add a css file in the header and 
-			a javascript at the end.<br />
-                        After loading the player javascript file you can init the player.<br>
-			<br>
-                        <strong>Remark</strong>: for all CSS and JS files exist original sources and
-                        minified versions as well. All examples use the minified files.<br>
+            How to run the player?<br />
+            In your html document you need to add a css file in the header and 
+            a javascript at the end.<br />
+            After loading the player javascript file you can init the player.<br>
+            <br>
+            And one little detail: next to the plain player there is a javascript that enables
+            drag and drop functionality. Just load it before the player javascript file.<br>
+            <br>
+            <strong>Remark</strong>: for all CSS and JS files exist original sources and
+            minified versions as well. All examples use the minified files.<br>
         </p>
         <h3>Html preview</h3>
         <pre>
@@ -41,6 +56,7 @@
 
   (...)
   
+  &lt;script src="../<strong>addi.min.js</strong>">&lt;/script>
   &lt;script src="../<strong>mcplayer.min.js</strong>">&lt;/script>
 
   &lt;!-- initialize the player -->
@@ -51,16 +67,73 @@
 
 &lt;/body>
 </pre>
+        <!-- ************************************************************** -->
         
+        <h3>Drag and drop functionality</h3>
+        <p>
+            By default there is no drag and drop functionality of the 
+            window like player.<br />
+            The player class detects the existance of my class <em>addi</em> (which is part of the download).<br />
+            You just need to load it before mcplayer.js.<br />
+            <br />
+            In this demo:<br />
+        </p>
+        <ol>
+            <li>Move your mouse pointer to the main player window. Hold the mouse key down and move the player window around.</li>
+            <li>Open a window i.e. playlist or download - you can move these windows too.</li>
+            <li>Press [F5] to reload the window. The windows you moved keep their position.</li>
+        </ol>
 		
         <!-- ************************************************************** -->
         
         <h2>Add audios</h2>
-		<p>
-			The song must exist in stereo and surround in 2 formats for both
-			channel types.
+        <h3>stereo audios</h3>
+        <p>
+            For testing you can begin with with a single audio format.
+            I suggest to use mp3.<br>
         </p>
+<pre>
+&lt;audio loop="loop"
+	controls="controls"
+	preload="none"
+	title="<strong>[Title]</strong>"
+	>
+	
+	&lt;source src="<strong>[song-in-stereo].mp3</strong>" type="audio/mp3" data-ch="<strong>2.0</strong>" title="<strong>2.0</strong>" />
+
+&lt;/audio>
+</pre>	
+        <h3>Surround Audio formats</h3>
+        <p>
+            The special feature of this player is handling sourrund audios.
+            Each songtitle must exist in stereo and surround in 2 formats for both channel types.
+        </p>
+        <ul>
+            <li>stereo:
+                <ul>
+                    <li>Ogg - Ogg Theorea, stereo</li>
+                    <li>Mp3 - MPEG I Layer 3 audio file (the classic mp3 file)</li>
+                </ul>
+            </li>
+            <li>5.1:
+                <ul>
+                    <li>M4a - MPEG 4 audio (aac)</li>
+                    <li>Ogg - Ogg Theorea, 5.1</li>
+                </ul>
+            </li>
+        </ul>
+        <p>
+            How to create the different file types?<br>
+            I recommend to automize the conversion of 2 exports (stereo, surround) of your DAW.<br>
+            I myself use a few batch files using ffmpeg, oggenc2 and neroAacEnc.<br>
+        </p>
+        
         <h3>Html preview</h3>
+        <p>
+            For each audio in your website you need a audio tag with several sources
+            for all channels.<br>
+            Also pay attention to the attributes to group the channels.
+        </p>
 <pre>
 &lt;audio loop="loop"
 	controls="controls"
@@ -69,11 +142,11 @@
 	>
 	
 	&lt;!-- stereo sources -->
-	&lt;source src="<strong>[song-in-stereo].ogg</strong>" type="audio/ogg" data-ch="2.0" title="2.0" />
+	&lt;source src="<strong>[song-in-stereo].mp3</strong>" type="audio/mp3" data-ch="<strong>2.0</strong>" title="<strong>2.0</strong>" />
 	&lt;source src="<strong>[song-in-stereo].mp3</strong>" type="audio/mp3" data-ch="2.0" title="2.0" />
 
 	&lt;!-- surround sources -->
-	&lt;source src="<strong>[song-in-5.1-surround].m4a</strong>" type="audio/mp4" data-ch="5.1" title="5.1" />
+	&lt;source src="<strong>[song-in-5.1-surround].m4a</strong>" type="audio/mp4" data-ch="<strong>5.1</strong>" title="<strong>5.1</strong>"  />
 	&lt;source src="<strong>[song-in-5.1-surround].ogg</strong>" type="audio/ogg" data-ch="5.1" title="5.1" />
 
 	&lt;!-- for fallback add a flashplayer here -->
@@ -83,10 +156,9 @@
         <!-- ************************************************************** -->
         
         <h2>Example audios</h2>
-		<p>
-			The following audios are linked to my website www.axel-hahn.de 
-			They are free for non commercial usage (license: cc 3.0 - by-nc-sa).<br>
-			<a href="https://www.axel-hahn.de/music/axels-songs/" target="_blank">Axels songs</a>
+        <p>
+            The following audios are linked to my website www.axel-hahn.de 
+            They are free for non commercial usage (license: cc 3.0 - by-nc-sa).<br>
         </p>
 			<div style="clear: left; padding: 0.5em 1em;">
 				<audio loop="loop"
@@ -95,13 +167,16 @@
 					title="Ticker"
 					>
 					
-					<!-- stereo sources -->
+					<source src="https://www.axel-hahn.de/axel/download/ticker_2.0_.mp3" type="audio/mp3" data-ch="2.0" title="2.0" />
+					<!-- stereo sources 
 					<source src="https://www.axel-hahn.de/axel/download/ticker_2.0_.ogg" type="audio/ogg" data-ch="2.0" title="2.0" />
 					<source src="https://www.axel-hahn.de/axel/download/ticker_2.0_.mp3" type="audio/mp3" data-ch="2.0" title="2.0" />
-
-					<!-- surround sources -->
+                                        -->
+					<!-- surround sources 
 					<source src="https://www.axel-hahn.de/axel/download/ticker_5.1_.m4a" type="audio/mp4" data-ch="5.1" title="5.1" />
 					<source src="https://www.axel-hahn.de/axel/download/ticker_5.1_.ogg" type="audio/ogg" data-ch="5.1" title="5.1" />
+                                        -->
+                                        
 
 					<!-- for fallback add a flashplayer here -->
 
@@ -193,12 +268,16 @@
 				</audio>
 				Give me a BIT more
 			</div>
+        <p>
+            More: <a href="https://www.axel-hahn.de/music/axels-songs/" target="_blank">Axels songs</a> (German)
+        </p>
 			
         
         <!-- ************************************************************** -->
         
 
         
+		<script src="../addi.min.js"></script>
 		<script src="../mcplayer.min.js"></script>
                 <script>
                     var oMcPlayer=new mcPlayer();
