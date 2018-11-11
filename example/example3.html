@@ -30,6 +30,21 @@
         </p>
 		
 		
+        <!-- ************************************************************** -->
+        
+        
+        <div style="clear: left; padding: 0.5em 1em;">
+            <audio loop="loop"
+                   controls="controls"
+                   preload="none"
+                        data-title="Planetradio"
+                        data-url="http://www.planetradio.de"
+                >
+                <source src="http://mp3.planetradio.de/planetradio/hqlivestream.mp3" type="audio/mp3" />
+            </audio>
+            planetradio
+        </div>
+        
         <div style="clear: left; padding: 0.5em 1em;">
             <audio loop="loop"
                    controls="controls"
@@ -38,12 +53,12 @@
 				   
 				   data-title="Ticker"
 				   data-artist="Axel Hahn"
-				   data-album=""
+				   data-album="test album"
 				   data-year="2017"
 				   data-image="https://www.axel-hahn.de/assets/audio/cover/ticker.jpg"
 				   data-genre="electronic"
 				   data-bpm="120"
-				   data-url=""
+				   data-url="https://www.axel-hahn.de"
                    >
 
                 <!-- stereo sources -->
@@ -371,6 +386,18 @@
                 <td><span id="spanAudiosrc" class="val-string">...</span></td>
             </tr>
             <tr>
+                <td>get network state of the current audio</td>
+                <td>getAudioNetworkstate()</td>
+                <td>string</td>
+                <td><span id="spanAudionetworkstate" class="val-integer">...</span></td>
+            </tr>
+            <tr>
+                <td>get ready state of the current audio</td>
+                <td>getAudioReadystate()</td>
+                <td>string</td>
+                <td><span id="spanAudioreadystate" class="val-integer">...</span></td>
+            </tr>
+            <tr>
                 <td>is playing</td>
                 <td>isPlaying()</td>
                 <td>boolean</td>
@@ -387,6 +414,12 @@
                 <td>isStopped()</td>
                 <td>boolean</td>
                 <td><span id="spanIsStopped" class="val-bool">...</span></td>
+            </tr>
+            <tr>
+                <td>is it a stream? true means a stream; false is a media file<br>Remark: it will be detected if the audio was started</td>
+                <td>isStream()</td>
+                <td>boolean</td>
+                <td><span id="spanIsStream" class="val-bool">...</span></td>
             </tr>
             <tr>
                 <td>Get volume (value 0..1)</td>
@@ -490,6 +523,7 @@
                         document.getElementById("spanIsPlaying").innerHTML = oMcPlayer.isPlaying();
                         document.getElementById("spanIsPaused").innerHTML = oMcPlayer.isPaused();
                         document.getElementById("spanIsStopped").innerHTML = oMcPlayer.isStopped();
+                        document.getElementById("spanIsStream").innerHTML = oMcPlayer.isStream();
                         document.getElementById("spanIsMuted").innerHTML = oMcPlayer.isMuted();
                         document.getElementById("spanIsShuffled").innerHTML = oMcPlayer.isShuffled();
                         document.getElementById("spanIsRepeatlist").innerHTML = oMcPlayer.isRepeatlist();
@@ -503,6 +537,8 @@
                         document.getElementById("spanAudiochannels").innerHTML = oMcPlayer.getAudioChannels();
                         document.getElementById("spanAllAudiochannels").innerHTML = '<pre>[' + oMcPlayer.getAllAudioChannels().toString() + ']</pre>';
                         document.getElementById("spanAudiosrc").innerHTML = oMcPlayer.getAudioSrc();
+                        document.getElementById("spanAudionetworkstate").innerHTML = oMcPlayer.getAudioNetworkstate();
+                        document.getElementById("spanAudioreadystate").innerHTML = oMcPlayer.getAudioReadystate();
                         document.getElementById("spanPlaylistCount").innerHTML = oMcPlayer.getPlaylistCount();
                         document.getElementById("spanPlaylist").innerHTML = '<pre>' + JSON.stringify(oMcPlayer.getPlaylist(), null, '  ') + '</pre>';
                     } catch (e) {

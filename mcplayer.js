@@ -39,7 +39,7 @@
  * mcPlayer ... Multi Channel Player
  * 
  * @author    Axel Hahn
- * @version   0.32
+ * @version   0.33
  *
  * @this mcPlayer
  * 
@@ -67,8 +67,8 @@ var mcPlayer = function () {
     // settings
     this.cfg = {
         about: {
-            version: '0.32',
-            label: 'AMC Player - v0.32',
+            version: '0.33',
+            label: 'AMC Player - v0.33',
             description: '<strong>A</strong>xels <strong>M</strong>ulti <strong>C</strong>hannel <strong>Player</strong>.<br><br>This is a webbased HTML5 player.<br>It\'s focus is the handling of media in stereo and surround for a title.',
             labeldownload: 'Download:<br>',
             download: 'http://sourceforge.net/projects/amcplayer/files/latest/download',
@@ -190,8 +190,30 @@ var mcPlayer = function () {
                 noentry: 'Select or play an audio first to show its downloads.'
             },
             songinfo: {
-                bpm: 'bpm'
-            }
+                album: 'Album',
+                year: 'Year',
+                bpmspeed: 'Speed',
+                bpm: 'bpm',
+                genre: 'Genre',
+                url: 'Web'
+            },
+            status:{
+                networkstate: {
+                    label: 'Network activity',
+                    0: [ 'Empty',  '0 = NETWORK_EMPTY - audio/video has not yet been initialized'],
+                    1: [ 'Idle',   '1 = NETWORK_IDLE - audio/video is active and has selected a resource, but is not using the network'],
+                    2: [ 'Loading','2 = NETWORK_LOADING - browser is downloading data'],
+                    3: [ 'No Source','3 = NETWORK_NO_SOURCE - no audio/video source found']
+                },
+                readystate: {
+                    label: 'Status',
+                    0: ['Have nothing',  '0 = HAVE_NOTHING - no information whether or not the audio/video is ready'],
+                    1: ['Have Metadata', '1 = HAVE_METADATA - metadata for the audio/video is ready'],
+                    2: ['OK, Current data',  '2 = HAVE_CURRENT_DATA - data for the current playback position is available, but not enough data to play next frame/millisecond'],
+                    3: ['OK, Future data',   '3 = HAVE_FUTURE_DATA - data for the current and at least the next frame is available'],
+                    4: ['OK, Enough data',   '4 = HAVE_ENOUGH_DATA - enough data available to start playing']
+                }
+            }            
         },
         settings: {
             autoopen: false,
@@ -239,10 +261,9 @@ var mcPlayer = function () {
 
     /**
      * Check: does the browser support 5.1 channels?<br>
-     * older Opera versions: no<br>
-     * all other: Yes<br>
-     * <br>
-     * TODO: scan for tablets and mobile devices.
+     * tablets and mobile devices: false<br>
+     * older Opera versions: false<br>
+     * all other: true<br>
      * 
      * @return {boolean}
      */
@@ -396,14 +417,14 @@ var mcPlayer = function () {
                     + '></a>';
         }
         s += '</div>'
-                + '<div id="mcpprogressdiv"'
+            + '<div id="mcpprogressdiv"'
                 + (this.cfg.aPlayer.bars["progress"].visible ? '' : 'style="display: none"')
                 + '><canvas id="mcpprogresscanvas" title="' + this.cfg.aPlayer.bars["progress"].title + '"></canvas>'
                 + '<div id="mcpprogressbar"></div>'
-                + '</div>'
-                + '<span id="mcptime"><span id="mcptimeplayed">-:--</span>/ <span id="mcptimetotal">-:--</span></span>'
+            + '</div>'
+            + '<span id="mcptime"><span id="mcptimeplayed">-:--</span>/ <span id="mcptimetotal">-:--</span></span>'
 
-                + '<div id="mcpvolumediv" title="volume">'
+            + '<div id="mcpvolumediv" title="volume">'
                 + '<a href="#" id="mcpvolmute" onclick="' + this.name + '.setVolume(0); return false;" '
                 + (this.cfg.aPlayer.buttons["volmute"].visible ? '' : 'style="display: none" ')
                 + 'title="' + this.cfg.aPlayer.buttons["volmute"].title + '"></a>'
@@ -415,29 +436,38 @@ var mcPlayer = function () {
                 + '<a href="#" id="mcpvolfull" onclick="' + this.name + '.setVolume(1); return false;" '
                 + (this.cfg.aPlayer.buttons["volfull"].visible ? '' : 'style="display: none" ')
                 + 'title="' + this.cfg.aPlayer.buttons["volfull"].title + '"></a>'
-                + '</div>'
+            + '</div>'
 
-                + '<div id="mcpchannels"></div>'
+            + '<div id="mcpchannels"></div>'
 
-                + '<div id="mcpoptions">'
-                ;
-        // TODO: fill me with life
-        s += '<a href="#" onclick="' + this.name + '.toggleRepeat(); return false;" id="mcpoptrepeat" '
+            + '<div id="mcpoptions">'
+                + '<a href="#" onclick="' + this.name + '.toggleRepeat(); return false;" id="mcpoptrepeat" '
                 + (this.isRepeatlist() ? 'class="active" ' : '')
                 + 'title="' + this.cfg.aPlayer.buttons["repeat"].title + '"></a>'
                 + '<a href="#" onclick="' + this.name + '.toggleShuffle(); return false;" id="mcpoptshuffle" '
                 + (this.cfg.settings.shuffle ? 'class="active" ' : '')
                 + 'title="' + this.cfg.aPlayer.buttons["shuffle"].title + '"></a>'
                 ;
-        var aBtn = ['download', 'playlist', 'about'];
-        for (var i = 0; i < aBtn.length; i++) {
-            idLink = 'mcpopt' + aBtn[i];
-            s += '<a href="#" onclick="' + this.name + '.toggleBoxAndButton(\'' + aBtn[i] + '\'); return false;" id="mcpopt' + aBtn[i] + '" '
-                    + (this.cfg.aPlayer.buttons[aBtn[i]].visible ? '' : 'style="display: none" ')
-                    + ' title="' + this.cfg.aPlayer.buttons[aBtn[i]].title + '"></a>'
-                    ;
-        }
-        s += '</div>';
+                var aBtn = ['download', 'playlist', 'about'];
+                for (var i = 0; i < aBtn.length; i++) {
+                    idLink = 'mcpopt' + aBtn[i];
+                    s += '<a href="#" onclick="' + this.name + '.toggleBoxAndButton(\'' + aBtn[i] + '\'); return false;" id="mcpopt' + aBtn[i] + '" '
+                            + (this.cfg.aPlayer.buttons[aBtn[i]].visible ? '' : 'style="display: none" ')
+                            + ' title="' + this.cfg.aPlayer.buttons[aBtn[i]].title + '"></a>'
+                            ;
+                }
+            s += '</div>'
+            + '<div id="mcpstatusbar">'
+                + '<div>'
+                    + this.cfg.aPlayer.status.networkstate.label+': '
+                    +'<span id="mcpstatusnetwork"></span>'
+                + '</div>'
+                + '<div>'
+                    + this.cfg.aPlayer.status.readystate.label+': '
+                    +'<span id="mcpstatusready"></span>'
+                + '</div>'
+            + '</div>'
+            ;
 
         return s;
     };
@@ -501,22 +531,20 @@ var mcPlayer = function () {
         if (!this.cfg.settings.showsonginfos) {
             return '';
         }
-        var sHtml = '';
-        if (
-                this.getSongImage()
-                + this.getSongArtist()
-                ) {
-            sHtml += '<div>';
-            sHtml += this.getSongImage() ? '<img src="' + this.getSongImage() + '">' : '';
-            sHtml += this.getSongTitle() ? '<div class="title">' + this.getSongTitle() + '</div>' : '';
-            sHtml += this.getSongArtist() ? '<div class="artist">' + this.getSongArtist() + '</div>' : '';
-            sHtml += this.getSongAlbum() ? '<div class="album">' + this.getSongAlbum() + '</div>' : '';
-            sHtml += this.getSongYear() ? '<div class="year">' + this.getSongYear() + '</div>' : '';
-            sHtml += this.getSongBpm() ? '<div class="bpm">' + this.getSongBpm() + this.cfg.aPlayer.songinfo.bpm + '</div>' : '';
-
-            // TODO:
-            // this.getSongGenre()
-            // this.getSongUrl()
+        var sHtml = ''
+            + (this.getSongArtist() ? '<div class="artist">' + this.getSongArtist() + '</div>' : '')
+            + (this.getSongAlbum()  ? '<div class="album">'  + this.cfg.aPlayer.songinfo.album    + ': ' +this.getSongAlbum()  + '</div>' : '')
+            + (this.getSongYear()   ? '<div class="year">'   + this.cfg.aPlayer.songinfo.year     + ': ' + this.getSongYear()   + '</div>' : '')
+            + (this.getSongBpm()    ? '<div class="bpm">'    + this.cfg.aPlayer.songinfo.bpmspeed + ': ' + this.getSongBpm()    + ' ' + this.cfg.aPlayer.songinfo.bpm + '</div>' : '')
+            + (this.getSongGenre()  ? '<div class="genre">'  + this.cfg.aPlayer.songinfo.genre    + ': '  + this.getSongGenre()  + '</div>' : '')
+            + (this.getSongUrl()    ? '<div class="url">'    + this.cfg.aPlayer.songinfo.url      + ': <a href="' + this.getSongUrl() + '" target="_blank">'+this.getSongUrl()+'</a></div>' : '')
+            ;
+        if (sHtml || this.getSongImage()) {
+            sHtml = '<div>'
+                + (this.getSongImage() ? '<img src="' + this.getSongImage() + '">' : '')
+                + (this.getSongTitle() ? '<div class="title">' + this.getSongTitle() + '</div>' : '')
+                + sHtml
+                ;
 
             sHtml += '<div style="clear: both;"></div>';
             sHtml += '</div>';
@@ -1239,7 +1267,8 @@ var mcPlayer = function () {
             }
         }
         if (iChannels === 1) {
-            sChannels = '<li>' + sChannel + '</li>';
+            // sChannels = '<li>' + sChannel + '</li>';
+            sChannels = '';
         }
         document.getElementById("mcpplayeraudios").innerHTML = s;
         if (sChannels) {
@@ -1346,21 +1375,51 @@ var mcPlayer = function () {
         if (sChannelId) {
             // document.getElementById("lnkaudio"+id).className="active";
             oAudioTmp = document.getElementById("mcp" + sChannelId);
+            oAudioTmp.idurationchange=0;
+            oAudioTmp.isStream=false;
+            oAudioTmp.lastDuration=false;
             this.oAudio = oAudioTmp;
             if (this.oAudio) {
                 this._wait4Audio(this.oAudio, this.iCurrentTime);
 
                 this.oAudio.volume = this.cfg.settings.volume;
-
-                // add events
+            
+                document.getElementById('mcptimeplayed').innerHTML = '?:??';
+                document.getElementById('mcptimetotal').innerHTML = '?:??';
+                document.getElementById('mcptime').style.display='block';
 
                 // --------------------------------------------------
-                // draw / update progressbar
+                // draw / update time display
                 // --------------------------------------------------
+                oAudioTmp.addEventListener("durationchange", function () {
+                    if(oAudioTmp.duration===Infinity){
+                        oAudioTmp.isStream=true;
+                    } else {
+                        if (oAudioTmp.lastDuration !== oAudioTmp.duration ){
+                            oAudioTmp.idurationchange++;
+                            oAudioTmp.lastDuration=oAudioTmp.duration;
+                            if(oAudioTmp.idurationchange>3){
+                                oAudioTmp.isStream=true;
+                            }
+                        }
+                    }
+                });
                 oAudioTmp.addEventListener("timeupdate", function () {
+                    
+                    document.getElementById('mcpprogressdiv').style.display=oAudioTmp.isStream ? 'none' : '';
+                    document.getElementById('mcptime').style.display=oAudioTmp.isStream ? 'none' : 'block';
+                    
+                    // player buttons
+                    document.getElementById('mcppause').style.display=oAudioTmp.isStream ? 'none' : 'block';
+                    document.getElementById('mcpbackward').style.display=oAudioTmp.isStream ? 'none' : 'block';
+                    document.getElementById('mcpforward').style.display=oAudioTmp.isStream ? 'none' : 'block';
+
                     if (!oAudioTmp.currentTime) {
                         document.getElementById('mcptimeplayed').innerHTML = '-:--';
                         document.getElementById('mcptimetotal').innerHTML = '-:--';
+                        return false;
+                    }
+                    if(oAudioTmp.isStream){
                         return false;
                     }
 
@@ -1638,6 +1697,17 @@ var mcPlayer = function () {
 
     // ----------------------------------------------------------------------
     /**
+     * get network state of current audio (i.e. loading / idle)
+     * https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/networkState
+     * @returns {Integer|false}
+     */
+    this.getAudioNetworkstate = function () {
+        var oAudioTmp = this.oAudio ? this.oAudio : document.getElementById("mcp" + this.getAudioChannels());
+        return oAudioTmp ? oAudioTmp.networkState : false;
+    };
+
+    // ----------------------------------------------------------------------
+    /**
      * get position in [sec] of the current song
      * @return {float}
      */
@@ -1646,6 +1716,16 @@ var mcPlayer = function () {
             return false;
         }
         return this.oAudio.currentTime;
+    };
+    // ----------------------------------------------------------------------
+    /**
+     * get document state of current audio
+     * https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/readyState
+     * @returns {Integer|false}
+     */
+    this.getAudioReadystate = function () {
+        var oAudioTmp = this.oAudio ? this.oAudio : document.getElementById("mcp" + this.getAudioChannels());
+        return oAudioTmp ? oAudioTmp.readyState : false;
     };
 
     // ----------------------------------------------------------------------
@@ -1858,6 +1938,37 @@ var mcPlayer = function () {
     this.isStopped = function () {
         return (!this.oAudio || this.oAudio.currentTime === 0);
     };
+    /**
+     * get boolean value - is the curemt played audio a stream?
+     * remark: it is detected by audio.duration == Infinity (Chrome)
+     * or count of durationchange events (used in Firefox)
+     * @since 0.33
+     * @returns {Boolean}
+     */
+    this.isStream = function () {
+        return (this.oAudio && this.oAudio.isStream);
+    };
+    
+    // ----------------------------------------------------------------------
+    /**
+     * get boolean value - is the curemt played audio a stream?
+     * remark: it is detected by audio.duration == Infinity (Chrome)
+     * or count of durationchange events (used in Firefox)
+     * @since 0.33
+     * @returns {Boolean}
+     */
+    this.updateStatus = function () {
+        var iNet=this.getAudioNetworkstate();
+        if (iNet){
+            var iStatus=this.getAudioReadystate();
+            document.getElementById('mcpstatusnetwork').innerHTML='<span class="networkstate'+iNet+'" title="'+this.cfg.aPlayer.status.networkstate[iNet][1]+'">' + this.cfg.aPlayer.status.networkstate[iNet][0] + '</span>';
+            document.getElementById('mcpstatusready').innerHTML='<span class="readystate'+iStatus+'" title="'+this.cfg.aPlayer.status.readystate[iStatus][1]+'">' + this.cfg.aPlayer.status.readystate[iStatus][0] + '</span>';
+        } else {
+            document.getElementById('mcpstatusnetwork').innerHTML='-';
+            document.getElementById('mcpstatusready').innerHTML='-';
+        }
+        return true;
+    };
 
     // ----------------------------------------------------------------------
     /**
@@ -1909,6 +2020,7 @@ var mcPlayer = function () {
         this.minimizeBox('about', true);
         this.minimizeBox('download', true);
         this.minimizeBox('playlist', true);
+        window.setInterval(this.name + ".updateStatus()", 500);
         return true;
     };
 

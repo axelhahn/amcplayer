@@ -142,12 +142,13 @@
     text-shadow: 1px 1px 0 #fff;
 }
 #mcpplayersonginfo .artist{}
+#mcpplayersonginfo .artist{}
 #mcpplayersonginfo .album{}
-#mcpplayersonginfo .year{font-style: italic; font-size: 60%;}
-    #mcpplayersonginfo .year:before{content: '(';}
-    #mcpplayersonginfo .year:after{content: ')';}
-#mcpplayersonginfo .bpm{font-size: 80%; font-style: italic; margin-top: 1em; color:rgba(0,0,0,0.3);}
-#mcpplayersonginfo .description{font-size: 80%; font-style: italic; margin-top: 1em;}
+#mcpplayersonginfo .year{font-size: 90%; }
+#mcpplayersonginfo .bpm{font-size: 90%; margin-top: 1em; color:rgba(0,0,0,0.6);}
+#mcpplayersonginfo .genre{font-size: 90%;}
+#mcpplayersonginfo .url{font-size: 90%; margin-top: 1em;}
+#mcpplayersonginfo .url a{background: none; border: none; font-style: italic; float: none; width: auto;}
 
 /* ============================================================
 bars for volume and progress
@@ -187,7 +188,13 @@ bars for volume and progress
     width: 10px; 
 }
 #mcptime{position: absolute; right: 10px; }
+#mcpstatusbar{clear: left; border-top: 1px solid #fff;}
+#mcpstatusbar div{width: 49%; float: left;}
 
+/* nothing */   #mcpstatusbar .networkstate0{color: rgba(0,0,0,0.5);}
+/* idle */      #mcpstatusbar .networkstate1{color: rgba(0,0,0,0.5);}
+/* loading */   #mcpstatusbar .networkstate2{color:#060;}
+/* no source*/  #mcpstatusbar .networkstate3{background:#600; color: #fcc;}
 
 /* ============================================================
 additional buttons for channels, options, dialogs

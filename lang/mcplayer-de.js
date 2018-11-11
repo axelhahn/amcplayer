@@ -97,7 +97,30 @@ var aAmcLang = {
             noentry: 'Bitte ein Audio w&auml;hlen oder abspielen, um dessen Downloads zu zeigen.'
         },
         songinfo: {
-            bpm: 'BPM'
-        }
+            album: 'Album',
+            year: 'Jahr',
+            bpmspeed: 'Geschwindigkeit',
+            bpm: 'Bpm',
+            genre: 'Genre',
+            url: 'Webadresse'
+        },
+        status:{
+            networkstate: {
+                label: 'Netzwerk',                
+                0: [ 'Leer', '0 = NETWORK_EMPTY - Audio/Video wurde noch nicht initialisiert'],
+                1: [ 'Idle', '1 = NETWORK_IDLE - Audio/Video ist aktiv und hat eine Ressource ausgew&auml;hlt, verwendet aber nicht das Netzwerk'],
+                2: [ 'Laden','2 = NETZWERK_LADEN - der Browser l&auml;dt Daten herunter'],
+                3: [ 'Keine Quelle','3 = NETZWERK_NO_SOURCE - keine Audio-/Videoquelle gefunden']
+                
+            },
+            readystate: {
+                label: 'Status',
+                0: ['Nichts', '0 = HAVE_NOTHING - keine Information, ob das Audio/Video bereit ist oder nicht'],
+                1: ['Metadaten vorh.', '1 = HAVE_METADATA - Metadaten für das Audio/Video sind bereit'],
+                2: ['OK, Aktuelle Daten vorh.', '2 = HAVE_CURRENT_DATA - Daten für die aktuelle Wiedergabeposition sind verfügbar, aber nicht genügend Daten, um das nächste Bild/Millisekunde wiederzugeben'],
+                3: ['OK, Zukunftsdaten', '3 = HAVE_FUTURE_DATA - Daten für den aktuellen und mindestens den n&auml;chsten Frame sind verf&uuml;gbar'],
+                4: ['OK, Genug Daten', '4 = HAVE_ENOUGH_DATA - genug Daten vorhanden, um mit dem Spielen zu beginnen']
+            }
+        }            
     }
 };
