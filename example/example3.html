@@ -32,7 +32,7 @@
 		
         <!-- ************************************************************** -->
         
-        
+        <!--
         <div style="clear: left; padding: 0.5em 1em;">
             <audio loop="loop"
                    controls="controls"
@@ -44,6 +44,7 @@
             </audio>
             planetradio
         </div>
+        -->
         
         <div style="clear: left; padding: 0.5em 1em;">
             <audio loop="loop"
@@ -53,12 +54,12 @@
 				   
 				   data-title="Ticker"
 				   data-artist="Axel Hahn"
-				   data-album="test album"
+				   data-album=""
 				   data-year="2017"
 				   data-image="https://www.axel-hahn.de/assets/audio/cover/ticker.jpg"
 				   data-genre="electronic"
 				   data-bpm="120"
-				   data-url="https://www.axel-hahn.de"
+				   data-url="https://www.axel-hahn.de/music/axels-songs"
                    >
 
                 <!-- stereo sources -->
@@ -88,7 +89,7 @@
 				   data-image="https://www.axel-hahn.de/assets/audio/cover/lets_play.jpg"
 				   data-genre="electronic"
 				   data-bpm="80"
-				   data-url=""
+				   data-url="https://www.axel-hahn.de/music/axels-songs"
                    >
 
                 <!-- stereo sources -->
@@ -119,7 +120,7 @@
 				   data-image="https://www.axel-hahn.de/assets/audio/cover/lift-control.jpg"
 				   data-genre="electronic"
 				   data-bpm="125"
-				   data-url=""
+				   data-url="https://www.axel-hahn.de/music/axels-songs"
                    >
 
                 <!-- stereo sources -->
@@ -149,7 +150,7 @@
 				   data-image="https://www.axel-hahn.de/assets/audio/cover/november.jpg"
 				   data-genre="electronic"
 				   data-bpm="125"
-				   data-url=""
+				   data-url="https://www.axel-hahn.de/music/axels-songs"
                    >
 
                 <!-- stereo sources -->
@@ -179,7 +180,7 @@
 				   data-image="https://www.axel-hahn.de/assets/audio/cover/gimme-a-bit-more.jpg"
 				   data-genre="electronic"
 				   data-bpm="120"
-				   data-url=""
+				   data-url="https://www.axel-hahn.de/music/axels-songs"
                    >
 
                 <!-- stereo sources -->
@@ -240,7 +241,7 @@
             <button onclick="oMcPlayer.toggleRepeat()">toggleRepeat()</button>
             <br>
             <br>
-            playing option shuffle playlist; see tasble below to see playlist order<br>
+            playing option shuffle playlist; see table below to see playlist order<br>
             <button onclick="oMcPlayer.enableShuffle()">enableShuffle()</button>
             <button onclick="oMcPlayer.disableShuffle()">disableShuffle()</button>
             <button onclick="oMcPlayer.toggleShuffle()">toggleShuffle()</button>
@@ -267,6 +268,13 @@
             <button onclick="oMcPlayer.minimize()">minimize()</button>
             <br>
             <br>
+            statusbar<br>
+            <button onclick="oMcPlayer.enableStatusbar()">enableStatusbar()</button>
+            <button onclick="oMcPlayer.disableStatusbar()">disableStatusbar()</button>
+            <button onclick="oMcPlayer.toggleStatusbar()">toggleStatusbar()</button>
+            <br>
+            <br>
+            boxes<br>
             <button onclick="oMcPlayer.maximizeBox('about')">maximizeBox('about')</button>
             <button onclick="oMcPlayer.minimizeBox('about')">minimizeBox('about')</button>
             <button onclick="oMcPlayer.toggleBoxAndButton('about')">toggleBoxAndButton('about')</button>
@@ -416,7 +424,7 @@
                 <td><span id="spanIsStopped" class="val-bool">...</span></td>
             </tr>
             <tr>
-                <td>is it a stream? true means a stream; false is a media file<br>Remark: it will be detected if the audio was started</td>
+                <td>is it a stream? true means a stream; false is a media file<br>Remark: it will be detected after the audio was started</td>
                 <td>isStream()</td>
                 <td>boolean</td>
                 <td><span id="spanIsStream" class="val-bool">...</span></td>
@@ -469,6 +477,12 @@
                 <td>isVisiblePlayer()</td>
                 <td>boolean</td>
                 <td><span id="spanIsVisiblePlayer" class="val-bool">...</span></td>
+            </tr>
+            <tr>
+                <td>is the statusbar visible</td>
+                <td>isVisibleStatusbar()</td>
+                <td>boolean</td>
+                <td><span id="spanIsVisibleStatusbar" class="val-bool">...</span></td>
             </tr>
             
             <tr>
@@ -531,6 +545,7 @@
                         document.getElementById("spanIsVisibleBoxDownload").innerHTML = oMcPlayer.isVisibleBoxDownload();
                         document.getElementById("spanIsVisibleBoxPlaylist").innerHTML = oMcPlayer.isVisibleBoxPlaylist();
                         document.getElementById("spanIsVisiblePlayer").innerHTML = oMcPlayer.isVisiblePlayer();
+                        document.getElementById("spanIsVisibleStatusbar").innerHTML = oMcPlayer.isVisibleStatusbar();
                         document.getElementById("spanCurrentvolume").innerHTML = oMcPlayer.getVolume();
                         document.getElementById("spanAudiopos").innerHTML = oMcPlayer.getAudioPosition();
                         document.getElementById("spanAudioduration").innerHTML = oMcPlayer.getAudioDuration();

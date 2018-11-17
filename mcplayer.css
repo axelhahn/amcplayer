@@ -40,6 +40,11 @@
 
 
 #mcpabout a, #mcpdownloads a, #mcpplaylist a{color: #08c;}
+#mcpabout .amclogo{
+    background-image: url("data:image/png;base64,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");
+    width: 200px; height: 100px;
+    float: right;
+}
 
 #mcplayer .active a,
 #mcplayer a.active,
@@ -188,7 +193,8 @@ bars for volume and progress
     width: 10px; 
 }
 #mcptime{position: absolute; right: 10px; }
-#mcpstatusbar{clear: left; border-top: 1px solid #fff;}
+#mcpstatusbar{clear: left; border-top: 1px solid #fff; display: none;}
+#mcpstatusbar.active{display: block;}
 #mcpstatusbar div{width: 49%; float: left;}
 
 /* nothing */   #mcpstatusbar .networkstate0{color: rgba(0,0,0,0.5);}
@@ -255,7 +261,7 @@ additional buttons for channels, options, dialogs
     transition: all 0.25s ease-out;
     width: 300px;
 }
-#mcpabout{width: 40%; left: 10%; right: auto;}
+#mcpabout{width: 40em; left: 10%; right: auto;}
 #mcpabout.Xvisible{opacity: 1; bottom: 150px;}
 
 #mcpplaylist{right: 10px;}
@@ -398,19 +404,25 @@ additional buttons for channels, options, dialogs
 }
 
 
-#mcppause:before,       .icon-pause:before          { content: "⎉"; } /* '\2389' */
-#mcpforward:before,     .icon-fast-fw:before        { content: "⏩"; } /* '\23e9' */
-#mcpbackward:before,    .icon-fast-bw:before        { content: "⏪"; } /* '\23ea' */
-#mcpjumpnext:before,    .icon-to-end:before         { content: "⏭"; } /* '\23ed' */
-#mcpjumpprev:before,    .icon-to-start:before       { content: "⏮"; } /* '\23ee' */
-#mcpstop:before,        .icon-stop:before           { content: "▪"; } /* '\25aa' */
-#mcpplay:before,        .icon-play:before           { content: "▶"; } /* '\25b6' */
-#mcpoptplaylist:before, .icon-th-list:before        { content: "☰"; } /* '\2630' */
-#mcpoptrepeat:before,   .icon-cw:before             { content: "⟳"; } /* '\27f3' */
-#mcpoptshuffle:before,  .icon-cw:before             { content: "🔀"; } /* '\1f500' */
-#mcpminimize:before,    .icon-down-open-1:before    { content: ""; font-family: mcplayer_icons;} /* '\e800' */
-#mcpmaximize:before,    .icon-up-open-1:before      { content: ""; font-family: mcplayer_icons;} /* '\e801' */
-#mcpoptdownload:before, .icon-install:before        { content: ""; } /* '\e778' */
-#mcpvolmute:before,     .icon-volume-off:before     { content: "🔇"; } /* '\1f507' */
-#mcpvolfull:before,     .icon-volume-up:before      { content: "🔊"; } /* '\1f50a' */
-#mcpoptabout:before,    .icon-info-circle-1:before  { content: '\e802'; } /* 'î ‚' */
+#mcppause:before,       .icon-pause:before          { content: "\2389"; } /* '\2389' */
+#mcpforward:before,     .icon-fast-fw:before        { content: "\23e9"; } /* '\23e9' */
+#mcpbackward:before,    .icon-fast-bw:before        { content: "\23ea"; } /* '\23ea' */
+#mcpjumpnext:before,    .icon-to-end:before         { content: "\23ed"; } /* '\23ed' */
+#mcpjumpprev:before,    .icon-to-start:before       { content: "\23ee"; } /* '\23ee' */
+#mcpstop:before,        .icon-stop:before           { content: "\25aa"; } /* '\25aa' */
+#mcpplay:before,        .icon-play:before           { content: "\25b6"; } /* '\25b6' */
+#mcpoptplaylist:before, .icon-th-list:before        ,.ico-playlist:before { content: "\e804"; font-family: mcplayer_icons;} /* '\2630' */
+#mcpoptrepeat:before,   .icon-cw:before             { content: "\27f3"; } /* '\27f3' */
+#mcpoptshuffle:before,  .icon-cw:before             { content: "\1f500"; } /* '\1f500' */
+#mcpminimize:before,    .icon-down-open-1:before    { content: "\e800"; font-family: mcplayer_icons;} /* '\e800' */
+#mcpmaximize:before,    .icon-up-open-1:before      { content: "\e801"; font-family: mcplayer_icons;} /* '\e801' */
+#mcpoptdownload:before, .icon-install:before        ,.ico-download:before { content: "\e778"; font-family: mcplayer_icons;} /* '\e778' */
+#mcpvolmute:before,     .icon-volume-off:before     { content: "\1f507"; } /* '\1f507' */
+#mcpvolfull:before,     .icon-volume-up:before      { content: "\1f50a"; } /* '\1f50a' */
+#mcpoptabout:before,    .icon-info-circle-1:before  ,.ico-about:before { content: '\e802'; font-family: mcplayer_icons;} /* 'î ‚' */
+#mcpoptstatusbar:before, .icon-window-minimize:before  { content: '\f2d1'; } /* 'î ‚' */
+
+.ico-playlist:before,
+.ico-download:before,
+.ico-about:before
+{font-size: 150%;}

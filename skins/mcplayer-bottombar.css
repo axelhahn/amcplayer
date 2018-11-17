@@ -26,7 +26,7 @@
 #mcpchannels{clear: none; float: left; margin: 0 2em 0 2em; }
 #mcptime{float: left; display: block; position: relative; right: 0; top: 0.5em; margin-left: 1em;}
 #mcpoptions{margin-right: 1em;}
-#mcpstatusbar{clear: none; border: none; float: right; width: 15em;}
+#mcpstatusbar{clear: none; border: none; float: right; width: 18em;}
 #mcpstatusbar div{width: auto; float: none;}
 
 #mcplayer a{padding:0.3em;}

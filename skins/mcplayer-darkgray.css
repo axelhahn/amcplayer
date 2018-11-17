@@ -22,7 +22,9 @@
 #mcpplayersonginfo>div{
     border-bottom: 1px solid #666;
 }
-#mcpplayersonginfo .title{
+#mcpabout .title, 
+#mcpplayersonginfo .title
+{
     color:rgba(200,200,255,0.2);
     color:#89a;
     text-shadow: 1px 1px 0 #000;
@@ -38,6 +40,11 @@
 
 
 #mcptime{color:#999;text-shadow: none;}
+
+/* nothing */   #mcpstatusbar .networkstate0{color: rgba(255,255,255,0.5);}
+/* idle */      #mcpstatusbar .networkstate1{color: rgba(255,255,255,0.5);}
+/* loading */   #mcpstatusbar .networkstate2{color:#0a0;}
+/* no source*/  #mcpstatusbar .networkstate3{background:#600; color: #fcc;}
 
 #mcpvolumecanvas,
 #mcpprogresscanvas{background: #888; border-radius: 0;}

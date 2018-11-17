@@ -15,18 +15,19 @@
 #mcplayer a.active,
 #mcpplaylist li.active a{
     /* background: rgba(200, 200, 255, 0.4); */
-    background: linear-gradient(to bottom, #8ca, #6a8);
+    background: linear-gradient(to bottom, #89a, #ace);
     color:#fff;
 }
 
 #mcpabout .title, 
 #mcpplayersonginfo .title{
     color:#6a8;
+    color:#678;
 }
 
 #mcpvolumecanvas,
 #mcpprogresscanvas{
-    background: linear-gradient(to bottom, #bde,#cef,#bcd);
+    background: linear-gradient(to bottom, #cde,#e0e8f0,#bcd);
 }
 
 #mcpmaximize{background: #a86; color:#fff;}

@@ -76,6 +76,10 @@ var aAmcLang = {
             minimize: {
                 label: '',
                 title: 'Minimieren'
+            },
+            statusbar: {
+                label: '',
+                title: 'Statusbar mit Netzwerk und Mediastatus'
             }
         },
         bars: {
@@ -94,7 +98,8 @@ var aAmcLang = {
         },
         download: {
             title: 'Audios herunterladen',
-            noentry: 'Bitte ein Audio w&auml;hlen oder abspielen, um dessen Downloads zu zeigen.'
+            noentry: 'Bitte ein Audio w&auml;hlen oder abspielen, um dessen Downloads zu zeigen.',
+            hint: 'Verwende die rechte Maustaste oder das Kontextmen&uuml;, um das Linkziel zu speichern'
         },
         songinfo: {
             album: 'Album',
@@ -117,9 +122,9 @@ var aAmcLang = {
                 label: 'Status',
                 0: ['Nichts', '0 = HAVE_NOTHING - keine Information, ob das Audio/Video bereit ist oder nicht'],
                 1: ['Metadaten vorh.', '1 = HAVE_METADATA - Metadaten für das Audio/Video sind bereit'],
-                2: ['OK, Aktuelle Daten vorh.', '2 = HAVE_CURRENT_DATA - Daten für die aktuelle Wiedergabeposition sind verfügbar, aber nicht genügend Daten, um das nächste Bild/Millisekunde wiederzugeben'],
+                2: ['OK, Aktuelle Daten vorh.', '2 = HAVE_CURRENT_DATA - Daten für die aktuelle Wiedergabeposition sind verfügbar, aber nicht genügend Daten für eine Wiedergabe'],
                 3: ['OK, Zukunftsdaten', '3 = HAVE_FUTURE_DATA - Daten für den aktuellen und mindestens den n&auml;chsten Frame sind verf&uuml;gbar'],
-                4: ['OK, Genug Daten', '4 = HAVE_ENOUGH_DATA - genug Daten vorhanden, um mit dem Spielen zu beginnen']
+                4: ['OK, genug Daten', '4 = HAVE_ENOUGH_DATA - genug Daten vorhanden, um mit dem Spielen zu beginnen']
             }
         }            
     }
