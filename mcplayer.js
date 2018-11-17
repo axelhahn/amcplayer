@@ -1352,6 +1352,7 @@ var mcPlayer = function () {
         document.getElementById("mcpplaylist").innerHTML = this._genPlaylist();
         document.getElementById("mcpdownloads").innerHTML = this._genDownloads();
 
+        this._playerheightSet();
         var sSonginfos = this._genSonginfos();
         document.getElementById("mcpplayersonginfo").innerHTML = sSonginfos;
         this._playerheightAdjust();
