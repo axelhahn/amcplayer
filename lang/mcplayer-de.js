@@ -1,6 +1,6 @@
 var aAmcLang = {
     about: {
-        description: '<strong>A</strong>xels <strong>M</strong>ulti <strong>C</strong>hannel <strong>Player</strong>.<br><br>Dies ist ein webbasierter HTML5-Player.<br>Sein Fokus liegt auf dem Handling von Medien in stereo und surround ein und desselben Titels.',
+        description: '<strong>A</strong>xels <strong>M</strong>ulti <strong>C</strong>hannel <strong>Player</strong>.<br>Dies ist ein webbasierter HTML5-Audio-Player.<br>Sein Fokus liegt auf dem Handling von Medien in stereo und surround ein und desselben Titels.',
         labeldownload: 'Herunterladen:<br>',
         labellicense: 'Lizenz: ',
         license: 'GPL 3.0',
@@ -9,7 +9,7 @@ var aAmcLang = {
     },
     links: {
         play: {
-                title: 'Abspielen'
+            title: 'Abspielen'
         }
     },
     aPlayer: {
@@ -109,14 +109,14 @@ var aAmcLang = {
             genre: 'Genre',
             url: 'Webadresse'
         },
-        status:{
+        status: {
             networkstate: {
-                label: 'Netzwerk',                
-                0: [ 'Leer', '0 = NETWORK_EMPTY - Audio/Video wurde noch nicht initialisiert'],
-                1: [ 'Idle', '1 = NETWORK_IDLE - Audio/Video ist aktiv und hat eine Ressource ausgew&auml;hlt, verwendet aber nicht das Netzwerk'],
-                2: [ 'Laden','2 = NETZWERK_LADEN - der Browser l&auml;dt Daten herunter'],
-                3: [ 'Keine Quelle','3 = NETZWERK_NO_SOURCE - keine Audio-/Videoquelle gefunden']
-                
+                label: 'Netzwerk',
+                0: ['Leer', '0 = NETWORK_EMPTY - Audio/Video wurde noch nicht initialisiert'],
+                1: ['Idle', '1 = NETWORK_IDLE - Audio/Video ist aktiv und hat eine Ressource ausgew&auml;hlt, verwendet aber nicht das Netzwerk'],
+                2: ['Laden', '2 = NETZWERK_LADEN - der Browser l&auml;dt Daten herunter'],
+                3: ['Keine Quelle', '3 = NETZWERK_NO_SOURCE - keine Audio-/Videoquelle gefunden']
+
             },
             readystate: {
                 label: 'Status',
@@ -126,6 +126,6 @@ var aAmcLang = {
                 3: ['OK, Zukunftsdaten', '3 = HAVE_FUTURE_DATA - Daten für den aktuellen und mindestens den n&auml;chsten Frame sind verf&uuml;gbar'],
                 4: ['OK, genug Daten', '4 = HAVE_ENOUGH_DATA - genug Daten vorhanden, um mit dem Spielen zu beginnen']
             }
-        }            
+        }
     }
 };

@@ -1,15 +1,19 @@
 /*
 
-  amc player SKIN :: LIGHT BROWN
+    amc player SKIN :: LIGHT BROWN
+    @author: Axel Hahn
 
 */
 
-.mcpbox{
-    background: linear-gradient(to bottom, #dca,#a86);
-}
 #mcplayer a, #mcpabout a, #mcpdownloads a, #mcpplaylist a{color: #486;}
 #mcplayer a,#mcptime{color: #a86;}
-    
+
+/* ============================================================
+
+    player
+
+============================================================ */
+
 #mcplayer .active a,
 #mcplayer a.active,
 #mcpplaylist li.active a{
@@ -17,21 +21,40 @@
     color:#fff;
 }
 
-#mcpabout .title, 
-#mcpplayersonginfo .title{
-    color:#6a8;
-    color:#a62;
-}
+/* ---------------------------------------------------------
+    bars for volume and progress
+--------------------------------------------------------- */
 
 #mcpvolumecanvas,
 #mcpprogresscanvas{
     background: linear-gradient(to bottom, #dca, #edb, #dca);
 }
 
+/* ---------------------------------------------------------
+    system buttons on top right + maximize on the bottom
+--------------------------------------------------------- */
+
 #mcpmaximize{background: #a86; color:#fff;}
 .mcpsystembutton{
     background: #a86;
 }
 .mcpsystembutton>a{color:#fff !important;}
-.songbtnactive{
+
+/* ============================================================
+
+    boxes
+
+============================================================ */
+
+#mcpabout .title, 
+#mcpplayersonginfo .title{
+    color:#a62;
+}
+
+/* ---------------------------------------------------------
+    title bars
+--------------------------------------------------------- */
+
+.mcpbox{
+    background: linear-gradient(to bottom, #dca,#a86);
 }

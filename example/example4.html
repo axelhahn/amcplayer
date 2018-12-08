@@ -46,6 +46,8 @@
                             <option value="lightbrown">light brown</option>
                             <option value="lightviolet">light violet</option>
                             <option value="darkgray">dark gray</option>
+                            <option value="flat-white-black">flat white</option>
+                            <option value="flat-dark">flat dark</option>
                         </select>
                         <p><strong>Player Color</strong>
                             With the shipped CSS you get a default skin.<br>
@@ -330,7 +332,7 @@
                 clearCss();
                 
                 if(query.type){
-                    var cssfile='../skins/mcplayer-'+query.type.replace(/[^a-z]/g, '')+'.min.css';
+                    var cssfile='../skins/mcplayer-'+query.type.replace(/[^a-z\-]/g, '')+'.min.css';
                     var link=addCss(cssfile);
                     sPreview+='<strong>'+link.outerHTML.replace(/\</, '&lt;')+'</strong><br>            ';
                     // oSelType.value=query.type;
@@ -355,7 +357,7 @@
                 }
                 if(query.skin){
 
-                    var cssfile='../skins/mcplayer-'+query.skin.replace(/[^a-z]/g, '')+'.min.css';
+                    var cssfile='../skins/mcplayer-'+query.skin.replace(/[^a-z\-]/g, '')+'.min.css';
                     var link=addCss(cssfile);
                     sPreview+='<strong>'+link.outerHTML.replace(/\</, '&lt;')+'</strong>';
                     

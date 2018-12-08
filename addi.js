@@ -6,7 +6,7 @@
  *   (named "draggable" by default - but you can use any other name)
  * 
  * @author    Axel Hahn
- * @version   0.02
+ * @version   0.03
  *
  * @this addi
  * 
@@ -19,12 +19,18 @@
  */
 var addi = function(){
 
-    this.iFenceWidth=document.body.style.width;
-    this.iFenceHeight=document.body.style.height;
     
     return {
         _saveData: [],
         _dragClass: 'draggable',
+        
+        oFence: {
+            bFullscreen: true,
+            top: 0,
+            left: 0,
+            width: window.innerWidth,
+            height: window.innerHeight
+        },
         
         // override existing style values while moving the div
         _savstyles:{
@@ -65,16 +71,15 @@ var addi = function(){
          * @returns {addiaddi.addiAnonym$0.getVisibl_getVisiblePositionym$2}
          */
         _fixVisiblePosition : function(oDiv2Drag,xpos,ypos){
-            // get screensize and max position of a div
-            var iMaxX=document.body.style.width  ? document.body.style.width-oDiv2Drag.clientWidth : xpos;
-            var iMaxY=document.body.style.height ? document.body.style.height-oDiv2Drag.clientHeight : ypos;
-
-            xpos=Math.max(0,xpos);
-            xpos=Math.min(iMaxX,xpos);
             
-            ypos=Math.max(0,ypos);
-            ypos=Math.min(iMaxY,ypos);
+            this._updateFence();
 
+            xpos=Math.max(this.oFence.left,xpos);
+            xpos=Math.min(this.oFence.left+this.oFence.width-oDiv2Drag.clientWidth,xpos);
+            
+            ypos=Math.max(this.oFence.top,ypos);
+            ypos=Math.min(this.oFence.top+this.oFence.height-oDiv2Drag.clientHeight ,ypos);
+            
             return {
                 xpos: xpos,
                 ypos: ypos
@@ -127,6 +132,24 @@ var addi = function(){
             }
             return true;
         },
+        /**
+         * helper: update size of this.oFence if it is set to fullscreen in 
+         * case of resizing of the browser window
+         * 
+         * @returns {undefined}
+         */
+        _updateFence : function(){
+            if(this.oFence.bFullscreen){
+                this.oFence={
+                    bFullscreen: true,
+                    top: 0,
+                    left: 0,
+                    width: window.innerWidth,
+                    height: window.innerHeight
+                };
+            };
+        },
+        
         // ------------------------------------------------------------
         // public functions
         // ------------------------------------------------------------
@@ -155,7 +178,9 @@ var addi = function(){
                 addi.stopMoving(document.getElementById(sDivId));
             };
             // for FF only:
-            // oDiv2Drag.setAttribute('draggable', 'true');
+            if (navigator.appCodeName==='Mozilla' && navigator.userAgent.indexOf('Firefox/')>0){
+                oDiv2Drag.setAttribute('draggable', 'true');
+            }
             
             // restore last position
             if (oDiv2Drag.className.indexOf('saveposition')!==false){
@@ -172,9 +197,7 @@ var addi = function(){
             var id=this._getVarname(oDiv2Drag.id);
             var aData=localStorage.getItem(id) ? JSON.parse(localStorage.getItem(id)) : false;
             if(aData && aData.left && aData.top){
-                // this._styleSave(oDiv2Drag);
-                this.move(oDiv2Drag,aData.left,aData.top);
-                // this._styleRestore(oDiv2Drag);
+                this.move(oDiv2Drag,aData.left,aData.top, true);
             }
             return aData;
         },
@@ -185,13 +208,15 @@ var addi = function(){
          * @param {object} oDiv2Drag  movable object
          * @param {integer} xpos      position x
          * @param {integer} ypos      position y
+         * @param {boolean} bNoFix    flag: skip fixing the position based on window size (is set to true in the load method)
          * @returns {undefined}
          */
-        move : function(oDiv2Drag,xpos,ypos){
+        move : function(oDiv2Drag,xpos,ypos, bNoFix){
             oDiv2Drag.style.bottom = 'auto';
-            var aPos=this._fixVisiblePosition(oDiv2Drag,xpos,ypos);
+            
+            var aPos=bNoFix ? { 'xpos':xpos, 'ypos':ypos } : this._fixVisiblePosition(oDiv2Drag,xpos,ypos);
             oDiv2Drag.style.left = aPos['xpos'] + 'px';
-            oDiv2Drag.style.top = aPos['ypos'] + 'px';
+            oDiv2Drag.style.top = aPos['ypos'] + 'px';            
             this.save(oDiv2Drag);
             return true;
         },
@@ -269,14 +294,14 @@ var addi = function(){
          * @returns {undefined}
          */
         reset : function(sClass,bRemoveLocalstorage){
-            if(sClass){
-                this._dragClass='draggable';
+            if(!sClass){
+                sClass=this._dragClass;
             }
             // scan all elements with class draggable and reset
-            var oList = document.getElementsByClassName(this._dragClass);
+            var oList = document.getElementsByClassName(sClass);
             if(oList && oList.length){
                 for (var i = 0; i < oList.length; i++) {
-                    this.resetDiv(oList[i]);
+                    this.resetDiv(oList[i],bRemoveLocalstorage);
                 }
             }
         },

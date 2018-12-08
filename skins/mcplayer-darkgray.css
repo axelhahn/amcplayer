@@ -1,6 +1,7 @@
 /*
 
-  amc player SKIN :: DARK GRAY
+    amc player SKIN :: DARK GRAY
+    @author: Axel Hahn
 
 */
 
@@ -12,32 +13,41 @@
     border-color: rgba(255,255,255,0.2);
     border-radius: 0;
     box-shadow: 0 0 20px #000;
-
 }
-#mcphud{color: #abc}
 
-#mcpwrapper a{background: rgba(0,0,0,0.1); color: #888; border-color: rgba(255,255,255,0.1); border-radius: 0;}
+/* ============================================================
+
+    player
+
+============================================================ */
+
+#mcpwrapper a{
+    background: rgba(0,0,0,0.1); 
+    border-color: rgba(255,255,255,0.1); 
+    border-radius: 0;
+    color: #888; 
+}
 #mcplayer a:hover{background: rgba(255,255,255,0.1);}
-
 #mcpplayersonginfo>div{
     border-bottom: 1px solid #666;
 }
 #mcpabout .title, 
 #mcpplayersonginfo .title
 {
-    color:rgba(200,200,255,0.2);
     color:#89a;
     text-shadow: 1px 1px 0 #000;
 }
-#mcpplayersonginfo .bpm{font-size: 80%; font-style: italic; margin-top: 1em; color:rgba(255,255,255,0.2);}
-
+#mcpplayersonginfo .bpm{
+    font-size: 80%; 
+    font-style: italic; 
+    margin-top: 1em; 
+}
 #mcpabout a, #mcpdownloads a, #mcpplaylist a{
     color:#889;
 }
 #mcpwrapper .active a,
 #mcpwrapper a.active,
 #mcpplaylist li.active a{background: #89a; color:#334;}
-
 
 #mcptime{color:#999;text-shadow: none;}
 
@@ -46,14 +56,21 @@
 /* loading */   #mcpstatusbar .networkstate2{color:#0a0;}
 /* no source*/  #mcpstatusbar .networkstate3{background:#600; color: #fcc;}
 
+/* ---------------------------------------------------------
+    bars for volume and progress
+--------------------------------------------------------- */
+
 #mcpvolumecanvas,
-#mcpprogresscanvas{background: #888; border-radius: 0;}
+#mcpprogresscanvas{
+    background: #888; 
+    border-radius: 0;
+}
+
+/* ---------------------------------------------------------
+    system buttons on top right + maximize on the bottom
+--------------------------------------------------------- */
 
 #mcpminimize{color:#333;}
-
-#mcpdownloads ul, #mcpplaylist ul{
-    background: none;
-}
 
 .mcpsystembutton{
     background: #333;
@@ -62,10 +79,29 @@
     padding: 0px 5px; 
 }
 
+/* ============================================================
+
+    boxes
+
+============================================================ */
+
+#mcpdownloads ul, #mcpplaylist ul{
+    background: none;
+}
+
+/* ---------------------------------------------------------
+    title bars
+--------------------------------------------------------- */
 
 .mcpbox{
     background: linear-gradient(to bottom, #345, #567);
 }
+
+/* ============================================================
+
+    play buttons for hidden audio tags in the website
+
+============================================================ */
 
 .songbtn, .songbtn:hover{
     border-radius: 0.2em; 
@@ -76,3 +112,11 @@
     background: #89a;
     color: #334;
 }
+
+/* ============================================================
+
+    hud infobox
+
+============================================================ */
+
+#mcphud{color: #abc}

@@ -1,0 +1,108 @@
+/*
+
+    amc player SKIN :: FLAT DARK
+    @author: Axel Hahn
+
+*/
+
+#mcpwrapper,
+#mcpabout, #mcpdownloads, #mcpplaylist,
+.mcpbox{
+    background: #282c38; 
+    color:#789;
+}
+
+/* ============================================================
+
+    player
+
+============================================================ */
+
+#mcplayer a, #mcpabout a, #mcpdownloads a, #mcpplaylist a{}
+#mcplayer a,#mcptime{
+    background:none; 
+    border: none; 
+    border-radius: 0;
+    color: #678; 
+}
+#mcptitle {color:#fff;}
+#mcplayer a:hover{
+    background: none; color:#abc;
+}
+#mcplayer a.active#mcpplay{
+    background: #3a5; 
+    color:#fff;
+}
+#mcplayer .active a,
+#mcplayer a.active,
+#mcpplaylist li.active a{
+    background: none;
+    color:#fa2;
+}
+#mcpplayersonginfo > div {
+    background: none;
+    border: none;
+}
+#mcpplayersonginfo img{
+    box-shadow: none; border: none;
+}
+#mcpplayersonginfo .url a{color: #08c;}
+#mcpabout .title, 
+#mcpplayersonginfo .title{
+    color:#c25; text-shadow: none;
+}
+
+/* ---------------------------------------------------------
+    bars for volume and progress
+--------------------------------------------------------- */
+
+#mcpvolumecanvas,
+#mcpprogresscanvas{
+    background: #68a;
+    border-radius: 0;
+}
+
+/* ---------------------------------------------------------
+    system buttons on top right + maximize on the bottom
+--------------------------------------------------------- */
+
+#mcpmaximize{
+    background:#282c38;color:#abc; 
+    border: none;
+}
+.mcpsystembutton{
+    background:none;
+    border: none;
+    margin-top: 0;
+}
+
+#mcpstatusbar{border: none;}
+/* nothing */   #mcpstatusbar .networkstate0{color: #789;}
+/* idle */      #mcpstatusbar .networkstate1{color: #789;}
+/* loading */   #mcpstatusbar .networkstate2{color:#090;}
+/* no source*/  #mcpstatusbar .networkstate3{background:#600; color: #fcc;}
+
+
+/* ============================================================
+
+    boxes
+
+============================================================ */
+
+#mcpdownloads ul, #mcpplaylist ul {
+    background: none;
+    border: none;
+}
+#mcpplaylist li a:hover{
+    background: rgba(255,255,255,0.05);
+}
+
+/* ---------------------------------------------------------
+    title bars
+--------------------------------------------------------- */
+
+.mcpbox {
+    color:#abc; 
+    font-weight: bold;
+    text-shadow: none; 
+}

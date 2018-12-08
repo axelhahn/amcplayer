@@ -22,8 +22,7 @@ LICENSE
 
 
 STATUS
-  It is still BETA. The basic player works well but I need to fix issues,
-  add functionality and need to write documentation. 
+  Stable
 
 
 DOWNLOAD
@@ -31,22 +30,13 @@ DOWNLOAD
   Extract all files below a webroot in any subdirectory, i.e.
   [webroot]/javascript
 
-  OR 
-
-  check it out
-
-    cd [webroot-directory]/javascript
-    svn checkout svn://svn.code.sf.net/p/amcplayer/code/trunk amcplayer
-
 
 EMBED PLAYER IN YOUR WEBSITE
 
-  to your webserver copy:
-    - mcplayer.min.css
-    - mcplayer.min.js
-    - mcplayer_icons.ttf (loaded in mcplayer.min.css)
+  Copy all files excluding the example directory to your webserver.
+  For JS and CSS files exist minified versions
 	
-  in your html page:
+  In your html page:
     - load the css in the header
     - load the javascript at the end of the document
 

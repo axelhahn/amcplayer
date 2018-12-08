@@ -1,9 +1,15 @@
 /*
 
-    amc player SKIN :: LIGHT VIOLET
+    amc player SKIN :: FLAT WHITE N BLACK
     @author: Axel Hahn
 
 */
+
+#mcpwrapper,
+#mcpabout, #mcpdownloads, #mcpplaylist,
+.mcpbox{
+    background: #fff; 
+}
 
 /* ============================================================
 
@@ -11,17 +17,35 @@
 
 ============================================================ */
 
-#mcplayer a, #mcpabout a, #mcpdownloads a, #mcpplaylist a{color: #689;}
-#mcplayer a,#mcptime{color: #689;}   
+#mcplayer a, #mcpabout a, #mcpdownloads a, #mcpplaylist a{}
+#mcplayer a,#mcptime{
+    background:none; 
+    border: none; 
+    border-radius: 0;
+    color: #333; 
+}
+
+#mcptitle {color:#888;}
+#mcplayer a:hover{
+    background: #eee;
+}
+#mcplayer a.active#mcpplay{background: #3a3;}
 #mcplayer .active a,
 #mcplayer a.active,
 #mcpplaylist li.active a{
-    background: linear-gradient(to bottom, #89a, #ace);
+    background: #aaa;
     color:#fff;
 }
+#mcpplayersonginfo > div {
+    background: none;
+}
+#mcpplayersonginfo img{
+    box-shadow: none; border: none;
+}
+#mcpplayersonginfo .url a{color: #08c;}
 #mcpabout .title, 
 #mcpplayersonginfo .title{
-    color:#678;
+    color:#555;
 }
 
 /* ---------------------------------------------------------
@@ -30,7 +54,8 @@
 
 #mcpvolumecanvas,
 #mcpprogresscanvas{
-    background: linear-gradient(to bottom, #cde,#e0e8f0,#bcd);
+    background: #eee;
+    border-radius: 0;
 }
 
 /* ---------------------------------------------------------
@@ -38,15 +63,14 @@
 --------------------------------------------------------- */
 
 #mcpmaximize{
-    background: #a86; 
-    color:#fff;
+    background:#888;color:#fff;
 }
+
 .mcpsystembutton{
-    background: #ea6;
+    background:none;
+    margin-top: 0;
 }
-.mcpsystembutton>a{color:#fff !important;}
-.songbtnactive{
-}
+.mcpsystembutton>a{color:#888 !important;}
 
 /* ============================================================
 
@@ -54,10 +78,16 @@
 
 ============================================================ */
 
+#mcpdownloads ul, #mcpplaylist ul {
+    border: none;
+}
+
 /* ---------------------------------------------------------
     title bars
 --------------------------------------------------------- */
 
-.mcpbox{
-    background: linear-gradient(to bottom, #d8e, #a8b);
+.mcpbox {
+    color:#333; 
+    font-weight: bold;
+    text-shadow: none; 
 }
