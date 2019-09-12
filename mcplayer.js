@@ -36,7 +36,7 @@
  * mcPlayer ... Multi Channel Player
  * 
  * @author    Axel Hahn
- * @version   1.00
+ * @version   1.01
  *
  * @this mcPlayer
  * 
@@ -64,7 +64,7 @@ var mcPlayer = function () {
     // settings
     this.cfg = {
         about: {
-            version: '1.00',
+            version: '1.01',
             label: 'AMC Player',
             description: '<strong>A</strong>xels <strong>M</strong>ulti <strong>C</strong>hannel <strong>Player</strong>.<br>This is a webbased HTML5 audio player.<br>It\'s focus is the handling of media in stereo and surround for a title.',
             labeldownload: 'Download:<br>',
@@ -250,6 +250,7 @@ var mcPlayer = function () {
     this.iPlaylistId = -1;
 
     this._iMinDelta = 100;
+    this._sContainerId = false;
     this.sScreensize = false;
 
     this.name = false;
@@ -679,6 +680,16 @@ var mcPlayer = function () {
         }
         return this.iPlaylistId;
     };
+    
+    this._addHtml = function (sHtml) {
+        // console.log(document.getElementsByTagName("BODY")[0].innerHTML); 
+        console.log(sHtml); 
+        oContainer=document.getElementById(this._sContainerId) ? document.getElementById(this._sContainerId) : document.getElementsByTagName("BODY")[0];
+        if(oContainer){
+            oContainer.innerHTML += sHtml;
+        }
+        // return document.getElementsByTagName("BODY")[0].innerHTML += sHtml;
+    }
 
     // ----------------------------------------------------------------------
     /**
@@ -691,15 +702,14 @@ var mcPlayer = function () {
         var styleTop = ' style="top: ' + ((document.documentElement.clientHeight + 100) + 'px') + ';"';
         this.oDivDownloads = document.getElementById("mcpdownloads");
         if (!this.oDivDownloads) {
-            document.getElementsByTagName("BODY")[0].innerHTML += '<div id="mcpdownloads" class="draggable saveposition"' + styleTop + '></div>';
+            this._addHtml('<div id="mcpdownloads" class="draggable saveposition"' + styleTop + '></div>');
             this.oDivDownloads = document.getElementById("mcpdownloads");
         }
         this.oDivDownloads.innerHTML = this._genDownloads();
 
         this.oDivPlaylist = document.getElementById("mcpplaylist");
         if (!this.oDivPlaylist) {
-            // this.oDivPlayerwrapper.innerHTML+='<div id="mcpplaylist"></div>';
-            document.getElementsByTagName("BODY")[0].innerHTML += '<div id="mcpplaylist" class="draggable saveposition"' + styleTop + '></div>';
+            this._addHtml('<div id="mcpplaylist" class="draggable saveposition"' + styleTop + '></div>');
             this.oDivPlaylist = document.getElementById("mcpplaylist");
         }
         this.oDivPlaylist.innerHTML = this._genPlaylist();
@@ -707,7 +717,7 @@ var mcPlayer = function () {
 
         this.oDivPlayerwrapper = document.getElementById("mcpwrapper");
         if (!this.oDivPlayerwrapper) {
-            document.getElementsByTagName("BODY")[0].innerHTML += '<div id="mcpwrapper"' + (this.cfg.settings.movable ? 'class="draggable saveposition"' : '') + '></div>';
+            this._addHtml('<div id="mcpwrapper"' + (this.cfg.settings.movable ? ' class="draggable saveposition"' : '') + '></div>');
             this.oDivPlayerwrapper = document.getElementById("mcpwrapper");
         }
         this.oDivHeader = document.getElementById("mcpheader");
@@ -727,13 +737,13 @@ var mcPlayer = function () {
         }
         this.oAPlayermaximize = document.getElementById("mcpmaximize");
         if (!this.oAPlayermaximize) {
-            document.getElementsByTagName("BODY")[0].innerHTML += '<a href="#" id="mcpmaximize" class="mcpsystembutton hidebutton" onclick="' + this.name + '.maximize(); return false" title="' + this.cfg.aPlayer.buttons["maximize"].title + '"> ' + this.cfg.aPlayer.buttons["maximize"].label + '</a>';
+            this._addHtml('<a href="#" id="mcpmaximize" class="mcpsystembutton hidebutton" onclick="' + this.name + '.maximize(); return false" title="' + this.cfg.aPlayer.buttons["maximize"].title + '"> ' + this.cfg.aPlayer.buttons["maximize"].label + '</a>');
             this.oAPlayermaximize = document.getElementById("mcpmaximize");
         }
-        document.getElementsByTagName("BODY")[0].innerHTML += '<div id="mcpabout" class="draggable saveposition"' + styleTop + '>' + this._genAboutbox() + '</div>';
+        this._addHtml('<div id="mcpabout" class="draggable saveposition"' + styleTop + '>' + this._genAboutbox() + '</div>');
         this.oDivPlayerhud = document.getElementById("mcphud");
         if (!this.oDivPlayerhud) {
-            document.getElementsByTagName("BODY")[0].innerHTML += '<div id="mcphud"></div>';
+            this._addHtml('<div id="mcphud"></div>');
             this.oDivPlayerhud = document.getElementById("mcphud");
         }
         this._playerheightSet();
@@ -1574,6 +1584,10 @@ var mcPlayer = function () {
 
 
                 }, false);
+                
+                // change volume 
+                this.oAudio.volume=this.cfg.settings.volume-0.01;
+                this.oAudio.volume=this.cfg.settings.volume;
 
 
                 // --------------------------------------------------
@@ -2075,10 +2089,11 @@ var mcPlayer = function () {
      */
     this._getName = function () {
         // search through the global object for a name that resolves to this object
-        for (var name in this.global)
+        for (var name in this.global){
             if (this.global[name] === this) {
                 return this._setName(name);
             }
+        }
     };
 
     /**
@@ -2100,9 +2115,11 @@ var mcPlayer = function () {
     // ----------------------------------------------------------------------
     /**
      * initialize player
+     * @param {string} sContainerId  id of a div where to put the player. if false player will be added to body
      * @return {boolean}
      */
-    this.init = function () {
+    this.init = function (sContainerId) {
+        this._sContainerId=sContainerId;
         this._getName();            // detect name of the object variable that initialized the player
         this._generatePlaylist();   // scan audios on webpage
         this._initHtml();           // generate html for the player        
@@ -2129,7 +2146,7 @@ var mcPlayer = function () {
     this.canPlaySurround();
     try {
         this.sCurrentChannel = localStorage.getItem("amcp.channels") ? localStorage.getItem("amcp.channels") : false;
-        this.cfg.settings.volume = localStorage.getItem("amcp.volume") ? localStorage.getItem("amcp.volume") : 1;
+        this.cfg.settings.volume = localStorage.getItem("amcp.volume")/1 ? localStorage.getItem("amcp.volume")/1 : 1;
     } catch (e) {
         // nop
     }

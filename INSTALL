@@ -31,7 +31,13 @@ DOWNLOAD
   [webroot]/javascript
 
 
+
 EMBED PLAYER IN YOUR WEBSITE
+
+  For a real life demo have a look to example/example1.html - open it in 
+  your browser.
+
+  If not read a short intro below.
 
   Copy all files excluding the example directory to your webserver.
   For JS and CSS files exist minified versions
@@ -44,27 +50,25 @@ EMBED PLAYER IN YOUR WEBSITE
 
   <!doctype html>
   <html>
-  <head>
+	<head>
+	  (...)
+	  <link rel="stylesheet" type="text/css" href="/path/mcplayer.min.css" media="screen" />
+	</head>
+	<body>
 
-    (...)
-    <link rel="stylesheet" type="text/css" 
-	  href="/javascript/mcplayer/mcplayer.min.css" media="screen" />		
-    (...)
-	
-  </head>
-  <body>
+	  (...)
+	  
+	  <script src="/path/addi.min.js"></script>
+	  <script src="/path/mcplayer.min.js"></script>
 
-    (...)
-    (your audio tags - see below)
-    (...)
-	
-    <script type="text/javascript" 
-	  src="/javascript/mcplayer/mcplayer.min.js"></script>
-  </body>
+	  <!-- initialize the player -->
+	  <script>
+		var oMcPlayer=new mcPlayer();
+		oMcPlayer.init();
+	  </script>
+
+	</body>
   </html>
-
-  remark: 
-  It describes how to make the beta work. It is not the final way.
 
 
 AUDIOS
