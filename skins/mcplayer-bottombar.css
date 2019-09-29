@@ -19,10 +19,12 @@
     margin:0.5em;
 }
 #mcpplayersonginfo{display: none;}
-#mcpprogressdiv{clear: none; float: left; margin-left: 1em; position: relative; left: 0;}
-#mcpprogresscanvas{height: 1.9em; width: 400px;}
+#mcpprogressdiv{clear: none; float: left; margin-left: 1em; margin-top: 4px; position: relative; left: 0; height: 1.9em;  width: 400px;}
 
-#mcpvolumediv{clear: none; float: left; margin-left: 1em; }
+#mcpvolumesection{clear: none;margin-left: 1em; }
+#mcpvolumediv {
+	margin-top: 7px;
+}
 #mcpvolumecanvas{height: 1.5em;}
 #mcpchannels{clear: none; float: left; margin: 0 2em 0 2em; }
 #mcptime{float: left; display: block; position: relative; right: 0; top: 0.5em; margin-left: 1em;}

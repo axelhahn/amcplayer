@@ -8,7 +8,7 @@
 #mcphud, #mcpwrapper, #mcpmaximize, #mcpplaylist, #mcpabout, #mcpdownloads
 {
     color:#777;
-    background:#444;
+    background:#333;
     text-shadow: none;
     border-color: rgba(255,255,255,0.2);
     border-radius: 0;
@@ -31,6 +31,9 @@
 #mcpplayersonginfo>div{
     border-bottom: 1px solid #666;
 }
+#mcpplayersonginfo img{
+    box-shadow: 0 0 2em #222;
+}
 #mcpabout .title, 
 #mcpplayersonginfo .title
 {
@@ -45,9 +48,12 @@
 #mcpabout a, #mcpdownloads a, #mcpplaylist a{
     color:#889;
 }
-#mcpwrapper .active a,
-#mcpwrapper a.active,
-#mcpplaylist li.active a{background: #89a; color:#334;}
+#mcplayer .active a,
+#mcplayer a.active,
+#mcpplaylist li.active a,
+.mcpslider-active{
+    background: #89a; color:#334;
+}
 
 #mcptime{color:#999;text-shadow: none;}
 
@@ -60,10 +66,10 @@
     bars for volume and progress
 --------------------------------------------------------- */
 
-#mcpvolumecanvas,
-#mcpprogresscanvas{
-    background: #888; 
-    border-radius: 0;
+.mcpslider-default{
+    background: rgba(200,240,255,0.2);
+}
+.mcpslider-active{
 }
 
 /* ---------------------------------------------------------
@@ -108,10 +114,14 @@
     background: #333;
     color:#888;
 }
-.songbtnactive{
+.songbtn:hover{
+    background: #567;
+}
+.songbtn:active, .songbtnactive{
     background: #89a;
     color: #334;
 }
+
 
 /* ============================================================
 

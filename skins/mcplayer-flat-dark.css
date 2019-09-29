@@ -35,7 +35,8 @@
 }
 #mcplayer .active a,
 #mcplayer a.active,
-#mcpplaylist li.active a{
+#mcpplaylist li.active a,
+.mcpslider-active{
     background: none;
     color:#fa2;
 }
@@ -56,11 +57,13 @@
     bars for volume and progress
 --------------------------------------------------------- */
 
-#mcpvolumecanvas,
-#mcpprogresscanvas{
-    background: #68a;
-    border-radius: 0;
+.mcpslider-default{
+    background: rgba(200,240,255,0.2);
 }
+.mcpslider-active{
+    background: #303440;
+}
+
 
 /* ---------------------------------------------------------
     system buttons on top right + maximize on the bottom

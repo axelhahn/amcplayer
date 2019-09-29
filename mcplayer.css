@@ -127,45 +127,54 @@
     bars for volume and progress
 --------------------------------------------------------- */
 
-    #mcpvolumecanvas,
-    #mcpprogresscanvas{
-        background: linear-gradient(to bottom, #bce,#def,#bce);
-        border: 1px solid rgba(255,255,255,0.2);
-        border-radius: 5px;
-        color: #ffffff;
-        cursor:pointer;
+    .mcpslider{
         display: block;
     }
+    .mcpslider-default{
+        position: absolute;
+        width: 100%;
+        background: rgba(255,255,255,0.3);
+        height: 0.5em;
+    }
+    .mcpslider-active{
+        position: relative;
+        width: 0;
+        background: #56a;
+        height: 0.5em;
+    }
+
     #mcpprogressdiv{ 
         left: 260px;
         position: absolute;
-    }
-    #mcpprogresscanvas{
-        height: 1.5em;
-        margin-top: 0;
         width: 210px;
     }
-
-    #mcpvolumediv{
-        clear: left; 
-        float: left;
+    #mcpprogressbar{
     }
+    #mcpprogressdiv,#mcpprogressdiv div{
+        height: 1.5em;
+    }
+
+    #mcpvolumesection{
+        border: 0px solid #f0f;
+        width: auto;
+        height: 1.8em;
+        float: left;
+        clear: left;
+    }
+    #mcpvolumediv{
+        margin-top: 3px;
+        margin-right: 3px;
+        float: left;
+        
+    }
+    #mcpvolumediv, #mcpvolumediv div{
+        width: 80px;
+        height: 1em;
+    }
+    
     #mcpvolumediv a{
         float: left; 
         font-family: mcplayer_icons;
-    }
-    #mcpvolumecanvas{
-        float: left;
-        height: 1.0em;
-        margin-right: 5px;
-        margin-top: 3px;
-        width: 100px;
-    }
-    #mcpprogressbar{
-        background: rgba(255,255,255,0.3);
-        display: none;
-        height: 10px;
-        width: 10px; 
     }
 
 /* ---------------------------------------------------------
@@ -269,7 +278,8 @@
     }
     #mcplayer .active a,
     #mcplayer a.active,
-    #mcpplaylist li.active a{
+    #mcpplaylist li.active a,
+    .mcpslider-active{
         background: rgb(195,217,255); /* Old browsers */
         background: linear-gradient(to bottom, #9cf, #56a, #9cf);
         color:#fff; 
@@ -378,8 +388,8 @@
     #mcpminimize:before,     .icon-down-open-1:before     { content: "\e800"; font-family: mcplayer_icons;} /* '\e800' */
     #mcpmaximize:before,     .icon-up-open-1:before       { content: "\e801"; font-family: mcplayer_icons;} /* '\e801' */
     #mcpoptdownload:before,  .icon-install:before,         .ico-download:before { content: "\e778"; font-family: mcplayer_icons;} /* '\e778' */
-    #mcpvolmute:before,      .icon-volume-off:before      { content: "\1f507"; } /* '\1f507' */
-    #mcpvolfull:before,      .icon-volume-up:before       { content: "\1f50a"; } /* '\1f50a' */
+    #mcpvolmute:before,      .icon-volume-off:before      { content: "\1f507"; font-family: mcplayer_icons;} /* '\1f507' */
+    #mcpvolfull:before,      .icon-volume-up:before       { content: "\1f50a"; font-family: mcplayer_icons;} /* '\1f50a' */
     #mcpoptabout:before,     .icon-info-circle-1:before,  .ico-about:before { content: '\e802'; font-family: mcplayer_icons;} /* 'î ‚' */
     #mcpoptstatusbar:before, .icon-window-minimize:before { content: '\f2d1'; } /* 'î ‚' */
 
@@ -401,14 +411,19 @@
         box-shadow: 0 0 10px rgba(0,0,0,0.3); 
         color:rgba(0,0,0,0.5); 
         float: left; 
+        margin-right: 0.5em;
+        margin-top: -0.5em;
         padding: 4px; 
         text-decoration: none;
     }
-    .songbtn:hover{background: rgba(0,0,0,0.15); }
+    .songbtn:hover{
+        background: rgba(255,197,120,1); 
+    }
 
-    .songbtnactive{
+    .songbtn:active, .songbtnactive{
         background: rgb(255,197,120); /* Old browsers */
         background: radial-gradient(circle at center, rgba(255,197,120,1) 0%,rgba(251,157,35,1) 100%); /* W3C */
+        box-shadow: 0 0 1.5em rgba(0,0,0,0.7); 
     }
 
 /* ============================================================

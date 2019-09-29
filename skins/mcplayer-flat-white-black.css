@@ -32,7 +32,8 @@
 #mcplayer a.active#mcpplay{background: #3a3;}
 #mcplayer .active a,
 #mcplayer a.active,
-#mcpplaylist li.active a{
+#mcpplaylist li.active a,
+.mcpslider-active{
     background: #aaa;
     color:#fff;
 }
@@ -52,10 +53,11 @@
     bars for volume and progress
 --------------------------------------------------------- */
 
-#mcpvolumecanvas,
-#mcpprogresscanvas{
+.mcpslider-default{
     background: #eee;
-    border-radius: 0;
+}
+.mcpslider-active{
+    background: #ddd;
 }
 
 /* ---------------------------------------------------------

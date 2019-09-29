@@ -36,7 +36,7 @@
  * mcPlayer ... Multi Channel Player
  * 
  * @author    Axel Hahn
- * @version   1.01
+ * @version   1.02
  *
  * @this mcPlayer
  * 
@@ -64,7 +64,7 @@ var mcPlayer = function () {
     // settings
     this.cfg = {
         about: {
-            version: '1.01',
+            version: '1.02',
             label: 'AMC Player',
             description: '<strong>A</strong>xels <strong>M</strong>ulti <strong>C</strong>hannel <strong>Player</strong>.<br>This is a webbased HTML5 audio player.<br>It\'s focus is the handling of media in stereo and surround for a title.',
             labeldownload: 'Download:<br>',
@@ -418,23 +418,35 @@ var mcPlayer = function () {
         s += '</div>'
                 + '<div id="mcpprogressdiv"'
                 + (this.cfg.aPlayer.bars["progress"].visible ? '' : 'style="display: none"')
-                + '><canvas id="mcpprogresscanvas" title="' + this.cfg.aPlayer.bars["progress"].title + '"></canvas>'
-                + '<div id="mcpprogressbar"></div>'
+                + '>'
+                    // + '<canvas id="mcpprogresscanvas" title="' + this.cfg.aPlayer.bars["progress"].title + '"></canvas>'
+                    + '<div class="mcpslider">'
+                        + '<div class="mcpslider-default"></div>'
+                        + '<div id="mcpprogressbar" class="mcpslider-active"></div>'
+                    + '</div>'
                 + '</div>'
                 + '<span id="mcptime"><span id="mcptimeplayed">-:--</span>/ <span id="mcptimetotal">-:--</span></span>'
 
-                + '<div id="mcpvolumediv" title="volume">'
-                + '<a href="#" id="mcpvolmute" onclick="' + this.name + '.setVolume(0); return false;" '
-                + (this.cfg.aPlayer.buttons["volmute"].visible ? '' : 'style="display: none" ')
-                + 'title="' + this.cfg.aPlayer.buttons["volmute"].title + '"></a>'
-
-                + '<canvas id="mcpvolumecanvas" '
-                + (this.cfg.aPlayer.bars["volume"].visible ? '' : 'style="display: none" ')
-                + 'title="' + this.cfg.aPlayer.bars["volume"].title + '"></canvas>'
-
-                + '<a href="#" id="mcpvolfull" onclick="' + this.name + '.setVolume(1); return false;" '
-                + (this.cfg.aPlayer.buttons["volfull"].visible ? '' : 'style="display: none" ')
-                + 'title="' + this.cfg.aPlayer.buttons["volfull"].title + '"></a>'
+                + '<div id="mcpvolumesection">'
+        
+                    + '<a href="#" id="mcpvolmute" onclick="' + this.name + '.setVolume(0); return false;" '
+                    + (this.cfg.aPlayer.buttons["volmute"].visible ? '' : 'style="display: none" ')
+                    + 'title="' + this.cfg.aPlayer.buttons["volmute"].title + '"></a>'
+            
+                    + '<div id="mcpvolumediv" title="volume">'
+                        // + '<canvas id="mcpvolumecanvas" '
+                        // + (this.cfg.aPlayer.bars["volume"].visible ? '' : 'style="display: none" ')
+                        // + 'title="' + this.cfg.aPlayer.bars["volume"].title + '"></canvas>'
+                        + '<div class="mcpslider">'
+                            + '<div class="mcpslider-default"></div>'
+                            + '<div id="mcpvolumebar" class="mcpslider-active"></div>'
+                        + '</div>'
+                    + '</div>'
+            
+                    + '<a href="#" id="mcpvolfull" onclick="' + this.name + '.setVolume(1); return false;" '
+                    + (this.cfg.aPlayer.buttons["volfull"].visible ? '' : 'style="display: none" ')
+                    + 'title="' + this.cfg.aPlayer.buttons["volfull"].title + '"></a>'
+            
                 + '</div>'
 
                 + '<div id="mcpchannels"></div>'
@@ -682,13 +694,10 @@ var mcPlayer = function () {
     };
     
     this._addHtml = function (sHtml) {
-        // console.log(document.getElementsByTagName("BODY")[0].innerHTML); 
-        console.log(sHtml); 
         oContainer=document.getElementById(this._sContainerId) ? document.getElementById(this._sContainerId) : document.getElementsByTagName("BODY")[0];
         if(oContainer){
             oContainer.innerHTML += sHtml;
         }
-        // return document.getElementsByTagName("BODY")[0].innerHTML += sHtml;
     }
 
     // ----------------------------------------------------------------------
@@ -1515,6 +1524,12 @@ var mcPlayer = function () {
                     document.getElementById('mcptimeplayed').innerHTML = m + ':' + s;
                     document.getElementById('mcptimetotal').innerHTML = m2 + ':' + s2;
 
+                    // since v1.1: div instead canvas
+                    var oProgressbar = document.getElementById('mcpprogressbar');
+                    if(oProgressbar){
+                        oProgressbar.style.width=oAudioTmp.currentTime / oAudioTmp.duration*100 + '%';
+                    }
+                    /*
                     var canvas = document.getElementById('mcpprogresscanvas');
                     if (canvas.getContext) {
                         var ctx = canvas.getContext("2d");
@@ -1533,35 +1548,37 @@ var mcPlayer = function () {
                             ctx.stroke();
                         }
                     }
+                    */
 
                 }, false);
 
                 // --------------------------------------------------
                 //set up mouse click to control position of audio
                 // --------------------------------------------------
-                document.getElementById('mcpprogresscanvas').addEventListener("click", function (event) {
-                    var x = new Number();
-                    var oWrapper = document.getElementById('mcpwrapper');
-                    var oDdiv = document.getElementById('mcpprogressdiv');
-                    var canvas = document.getElementById('mcpprogresscanvas');
-
+                document.getElementById('mcpprogressdiv').addEventListener("click", function (event) {
                     if (event.x !== undefined && event.y !== undefined) {
                         x = event.x;
                     } else {
                         x = event.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
                     }
-
-                    x -= canvas.offsetLeft + oWrapper.offsetLeft + oDdiv.offsetLeft;
+                    var oSelf = document.getElementById('mcpprogressdiv');
+                    var oWrapper = document.getElementById('mcpwrapper');
+                    x -= oSelf.offsetLeft + oWrapper.offsetLeft;
                     if (oAudioTmp && oAudioTmp.currentTime) {
-                        oAudioTmp.currentTime = oAudioTmp.duration * (x / canvas.clientWidth);
+                        oAudioTmp.currentTime = oAudioTmp.duration * (x / oSelf.clientWidth);
                     }
-
                 }, true);
 
                 // --------------------------------------------------
                 // draw / update volumebar
                 // --------------------------------------------------
                 oAudioTmp.addEventListener("volumechange", function () {
+                    // since v1.1: div instead canvas
+                    var oProgressbar = document.getElementById('mcpvolumebar');
+                    if(oProgressbar){
+                        oProgressbar.style.width=oAudioTmp.volume * 100 + '%';
+                    }
+                    /*
                     var canvasV = document.getElementById('mcpvolumecanvas');
 
                     if (canvasV.getContext) {
@@ -1581,6 +1598,7 @@ var mcPlayer = function () {
                             ctxV.stroke();
                         }
                     }
+                    */
 
 
                 }, false);
@@ -1593,6 +1611,23 @@ var mcPlayer = function () {
                 // --------------------------------------------------
                 //set up mouse click to control volume of audio
                 // --------------------------------------------------
+                document.getElementById('mcpvolumediv').addEventListener("click", function (event) {
+                    if (event.x !== undefined && event.y !== undefined) {
+                        x = event.x;
+                    } else {
+                        x = event.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+                    }
+                    var oSelf = document.getElementById('mcpvolumediv');
+                    var oWrapper = document.getElementById('mcpwrapper');
+                    x -= oSelf.offsetLeft + oWrapper.offsetLeft;
+                    try {
+                        localStorage.setItem("amcp.volume", x / oSelf.clientWidth);
+                        oAudioTmp.volume = (x / oSelf.clientWidth);
+                    } catch (err) {
+                        console.error("Error:" + err);
+                    }
+                }, true);
+                /*
                 document.getElementById('mcpvolumecanvas').addEventListener("click", function (event) {
                     var x = new Number();
                     var wrapper = document.getElementById("mcpwrapper");
@@ -1613,7 +1648,11 @@ var mcPlayer = function () {
                         console.error("Error:" + err);
                     }
                 }, true);
+                */
 
+                // --------------------------------------------------
+                // set up audio event
+                // --------------------------------------------------
                 oAudioTmp.addEventListener('ended', function () {
                     document.getElementById('mcpjumpnext').click();
                     // mcPlayer.prototype.setNextSong();

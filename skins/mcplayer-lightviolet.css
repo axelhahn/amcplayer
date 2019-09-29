@@ -15,7 +15,8 @@
 #mcplayer a,#mcptime{color: #689;}   
 #mcplayer .active a,
 #mcplayer a.active,
-#mcpplaylist li.active a{
+#mcpplaylist li.active a,
+.mcpslider-active{
     background: linear-gradient(to bottom, #89a, #ace);
     color:#fff;
 }
