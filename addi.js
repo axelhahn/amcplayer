@@ -17,12 +17,17 @@
  * @constructor
  * @return nothing
  */
+
+// global value: highest z-index of related divs
+var _addi_zIndex=100;
+
 var addi = function(){
 
     
     return {
         _saveData: [],
         _dragClass: 'draggable',
+        _dragOpacity: 0.8,
         
         oFence: {
             bFullscreen: true,
@@ -60,25 +65,43 @@ var addi = function(){
         // private functions
         // ------------------------------------------------------------
         /**
-         * get a top left position to fix current position and make a div 
-         * fully visible
+         * get a top left position {xpos, ypos} to fix current position and 
+         * make a div fully visible
          * @see move()
          * 
          * @private
          * @param {object} oDiv2Drag  movable object
          * @param {type} xpos
          * @param {type} ypos
-         * @returns {addiaddi.addiAnonym$0.getVisibl_getVisiblePositionym$2}
+         * @returns {object}
          */
         _fixVisiblePosition : function(oDiv2Drag,xpos,ypos){
             
-            this._updateFence();
+            this._updateFence(oDiv2Drag.style.paddingLeft);
+            var aStyles = window.getComputedStyle(oDiv2Drag);
+            
+            var divDeltaX=0
+                + parseInt(aStyles.borderLeftWidth)
+                + parseInt(aStyles.borderRightWidth)
+                + parseInt(aStyles.marginLeft)
+                + parseInt(aStyles.marginRight)
+                + parseInt(aStyles.paddingLeft)
+                + parseInt(aStyles.paddingRight)
+                ;
+            var divDeltaY=0
+                + parseInt(aStyles.borderTopWidth)
+                + parseInt(aStyles.borderBottomWidth)
+                + parseInt(aStyles.marginTop)
+                + parseInt(aStyles.marginBottom)
+                + parseInt(aStyles.paddingTop)
+                + parseInt(aStyles.paddingBottom)
+                ;
 
             xpos=Math.max(this.oFence.left,xpos);
-            xpos=Math.min(this.oFence.left+this.oFence.width-oDiv2Drag.clientWidth,xpos);
+            xpos=Math.min(this.oFence.left+this.oFence.width-oDiv2Drag.clientWidth-divDeltaX ,xpos);
             
             ypos=Math.max(this.oFence.top,ypos);
-            ypos=Math.min(this.oFence.top+this.oFence.height-oDiv2Drag.clientHeight ,ypos);
+            ypos=Math.min(this.oFence.top+this.oFence.height-oDiv2Drag.clientHeight-divDeltaY ,ypos);
             
             return {
                 xpos: xpos,
@@ -106,7 +129,7 @@ var addi = function(){
          * @returns {Boolean}
          */
         _styleSave : function(oDiv2Drag){
-            aStyles = window.getComputedStyle(oDiv2Drag);
+            var aStyles = window.getComputedStyle(oDiv2Drag);
             // create subitem for div id
             if(this._saveData[oDiv2Drag.id] === undefined){
                 this._saveData[oDiv2Drag.id]=new Object();
@@ -172,15 +195,13 @@ var addi = function(){
             // using atributes instead of addEventListener
             o=(oDiv2Click ? oDiv2Click : oDiv2Drag);
             o.onmousedown = function (event) {
+                addi._isDragging=true;
                 addi.startMoving(document.getElementById(sDivId),event);
             };
             o.onmouseup = function () {
+                addi._isDragging=false;
                 addi.stopMoving(document.getElementById(sDivId));
             };
-            // for FF only:
-            if (navigator.appCodeName==='Mozilla' && navigator.userAgent.indexOf('Firefox/')>0){
-                oDiv2Drag.setAttribute('draggable', 'true');
-            }
             
             // restore last position
             if (oDiv2Drag.className.indexOf('saveposition')!==false){
@@ -195,6 +216,14 @@ var addi = function(){
          */
         load : function(oDiv2Drag){
             var id=this._getVarname(oDiv2Drag.id);
+
+            // detect the highest z-index
+            var aStyles = oDiv2Drag.currentStyle || window.getComputedStyle(oDiv2Drag);
+            if(aStyles.zIndex && aStyles.zIndex>0){
+                _addi_zIndex=Math.max(parseInt(aStyles.zIndex), _addi_zIndex);
+            }
+            oDiv2Drag.style.zIndex=_addi_zIndex++;
+
             var aData=localStorage.getItem(id) ? JSON.parse(localStorage.getItem(id)) : false;
             if(aData && aData.left && aData.top){
                 this.move(oDiv2Drag,aData.left,aData.top, true);
@@ -253,10 +282,15 @@ var addi = function(){
             // save some styles
             this._styleSave(oDiv2Drag);
 
+            // for FF only:
+            // if (navigator.appCodeName==='Mozilla' && navigator.userAgent.indexOf('Firefox/')>0){
+            document.body.style.userSelect='none';
+
             iDivWidth = parseInt(oDiv2Drag.style.width),
             iDivHeight = parseInt(oDiv2Drag.style.height);
 
             oDiv2Drag.style.cursor='move';
+            oDiv2Drag.style.zIndex=_addi_zIndex++;
             
             iDivLeft = oDiv2Drag.style.left ? oDiv2Drag.style.left.replace('px','') : oDiv2Drag.offsetLeft;
             iDivTop  = oDiv2Drag.style.top? oDiv2Drag.style.top.replace('px','')  : oDiv2Drag.offsetTop;
@@ -268,6 +302,7 @@ var addi = function(){
                     posY = evt.clientY,
                     aX = posX - diffX,
                     aY = posY - diffY;
+                oDiv2Drag.style.opacity=addi._dragOpacity;
                 addi.move(oDiv2Drag,aX,aY);
             };
             return true;
@@ -282,6 +317,11 @@ var addi = function(){
             oDiv2Drag.style.cursor='default';
             // retore styles
             this._styleRestore(oDiv2Drag);
+
+            // for FF only:
+            // if (navigator.appCodeName==='Mozilla' && navigator.userAgent.indexOf('Firefox/')>0){
+            document.body.style.userSelect='auto';
+            oDiv2Drag.style.opacity=1;
             // oDiv2Drag.style.transition=this._saveData[oDiv2Drag.id].transition;
             // this._saveData[oDiv2Drag.id]=false;
             

@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Demo AMC Player 6</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <script src="functions.js"></script>
+        <link rel="stylesheet" type="text/css" href="example.css" />
+        <link rel="stylesheet" type="text/css" href="../mcplayer.css" media="screen" />
+
+    </head>
+    <body>
+        <h1>Demo AMC Player :: Play streams</h1>
+        <nav>
+            <a href="example1.html">Get started</a>
+            <a href="example2.html">Song infos</a>
+            <a href="example3.html">API</a>
+            <a href="example4.html">Skins</a>
+            <a href="example5.html">Language</a>
+            <a href="example6.html" class="active">Streams</a>
+        </nav>
+
+        <!-- ************************************************************** -->
+
+        <h2>Let's play streams</h2>
+        <p>
+			With a Html audio tag it is possible to add a streaming url - but NOT a playlist (like m3u, pls, xspf).<br>
+			If playing a stream with a audio tag the length of its duration continously changes during play time.
+			You cannot jump forward or backwards.<br>
+			<br>
+			The AMC player detects a stream by a changing duration of the audio.
+			Within a second it disables some controls to jump within an audio
+			including the progress bar and display of the audio time.<br>
+			All other functioniality is the same like for audio files.<br>
+			<br>
+			It works with AMC player - but it is not highly optimized to play streams yet.<br>
+			<br>
+			To get it run:<br>
+			
+        </p>
+		<ul>
+			<li>Add a data-title attribute to show the label for the stream in the player titlebar and in the playlist window.
+				Shorten it if it is necessary.
+			</li>
+			<li>If you add a <strong>source</strong> tag you *could* skip the type, data-ch and title - those are needed in
+				the download window only.</li>
+			<li>Do NOT add different stream types (Mp3, Ogg, Aac) as multiple source tags inside the same audio.<br>
+				Keep in mind that stream types (Ogg, Aac) could not not be supported on all OS and/ or browsers.</li>
+		</ul>
+        <h3>Html preview</h3>
+        <pre>
+&lt;audio loop="loop"
+	controls="controls"
+	preload="none"
+
+	&lt;!-- optional: more song metadata with html 5 data attributes -->
+	data-<strong>title</strong>="LiteFavorites (MP3)"
+	...
+	>
+
+	&lt;!-- audio sources -->
+	&lt;source <strong>src</strong>="http://ais-edge24-nyc06.cdnstream.com/1255_128" <strong>type="audio/mp3" data-ch="2.0" title="2.0"</strong> />
+
+&lt;/audio>
+</pre>
+
+        <!-- ************************************************************** -->
+
+        <h2>Example streams</h2>
+        <p>
+			Entrypoints to find a internet radio stream are
+		</p>
+		<ul>
+			<li><a href="https://directory.shoutcast.com/">https://directory.shoutcast.com/</a></li>
+			<li><a href="https://dir.xiph.org">https://dir.xiph.org</a></li>
+		</ul>
+        <p>
+			The streams below work at the time of creation of this example file. I have no influence to it.
+			Maybe one or some of the stations do not work for all time in the future. If a stream does not start
+			then try the next one :-)
+		</p>
+        
+
+        <div style="clear: left; padding: 0.5em 1em;">
+            <audio loop="loop"
+                   controls="controls"
+                   preload="none"
+				   
+				   data-title="LiteFavorites (MP3)"
+				   data-artist=""
+				   data-album=""
+				   data-year=""
+				   data-image=""
+				   data-genre=""
+				   data-bpm=""
+				   data-url=""
+                   >
+
+                <!-- stereo sources -->
+                <source src="http://ais-edge23-dal02.cdnstream.com/1255_128" type="audio/mp3" data-ch="2.0" title="2.0" />
+
+                <!-- for fallback add a flashplayer here -->
+
+            </audio>
+			LiteFavorites.com - Today's Hits & Yesterday's Favorites (MP3)
+        </div>
+
+        <div style="clear: left; padding: 0.5em 1em;">
+            <audio loop="loop"
+                   controls="controls"
+                   preload="none"
+				   
+				   data-title="LiteFavorites (AAC+)"
+				   data-artist=""
+				   data-album=""
+				   data-year=""
+				   data-image=""
+				   data-genre=""
+				   data-bpm=""
+				   data-url=""
+                   >
+
+                <!-- stereo sources -->
+                <source src="http://ais-edge23-dal02.cdnstream.com/1255_32" type="audio/aac" data-ch="2.0" title="2.0" />
+
+                <!-- for fallback add a flashplayer here -->
+
+            </audio>
+			LiteFavorites.com - Today's Hits & Yesterday's Favorites (AAC+)
+        </div>
+
+		<p>
+			All other streams below are MP3 streams.
+		</p>
+		
+		
+        <div style="clear: left; padding: 0.5em 1em;">
+            <audio loop="loop"
+                   controls="controls"
+                   preload="none"
+				   
+				   data-title="2000sRnB"
+				   data-artist=""
+				   data-album=""
+				   data-year=""
+				   data-image=""
+				   data-genre=""
+				   data-bpm=""
+				   data-url=""
+                   >
+
+                <!-- stereo sources -->
+                <source src="http://streaming511.radionomy.com/2000s-RnB" type="audio/mp3" data-ch="2.0" title="2.0" />
+
+                <!-- for fallback add a flashplayer here -->
+
+            </audio>
+			2000sRnB
+        </div>
+		
+        <div style="clear: left; padding: 0.5em 1em;">
+            <audio loop="loop"
+                   controls="controls"
+                   preload="none"
+				   
+				   data-title="Dance Wave!"
+				   data-artist=""
+				   data-album=""
+				   data-year=""
+				   data-image=""
+				   data-genre=""
+				   data-bpm=""
+				   data-url=""
+                   >
+
+                <!-- stereo sources -->
+                <source src="http://stream.dancewave.online:8080/dance.mp3" type="audio/mp3" data-ch="2.0" title="2.0" />
+
+                <!-- for fallback add a flashplayer here -->
+
+            </audio>
+			Dance Wave!
+        </div>
+		
+        <div style="clear: left; padding: 0.5em 1em;">
+            <audio loop="loop"
+                   controls="controls"
+                   preload="none"
+				   
+				   data-title="Metro LOVE Radio HD"
+				   data-artist=""
+				   data-album=""
+				   data-year=""
+				   data-image=""
+				   data-genre=""
+				   data-bpm=""
+				   data-url=""
+                   >
+
+                <!-- stereo sources -->
+                <source src="http://eu1.reliastream.com:7002/service" type="audio/mp3" data-ch="2.0" title="2.0" />
+
+                <!-- for fallback add a flashplayer here -->
+
+            </audio>
+			Metro LOVE Radio HD
+        </div>
+
+        <div style="clear: left; padding: 0.5em 1em;">
+            <audio loop="loop"
+                   controls="controls"
+                   preload="none"
+				   
+				   data-title="Costa Del Mar - Chillout"
+				   data-artist=""
+				   data-album=""
+				   data-year=""
+				   data-image=""
+				   data-genre=""
+				   data-bpm=""
+				   data-url=""
+                   >
+
+                <!-- stereo sources -->
+                <source src="http://radio4.vip-radios.fm:8020/stream-mp3-Chill_autodj" type="audio/mp3" data-ch="2.0" title="2.0" />
+
+                <!-- for fallback add a flashplayer here -->
+
+            </audio>
+			Costa Del Mar - Chillout - 100% Chillout Music from IBIZA.
+        </div>
+		
+		<div style="clear: left; padding: 0.5em 1em;">
+            <audio loop="loop"
+                   controls="controls"
+                   preload="none"
+				   
+				   data-title="Synthetic FM"
+				   data-artist=""
+				   data-album=""
+				   data-year=""
+				   data-image=""
+				   data-genre=""
+				   data-bpm=""
+				   data-url=""
+                   >
+
+                <!-- stereo sources -->
+                <source src="http://stream.syntheticfm.com:8040/live" type="audio/mp3" data-ch="2.0" title="2.0" />
+
+                <!-- for fallback add a flashplayer here -->
+
+            </audio>
+			Synthetic FM - The radio for the Synth lovers - MinimalWave, Synthwave, Dark Wave, Cold Wave, Minimal Synth, EBM, Electro, Vocoder
+        </div>
+		
+		<div style="clear: left; padding: 0.5em 1em;">
+            <audio loop="loop"
+                   controls="controls"
+                   preload="none"
+				   
+				   data-title="Synthpop Radio Synthez.Net"
+				   data-artist=""
+				   data-album=""
+				   data-year=""
+				   data-image=""
+				   data-genre=""
+				   data-bpm=""
+				   data-url=""
+                   >
+
+                <!-- stereo sources -->
+                <source src="http://air.synthez.net:8888/192" type="audio/mp3" data-ch="2.0" title="2.0" />
+
+                <!-- for fallback add a flashplayer here -->
+
+            </audio>
+			Synthpop Radio Synthez.Net | 192kbs+ - 24/7 ONLINE :: Synthpop | Electropop | Futurepop | EBM | Industrial
+        </div>
+
+		<div style="clear: left; padding: 0.5em 1em;">
+            <audio loop="loop"
+                   controls="controls"
+                   preload="none"
+				   
+				   data-title="Noise FM"
+				   data-artist=""
+				   data-album=""
+				   data-year=""
+				   data-image=""
+				   data-genre=""
+				   data-bpm=""
+				   data-url=""
+                   >
+
+                <!-- stereo sources -->
+                <source src="http://noisefm.ru:8000/play_256" type="audio/mp3" data-ch="2.0" title="2.0" />
+
+                <!-- for fallback add a flashplayer here -->
+
+            </audio>
+			Noise FM - It's Your Lifestyle!
+        </div>
+		
+        <!-- ************************************************************** -->
+
+
+        <script src="../addi.js"></script>
+        <script src="../mcplayer.js"></script>
+        
+        <!-- load a lang file ... it contains data in aAmcLang -->
+        
+        <script>
+            var oMcPlayer=new mcPlayer();
+            oMcPlayer.init();
+            oMcPlayer.enableStatusbar();
+            oMcPlayer.maximizeBox('playlist');
+            oMcPlayer.maximizeBox('download');
+        </script>
+
+        <br /><br /><br /><br />
+        <hr>
+        DOCS: <a href="https://www.axel-hahn.de/docs/amcplayer/index.htm" target="_blank">https://www.axel-hahn.de/docs/amcplayer/index.htm</a>        
+    </body>
+</html>

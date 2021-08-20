@@ -36,7 +36,7 @@
  * mcPlayer ... Multi Channel Player
  * 
  * @author    Axel Hahn
- * @version   1.02
+ * @version   1.03
  *
  * @this mcPlayer
  * 
@@ -64,7 +64,7 @@ var mcPlayer = function () {
     // settings
     this.cfg = {
         about: {
-            version: '1.02',
+            version: '1.03',
             label: 'AMC Player',
             description: '<strong>A</strong>xels <strong>M</strong>ulti <strong>C</strong>hannel <strong>Player</strong>.<br>This is a webbased HTML5 audio player.<br>It\'s focus is the handling of media in stereo and surround for a title.',
             labeldownload: 'Download:<br>',
@@ -601,7 +601,7 @@ var mcPlayer = function () {
                     if (this.iCurrentSong === -1 || this.iCurrentSong == i) {
                         sHtml += '<li '
                                 + (this.iCurrentSong == i ? ' class="active"' : '')
-                                + '>' + sSong
+                                + '><strong>' + sSong + '</strong>'
                                 + '<ul>'
                                 ;
                         for (var sChannel in this.aPL[i]["sources"]) {
