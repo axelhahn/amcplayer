@@ -36,7 +36,7 @@
  * mcPlayer ... Multi Channel Player
  * 
  * @author    Axel Hahn
- * @version   1.03
+ * @version   1.04
  *
  * @this mcPlayer
  * 
@@ -59,12 +59,14 @@
  * @constructor
  * @return nothing
  */
-var mcPlayer = function () {
+class mcPlayer {
 
-    // settings
-    this.cfg = {
+    // ----------------------------------------------------------------------
+    // config
+    // ----------------------------------------------------------------------
+    cfg = {
         about: {
-            version: '1.03',
+            version: '1.04-dev',
             label: 'AMC Player',
             description: '<strong>A</strong>xels <strong>M</strong>ulti <strong>C</strong>hannel <strong>Player</strong>.<br>This is a webbased HTML5 audio player.<br>It\'s focus is the handling of media in stereo and surround for a title.',
             labeldownload: 'Download:<br>',
@@ -219,57 +221,78 @@ var mcPlayer = function () {
         },
         settings: {
             autoopen: false,
-            movable: true, // v0.26
+            movable: true,
             repeatlist: true,
-            showsonginfos: true, // v0.29
-            showhud: true, // v0.30
-            showstatusbar: false, // v0.33
+            showsonginfos: true,
+            showhud: true,
+            showstatusbar: false,
             shuffle: false,
             volume: 0.9
         }
     };
 
-    this.oAudio = false;           // current audio object
-    this.sCurrentChannel = false;  // current audio - one of false | "2.0"| "5.1"
-    this.iMaxVol = 1;
+    // ----------------------------------------------------------------------
+    // other internal vars
+    // ----------------------------------------------------------------------
+    oAudio = false;           // current audio object
+    sCurrentChannel = false;  // current audio - one of false | "2.0"| "5.1"
+    iMaxVol = 1;
 
-    this.iCurrentTime = false;     // aktuelle Abspielposition - bei Wechsel der Audioquelle
-    this.bIsFading = false;        // Flag: erfolgt gerade ein X-Fading?
+    iCurrentTime = false;     // current audio position (in sec)
 
-    this.iVolInc = 0.02;           // X-Fading: Schrittweite der Lautstaerke-Aenderung 
-    this.iTimer = 20;              // X-Fading: Intervall der Lautstaerke-Aenderung 
+    bIsFading = false;        // flag: is a fading active?
+    iVolInc = 0.02;           // X-Fading: volume value to change
+    iTimer = 20;              // X-Fading: change interval in ms
 
-    this.iHudTimer = 5;            // time to display hud message in s
-    this.iRemoveTimer = 2;
+    iHudTimer = 5;            // time to display hud message in s
+    iRemoveTimer = 2;
 
 
     // get playlist of all audiotags of the current document
-    this.aPL = [];
-    this.iCurrentSong = -1;
-    this.aPlayorderList = [];
-    this.iPlaylistId = -1;
+    aPL = [];
+    iCurrentSong = -1;
+    aPlayorderList = [];
+    iPlaylistId = -1;
 
-    this._iMinDelta = 100;
-    this._sContainerId = false;
-    this.sScreensize = false;
+    _iMinDelta = 100;
+    _sContainerId = false;
+    sScreensize = false;
 
-    this.name = false;
+    name = false;
 
-    this.playlink = '[title]';
+    playlink = '[title]';
 
+    /**
+     * initialize player
+     * @param {string} sContainerId  id of a div where to put the player. if false player will be added to body
+     * @return {boolean}
+     */
+    constructor(oConfig) {
 
-// **********************************************************************
+        if (oConfig) {
+            this.setConfig(oConfig);
+        }
 
+        this.canPlaySurround();
+        try {
+            this.sCurrentChannel = localStorage.getItem("amcp.channels") ? localStorage.getItem("amcp.channels") : false;
+            this.cfg.settings.volume = localStorage.getItem("amcp.volume") / 1 ? localStorage.getItem("amcp.volume") / 1 : 1;
+        } catch (e) {
+            // nop
+        }
 
+        return true;
+    }
+    // **********************************************************************
     /**
      * Check: does the browser support 5.1 channels?<br>
      * tablets and mobile devices: false<br>
      * older Opera versions: false<br>
      * all other: true<br>
-     * 
+     *
      * @return {boolean}
      */
-    this.canPlaySurround = function () {
+    canPlaySurround() {
         var bReturn = true;
         // older Opera makes a stereo downmixing of surround media
         if (navigator.userAgent.indexOf("Presto/") >= 0) {
@@ -283,7 +306,7 @@ var mcPlayer = function () {
         })(navigator.userAgent || navigator.vendor || window.opera);
 
         return bReturn;
-    };
+    }
 
     /**
      * scan AUDIO tags and its sources in a document to create an
@@ -291,22 +314,24 @@ var mcPlayer = function () {
      * @private
      * @return {Array}
      */
-    this._scanAudios = function () {
+    #scanAudios() {
         var oAudioList = document.getElementsByTagName("AUDIO");
         var a = new Array();
         var aSource = false;
         var sChannels = false;
         var aSong = false;
         var o = false;
+        var dummy = false;
+
         for (var i = 0; i < oAudioList.length; i++) {
             oAudioList[i].style.display = "none";
             aSong = {
                 title: oAudioList[i].dataset.title
-                        ? oAudioList[i].dataset.title
-                        : oAudioList[i].title
+                    ? oAudioList[i].dataset.title
+                    : oAudioList[i].title
                         ? oAudioList[i].title
-                        : ''
-                ,
+                        : '',
+
                 artist: oAudioList[i].dataset.artist ? oAudioList[i].dataset.artist : false,
                 album: oAudioList[i].dataset.album ? oAudioList[i].dataset.album : false,
                 year: oAudioList[i].dataset.year ? oAudioList[i].dataset.year : false,
@@ -347,7 +372,7 @@ var mcPlayer = function () {
             oAudioList[i].parentNode.appendChild(newA);
         }
         return a;
-    };
+    }
 
 
     /**
@@ -381,7 +406,7 @@ var mcPlayer = function () {
      * @param {array} aSong
      * @returns {Boolean}
      */
-    this.addAudio = function (aSong) {
+    addAudio(aSong) {
         if (!aSong["sources"]) {
             return false;
         }
@@ -389,17 +414,18 @@ var mcPlayer = function () {
             aSong.title = 'audio ' + (this.aPL.length + 1);
         }
         this.aPL.push(aSong);
-        this._generatePlayorder();
+        this.#generatePlayorder();
     };
 
 
     /**
      * get default html code of player controls
      * @private
-     * @return {html_code} 
+     * @return {html_code}
      */
-    this._genPlayer = function () {
+    #genPlayer() {
         var s = '';
+        var idLink = false;
 
         s += '<div id="mcpplayersonginfo"></div>';
 
@@ -411,79 +437,76 @@ var mcPlayer = function () {
         s += '<div id="mcpplayerbtndiv">';
         for (var i = 0; i < aTmp.length; i++) {
             s += '<a href="#" id="mcp' + aTmp[i] + '"'
-                    + ' onclick="' + this.name + '.playeraction(\'' + aTmp[i] + '\'); return false;' + '"'
-                    + ' title="' + this.cfg.aPlayer.buttons[aTmp[i]].title + '"'
-                    + '></a>';
+                + ' onclick="' + this.name + '.playeraction(\'' + aTmp[i] + '\'); return false;' + '"'
+                + ' title="' + this.cfg.aPlayer.buttons[aTmp[i]].title + '"'
+                + '></a>';
         }
         s += '</div>'
-                + '<div id="mcpprogressdiv"'
-                + (this.cfg.aPlayer.bars["progress"].visible ? '' : 'style="display: none"')
-                + '>'
-                    // + '<canvas id="mcpprogresscanvas" title="' + this.cfg.aPlayer.bars["progress"].title + '"></canvas>'
-                    + '<div class="mcpslider">'
-                        + '<div class="mcpslider-default"></div>'
-                        + '<div id="mcpprogressbar" class="mcpslider-active"></div>'
-                    + '</div>'
-                + '</div>'
-                + '<span id="mcptime"><span id="mcptimeplayed">-:--</span>/ <span id="mcptimetotal">-:--</span></span>'
+            + '<div id="mcpprogressdiv"'
+            + (this.cfg.aPlayer.bars["progress"].visible ? '' : 'style="display: none"')
+            + '>'
+            // + '<canvas id="mcpprogresscanvas" title="' + this.cfg.aPlayer.bars["progress"].title + '"></canvas>'
+            + '<div class="mcpslider">'
+            + '<div class="mcpslider-default"></div>'
+            + '<div id="mcpprogressbar" class="mcpslider-active"></div>'
+            + '</div>'
+            + '</div>'
+            + '<span id="mcptime"><span id="mcptimeplayed">-:--</span>/ <span id="mcptimetotal">-:--</span></span>'
 
-                + '<div id="mcpvolumesection">'
-        
-                    + '<a href="#" id="mcpvolmute" onclick="' + this.name + '.setVolume(0); return false;" '
-                    + (this.cfg.aPlayer.buttons["volmute"].visible ? '' : 'style="display: none" ')
-                    + 'title="' + this.cfg.aPlayer.buttons["volmute"].title + '"></a>'
-            
-                    + '<div id="mcpvolumediv" title="volume">'
-                        // + '<canvas id="mcpvolumecanvas" '
-                        // + (this.cfg.aPlayer.bars["volume"].visible ? '' : 'style="display: none" ')
-                        // + 'title="' + this.cfg.aPlayer.bars["volume"].title + '"></canvas>'
-                        + '<div class="mcpslider">'
-                            + '<div class="mcpslider-default"></div>'
-                            + '<div id="mcpvolumebar" class="mcpslider-active"></div>'
-                        + '</div>'
-                    + '</div>'
-            
-                    + '<a href="#" id="mcpvolfull" onclick="' + this.name + '.setVolume(1); return false;" '
-                    + (this.cfg.aPlayer.buttons["volfull"].visible ? '' : 'style="display: none" ')
-                    + 'title="' + this.cfg.aPlayer.buttons["volfull"].title + '"></a>'
-            
-                + '</div>'
+            + '<div id="mcpvolumesection">'
 
-                + '<div id="mcpchannels"></div>'
+            + '<a href="#" id="mcpvolmute" onclick="' + this.name + '.setVolume(0); return false;" '
+            + (this.cfg.aPlayer.buttons["volmute"].visible ? '' : 'style="display: none" ')
+            + 'title="' + this.cfg.aPlayer.buttons["volmute"].title + '"></a>'
 
-                + '<div id="mcpoptions">'
-                + '<a href="#" onclick="' + this.name + '.toggleRepeat(); return false;" id="mcpoptrepeat" '
-                + (this.isRepeatlist() ? 'class="active" ' : '')
-                + 'title="' + this.cfg.aPlayer.buttons["repeat"].title + '"></a>'
-                + '<a href="#" onclick="' + this.name + '.toggleShuffle(); return false;" id="mcpoptshuffle" '
-                + (this.cfg.settings.shuffle ? 'class="active" ' : '')
-                + 'title="' + this.cfg.aPlayer.buttons["shuffle"].title + '"></a>'
-                + '<a href="#" onclick="' + this.name + '.toggleStatusbar(); return false;" id="mcpoptstatusbar" '
-                + (this.isVisibleStatusbar() ? 'class="active" ' : '')
-                + 'title="' + this.cfg.aPlayer.buttons["statusbar"].title + '"></a>'
-                ;
+            + '<div id="mcpvolumediv" title="volume">'
+            // + '<canvas id="mcpvolumecanvas" '
+            // + (this.cfg.aPlayer.bars["volume"].visible ? '' : 'style="display: none" ')
+            // + 'title="' + this.cfg.aPlayer.bars["volume"].title + '"></canvas>'
+            + '<div class="mcpslider">'
+            + '<div class="mcpslider-default"></div>'
+            + '<div id="mcpvolumebar" class="mcpslider-active"></div>'
+            + '</div>'
+            + '</div>'
+
+            + '<a href="#" id="mcpvolfull" onclick="' + this.name + '.setVolume(1); return false;" '
+            + (this.cfg.aPlayer.buttons["volfull"].visible ? '' : 'style="display: none" ')
+            + 'title="' + this.cfg.aPlayer.buttons["volfull"].title + '"></a>'
+
+            + '</div>'
+
+            + '<div id="mcpchannels"></div>'
+
+            + '<div id="mcpoptions">'
+            + '<a href="#" onclick="' + this.name + '.toggleRepeat(); return false;" id="mcpoptrepeat" '
+            + (this.isRepeatlist() ? 'class="active" ' : '')
+            + 'title="' + this.cfg.aPlayer.buttons["repeat"].title + '"></a>'
+            + '<a href="#" onclick="' + this.name + '.toggleShuffle(); return false;" id="mcpoptshuffle" '
+            + (this.cfg.settings.shuffle ? 'class="active" ' : '')
+            + 'title="' + this.cfg.aPlayer.buttons["shuffle"].title + '"></a>'
+            + '<a href="#" onclick="' + this.name + '.toggleStatusbar(); return false;" id="mcpoptstatusbar" '
+            + (this.isVisibleStatusbar() ? 'class="active" ' : '')
+            + 'title="' + this.cfg.aPlayer.buttons["statusbar"].title + '"></a>';
         var aBtn = ['download', 'playlist', 'about'];
         for (var i = 0; i < aBtn.length; i++) {
             idLink = 'mcpopt' + aBtn[i];
             s += '<a href="#" onclick="' + this.name + '.toggleBoxAndButton(\'' + aBtn[i] + '\'); return false;" id="mcpopt' + aBtn[i] + '" '
-                    + (this.cfg.aPlayer.buttons[aBtn[i]].visible ? '' : 'style="display: none" ')
-                    + ' title="' + this.cfg.aPlayer.buttons[aBtn[i]].title + '"></a>'
-                    ;
+                + (this.cfg.aPlayer.buttons[aBtn[i]].visible ? '' : 'style="display: none" ')
+                + ' title="' + this.cfg.aPlayer.buttons[aBtn[i]].title + '"></a>';
         }
         s += '</div>'
-                + '<div id="mcpstatusbar"'
-                + (this.cfg.settings.showstatusbar ? ' class="active" ' : '')
-                + '>'
-                + '<div>'
-                + this.cfg.aPlayer.status.networkstate.label + ': '
-                + '<span id="mcpstatusnetwork"></span>'
-                + '</div>'
-                + '<div>'
-                + this.cfg.aPlayer.status.readystate.label + ': '
-                + '<span id="mcpstatusready"></span>'
-                + '</div>'
-                + '</div>'
-                ;
+            + '<div id="mcpstatusbar"'
+            + (this.cfg.settings.showstatusbar ? ' class="active" ' : '')
+            + '>'
+            + '<div>'
+            + this.cfg.aPlayer.status.networkstate.label + ': '
+            + '<span id="mcpstatusnetwork"></span>'
+            + '</div>'
+            + '<div>'
+            + this.cfg.aPlayer.status.readystate.label + ': '
+            + '<span id="mcpstatusready"></span>'
+            + '</div>'
+            + '</div>';
 
         return s;
     };
@@ -491,47 +514,46 @@ var mcPlayer = function () {
     /**
      * generate html code for about box
      * @private
-     * @return {html_code} 
+     * @return {html_code}
      */
-    this._genAboutbox = function () {
+    #genAboutbox() {
 
         return '<div class="mcpbox">'
-                + '<span class="ico-about"> ' + this.cfg.aPlayer.about.title + '</span>'
-                + '<span class="mcpsystembutton"><a href="#" class="icon-down-open-1" onclick="' + this.name + '.toggleBoxAndButton(\'about\', \'minimize\'); return false;" title="' + this.cfg.aPlayer.buttons["minimize"].title + '">' + this.cfg.aPlayer.buttons["minimize"].label + '</a></span></div><div>'
-                + '<p class="amclogo"></p>'
-                + '<div class="title">' + this.cfg.about.label + ' v' + this.cfg.about.version + '</div>'
-                + '<p>' + this.cfg.about.description + '</p>'
-                + '<p>' + this.cfg.about.labellicense + '' + this.cfg.about.license + '</p>'
-                + '<p>' + this.cfg.about.labelurl + '<a href="' + this.cfg.about.url + '" target="_blank">' + this.cfg.about.url + '</a></p>'
-                + '<p>' + this.cfg.about.labeldownload + '<a href="' + this.cfg.about.download + '" target="_blank">' + this.cfg.about.download + '</a></p>'
-                + '<p>' + this.cfg.about.labeldocurl + '<a href="' + this.cfg.about.docurl + '" target="_blank">' + this.cfg.about.docurl + '</a></p>'
-                + '</div>';
+            + '<span class="ico-about"> ' + this.cfg.aPlayer.about.title + '</span>'
+            + '<span class="mcpsystembutton"><a href="#" class="icon-down-open-1" onclick="' + this.name + '.toggleBoxAndButton(\'about\', \'minimize\'); return false;" title="' + this.cfg.aPlayer.buttons["minimize"].title + '">' + this.cfg.aPlayer.buttons["minimize"].label + '</a></span></div><div>'
+            + '<p class="amclogo"></p>'
+            + '<div class="title">' + this.cfg.about.label + ' v' + this.cfg.about.version + '</div>'
+            + '<p>' + this.cfg.about.description + '</p>'
+            + '<p>' + this.cfg.about.labellicense + '' + this.cfg.about.license + '</p>'
+            + '<p>' + this.cfg.about.labelurl + '<a href="' + this.cfg.about.url + '" target="_blank">' + this.cfg.about.url + '</a></p>'
+            + '<p>' + this.cfg.about.labeldownload + '<a href="' + this.cfg.about.download + '" target="_blank">' + this.cfg.about.download + '</a></p>'
+            + '<p>' + this.cfg.about.labeldocurl + '<a href="' + this.cfg.about.docurl + '" target="_blank">' + this.cfg.about.docurl + '</a></p>'
+            + '</div>';
     };
 
     /**
      * generate html code for the playlist
      * @private
-     * @return {html_code} 
+     * @return {html_code}
      */
-    this._genPlaylist = function () {
+    #genPlaylist() {
 
         var sHtmlPL = ''
-                + '<div class="mcpbox">'
-                + '<span class="ico-playlist"> ' + this.cfg.aPlayer.playlist.title + '</span>'
-                + '<span class="mcpsystembutton">'
-                + '<a href="#" class="icon-down-open-1" onclick="' + this.name + '.toggleBoxAndButton(\'playlist\', \'minimize\'); return false;" '
-                + 'title="' + this.cfg.aPlayer.buttons["minimize"].title + '">' + this.cfg.aPlayer.buttons["minimize"].label + '</a>'
-                + '</span>'
-                + '</div>'
-                ;
+            + '<div class="mcpbox">'
+            + '<span class="ico-playlist"> ' + this.cfg.aPlayer.playlist.title + '</span>'
+            + '<span class="mcpsystembutton">'
+            + '<a href="#" class="icon-down-open-1" onclick="' + this.name + '.toggleBoxAndButton(\'playlist\', \'minimize\'); return false;" '
+            + 'title="' + this.cfg.aPlayer.buttons["minimize"].title + '">' + this.cfg.aPlayer.buttons["minimize"].label + '</a>'
+            + '</span>'
+            + '</div>';
         if (this.aPL.length > 0) {
             sHtmlPL += '<ul>';
             for (var i = 0; i < this.aPL.length; i++) {
                 sHtmlPL += '<li'
-                        + (this.iCurrentSong === i ? ' class="active"' : '')
-                        + '><a href="#" onclick="' + this.name + '.setSong(' + i + '); return false;">'
-                        + (this.aPL[i]["title"] ? this.aPL[i]["title"] : "Audio #" + (i + 1))
-                        + '</a></li>';
+                    + (this.iCurrentSong === i ? ' class="active"' : '')
+                    + '><a href="#" onclick="' + this.name + '.setSong(' + i + '); return false;">'
+                    + (this.aPL[i]["title"] ? this.aPL[i]["title"] : "Audio #" + (i + 1))
+                    + '</a></li>';
             }
             sHtmlPL += '</ul>';
         }
@@ -541,27 +563,25 @@ var mcPlayer = function () {
     /**
      * generate html code details of then current song
      * @private
-     * @return {html_code} 
+     * @return {html_code}
      */
-    this._genSonginfos = function () {
+    #genSonginfos() {
 
         if (!this.cfg.settings.showsonginfos) {
             return '';
         }
         var sHtml = ''
-                + (this.getSongArtist() ? '<div class="artist">' + this.getSongArtist() + '</div>' : '')
-                + (this.getSongAlbum() ? '<div class="album">' + this.cfg.aPlayer.songinfo.album + ': ' + this.getSongAlbum() + '</div>' : '')
-                + (this.getSongYear() ? '<div class="year">' + this.cfg.aPlayer.songinfo.year + ': ' + this.getSongYear() + '</div>' : '')
-                + (this.getSongBpm() ? '<div class="bpm">' + this.cfg.aPlayer.songinfo.bpmspeed + ': ' + this.getSongBpm() + ' ' + this.cfg.aPlayer.songinfo.bpm + '</div>' : '')
-                + (this.getSongGenre() ? '<div class="genre">' + this.cfg.aPlayer.songinfo.genre + ': ' + this.getSongGenre() + '</div>' : '')
-                + (this.getSongUrl() ? '<div class="url">' + this.cfg.aPlayer.songinfo.url + ': <a href="' + this.getSongUrl() + '" target="_blank">' + this.getSongUrl() + '</a></div>' : '')
-                ;
+            + (this.getSongArtist() ? '<div class="artist">' + this.getSongArtist() + '</div>' : '')
+            + (this.getSongAlbum() ? '<div class="album">' + this.cfg.aPlayer.songinfo.album + ': ' + this.getSongAlbum() + '</div>' : '')
+            + (this.getSongYear() ? '<div class="year">' + this.cfg.aPlayer.songinfo.year + ': ' + this.getSongYear() + '</div>' : '')
+            + (this.getSongBpm() ? '<div class="bpm">' + this.cfg.aPlayer.songinfo.bpmspeed + ': ' + this.getSongBpm() + ' ' + this.cfg.aPlayer.songinfo.bpm + '</div>' : '')
+            + (this.getSongGenre() ? '<div class="genre">' + this.cfg.aPlayer.songinfo.genre + ': ' + this.getSongGenre() + '</div>' : '')
+            + (this.getSongUrl() ? '<div class="url">' + this.cfg.aPlayer.songinfo.url + ': <a href="' + this.getSongUrl() + '" target="_blank">' + this.getSongUrl() + '</a></div>' : '');
         if (sHtml || this.getSongImage()) {
             sHtml = '<div>'
-                    + (this.getSongImage() ? '<img src="' + this.getSongImage() + '">' : '')
-                    + (this.getSongTitle() ? '<div class="title">' + this.getSongTitle() + '</div>' : '')
-                    + sHtml
-                    ;
+                + (this.getSongImage() ? '<img src="' + this.getSongImage() + '">' : '')
+                + (this.getSongTitle() ? '<div class="title">' + this.getSongTitle() + '</div>' : '')
+                + sHtml;
 
             sHtml += '<div style="clear: both;"></div>';
             sHtml += '</div>';
@@ -575,20 +595,22 @@ var mcPlayer = function () {
      * scan AUDIO tags and its sources in a document to create an
      * object with all current songs
      * @private
-     * @return {html_code} 
+     * @return {html_code}
      */
-    this._genDownloads = function () {
+    #genDownloads() {
         var sHtml = '';
+        var sSong = false;
+        var sSrc = false;
+        var sExt = false;
 
         if (this.aPL.length > 0) {
             sHtml += '<div class="mcpbox">'
-                    + '<span class="ico-download"> ' + this.cfg.aPlayer.download.title + '</span>'
-                    + '<span class="mcpsystembutton"><a href="#" class="icon-down-open-1" onclick="' + this.name + '.toggleBoxAndButton(\'download\', \'minimize\'); return false;" '
-                    + 'title="' + this.cfg.aPlayer.buttons["minimize"].title + '">' + this.cfg.aPlayer.buttons["minimize"].label + '</a>'
-                    + '</span>'
-                    + '</div>'
-                    + '<ul>'
-                    ;
+                + '<span class="ico-download"> ' + this.cfg.aPlayer.download.title + '</span>'
+                + '<span class="mcpsystembutton"><a href="#" class="icon-down-open-1" onclick="' + this.name + '.toggleBoxAndButton(\'download\', \'minimize\'); return false;" '
+                + 'title="' + this.cfg.aPlayer.buttons["minimize"].title + '">' + this.cfg.aPlayer.buttons["minimize"].label + '</a>'
+                + '</span>'
+                + '</div>'
+                + '<ul>';
             if (this.iCurrentSong === -1) {
                 sHtml += '<li>' + this.cfg.aPlayer.download.noentry + '</li>';
             } else {
@@ -600,13 +622,12 @@ var mcPlayer = function () {
                     }
                     if (this.iCurrentSong === -1 || this.iCurrentSong == i) {
                         sHtml += '<li '
-                                + (this.iCurrentSong == i ? ' class="active"' : '')
-                                + '><strong>' + sSong + '</strong>'
-                                + '<ul>'
-                                ;
+                            + (this.iCurrentSong == i ? ' class="active"' : '')
+                            + '><strong>' + sSong + '</strong>'
+                            + '<ul>';
                         for (var sChannel in this.aPL[i]["sources"]) {
                             sHtml += '<li>' + sChannel + ': ';
-                            for (j = 0; j < this.aPL[i]["sources"][sChannel].length; j++) {
+                            for (var j = 0; j < this.aPL[i]["sources"][sChannel].length; j++) {
                                 sSrc = this.aPL[i]["sources"][sChannel][j]["src"];
                                 sExt = this.aPL[i]["sources"][sChannel][j]["type"].replace('audio/', '');
                                 // sExt='';
@@ -614,9 +635,9 @@ var mcPlayer = function () {
                                     sExt = this.aPL[i]["sources"][sChannel][j]["src"].replace(/^.*\/|\.[^.]*$/g, '');
 
                                 sHtml += (j > 0 ? ' | ' : '')
-                                        + '<a href="' + this.aPL[i]["sources"][sChannel][j]["src"]
-                                        + '" title="' + sSong + ' (' + sChannel + '; ' + sExt + ')' + "\n" + this.aPL[i]["sources"][sChannel][j]["src"] + '"'
-                                        + '>' + sExt + '</a>';
+                                    + '<a href="' + this.aPL[i]["sources"][sChannel][j]["src"]
+                                    + '" title="' + sSong + ' (' + sChannel + '; ' + sExt + ')' + "\n" + this.aPL[i]["sources"][sChannel][j]["src"] + '"'
+                                    + '>' + sExt + '</a>';
                             }
                             sHtml += '</li>';
                         }
@@ -634,10 +655,10 @@ var mcPlayer = function () {
      * @private
      * @returns {undefined}
      */
-    this._generatePlaylist = function () {
+    #generatePlaylist() {
         // this.aPL = this._scanAudios(); 
-        this._scanAudios();
-        this._generatePlayorder();
+        this.#scanAudios();
+        this.#generatePlayorder();
     };
 
     /**
@@ -647,8 +668,8 @@ var mcPlayer = function () {
      * @param {type} b
      * @returns {Number}
      */
-    this._randomSort = function (a, b) {
-        return(parseInt(Math.random() * 10) % 2);
+    #randomSort(a, b) {
+        return (parseInt(Math.random() * 10) % 2);
     };
 
     /**
@@ -656,7 +677,7 @@ var mcPlayer = function () {
      * @private
      * @returns {undefined}
      */
-    this._generatePlayorder = function () {
+    #generatePlayorder() {
         this.aPlayorderList = [];
         if (this.aPL.length) {
             for (var i = 0; i < this.aPL.length; i++) {
@@ -667,12 +688,12 @@ var mcPlayer = function () {
                 if (this.iCurrentSong >= 0) {
                     this.aPlayorderList.splice(this.iCurrentSong, 1);
                 }
-                this.aPlayorderList.sort(this._randomSort);
+                this.aPlayorderList.sort(this.#randomSort);
                 if (this.iCurrentSong >= 0) {
                     this.aPlayorderList.unshift(this.iCurrentSong);
                 }
             }
-            this._findPlaylistId();
+            this.#findPlaylistId();
         }
     };
 
@@ -681,7 +702,7 @@ var mcPlayer = function () {
      * @private
      * @returns {Number|Boolean}
      */
-    this._findPlaylistId = function () {
+    #findPlaylistId() {
         this.iPlaylistId = false;
         if (this.iCurrentSong >= 0) {
             for (var i = 0; i < this.aPlayorderList.length; i++) {
@@ -692,13 +713,13 @@ var mcPlayer = function () {
         }
         return this.iPlaylistId;
     };
-    
-    this._addHtml = function (sHtml) {
-        oContainer=document.getElementById(this._sContainerId) ? document.getElementById(this._sContainerId) : document.getElementsByTagName("BODY")[0];
-        if(oContainer){
+
+    #addHtml(sHtml) {
+        var oContainer = document.getElementById(this._sContainerId) ? document.getElementById(this._sContainerId) : document.getElementsByTagName("BODY")[0];
+        if (oContainer) {
             oContainer.innerHTML += sHtml;
         }
-    }
+    };
 
     // ----------------------------------------------------------------------
     /**
@@ -706,27 +727,27 @@ var mcPlayer = function () {
      * @private
      * @return nothing
      */
-    this._initHtml = function () {
+    #initHtml() {
 
         var styleTop = ' style="top: ' + ((document.documentElement.clientHeight + 100) + 'px') + ';"';
         this.oDivDownloads = document.getElementById("mcpdownloads");
         if (!this.oDivDownloads) {
-            this._addHtml('<div id="mcpdownloads" class="draggable saveposition"' + styleTop + '></div>');
+            this.#addHtml('<div id="mcpdownloads" class="draggable saveposition"' + styleTop + '></div>');
             this.oDivDownloads = document.getElementById("mcpdownloads");
         }
-        this.oDivDownloads.innerHTML = this._genDownloads();
+        this.oDivDownloads.innerHTML = this.#genDownloads();
 
         this.oDivPlaylist = document.getElementById("mcpplaylist");
         if (!this.oDivPlaylist) {
-            this._addHtml('<div id="mcpplaylist" class="draggable saveposition"' + styleTop + '></div>');
+            this.#addHtml('<div id="mcpplaylist" class="draggable saveposition"' + styleTop + '></div>');
             this.oDivPlaylist = document.getElementById("mcpplaylist");
         }
-        this.oDivPlaylist.innerHTML = this._genPlaylist();
+        this.oDivPlaylist.innerHTML = this.#genPlaylist();
 
 
         this.oDivPlayerwrapper = document.getElementById("mcpwrapper");
         if (!this.oDivPlayerwrapper) {
-            this._addHtml('<div id="mcpwrapper"' + (this.cfg.settings.movable ? ' class="draggable saveposition"' : '') + '></div>');
+            this.#addHtml('<div id="mcpwrapper"' + (this.cfg.settings.movable ? ' class="draggable saveposition"' : '') + '></div>');
             this.oDivPlayerwrapper = document.getElementById("mcpwrapper");
         }
         this.oDivHeader = document.getElementById("mcpheader");
@@ -742,20 +763,20 @@ var mcPlayer = function () {
         if (!this.oDivPlayer) {
             this.oDivPlayerwrapper.innerHTML += '<div id="mcplayer"></div>';
             this.oDivPlayer = document.getElementById("mcplayer");
-            this.oDivPlayer.innerHTML = this._genPlayer();
+            this.oDivPlayer.innerHTML = this.#genPlayer();
         }
         this.oAPlayermaximize = document.getElementById("mcpmaximize");
         if (!this.oAPlayermaximize) {
-            this._addHtml('<a href="#" id="mcpmaximize" class="mcpsystembutton hidebutton" onclick="' + this.name + '.maximize(); return false" title="' + this.cfg.aPlayer.buttons["maximize"].title + '"> ' + this.cfg.aPlayer.buttons["maximize"].label + '</a>');
+            this.#addHtml('<a href="#" id="mcpmaximize" class="mcpsystembutton hidebutton" onclick="' + this.name + '.maximize(); return false" title="' + this.cfg.aPlayer.buttons["maximize"].title + '"> ' + this.cfg.aPlayer.buttons["maximize"].label + '</a>');
             this.oAPlayermaximize = document.getElementById("mcpmaximize");
         }
-        this._addHtml('<div id="mcpabout" class="draggable saveposition"' + styleTop + '>' + this._genAboutbox() + '</div>');
+        this.#addHtml('<div id="mcpabout" class="draggable saveposition"' + styleTop + '>' + this.#genAboutbox() + '</div>');
         this.oDivPlayerhud = document.getElementById("mcphud");
         if (!this.oDivPlayerhud) {
-            this._addHtml('<div id="mcphud"></div>');
+            this.#addHtml('<div id="mcphud"></div>');
             this.oDivPlayerhud = document.getElementById("mcphud");
         }
-        this._playerheightSet();
+        this.#playerheightSet();
     };
 
     // ----------------------------------------------------------------------
@@ -766,7 +787,7 @@ var mcPlayer = function () {
      * @param {boolean}  bFast     flag to override speed in css transistion
      * @return nothing
      */
-    this.minimize = function (bFast) {
+    minimize(bFast) {
         o = document.getElementById("mcpwrapper");
         o.style['transition-duration'] = bFast ? '0s' : '';
         o.style.top = (document.documentElement.clientHeight + this._iMinDelta) + 'px';
@@ -782,11 +803,11 @@ var mcPlayer = function () {
      * set if make the main player window is movable.
      * This method is useful if you added drag and drop support (addi.min.js)
      * for the windows but the main player is fixed on the bottom.
-     * 
+     *
      * @param {boolean} bMove  flag true/ false
      * @returns {undefined}
      */
-    this.makeMainwindowMovable = function (bMove) {
+    makeMainwindowMovable(bMove) {
         this.cfg.settings.movable = bMove;
         o = document.getElementById("mcpwrapper");
         if (this.cfg.settings.movable) {
@@ -812,10 +833,10 @@ var mcPlayer = function () {
      * show/ maximize the player GUI
      * @example
      * &lt;a href="#" onclick="oMcPlayer.maximize(); return false;"&gt;show the player&lt;/a&gt;
-     * 
+     *
      * @return nothing
      */
-    this.maximize = function () {
+    maximize() {
         o = document.getElementById("mcpwrapper");
         o.setAttribute('style', '');
         if (this.cfg.settings.movable && typeof addi !== 'undefined') {
@@ -825,16 +846,16 @@ var mcPlayer = function () {
     };
 
     /**
-     * show info in HUD div if 
+     * show info in HUD div if
      * - option showhud was set
      * - option autoopen is false
-     * - player is invisible (minimized) 
-     * 
+     * - player is invisible (minimized)
+     *
      * @private
      * @param  {string}  sMsg  message to show in hud
      * @return {boolean}
      */
-    this._showInfo = function (sMsg) {
+    #showInfo(sMsg) {
         if (!this.cfg.settings.showhud || this.cfg.settings.autoopen || this.isVisiblePlayer()) {
             return false;
         }
@@ -842,7 +863,7 @@ var mcPlayer = function () {
         this.iRemoveTimer = this.iHudTimer * 1000;
         o.className = 'active';
         o.innerHTML = sMsg;
-        this._decHudTimer();
+        this.#decHudTimer();
         return true;
     };
 
@@ -851,7 +872,7 @@ var mcPlayer = function () {
      * @private
      * @return nothing
      */
-    this._hideInfo = function () {
+    #hideInfo() {
         var o = document.getElementById("mcphud");
         o.className = '';
         return true;
@@ -862,13 +883,13 @@ var mcPlayer = function () {
      * @private
      * @return nothing
      */
-    this._decHudTimer = function () {
+    #decHudTimer() {
         this.iRemoveTimer = this.iRemoveTimer - 100;
         // this.showInfo(this.iRemoveTimer);
         if (this.iRemoveTimer > 0) {
-            window.setTimeout(this.name + "._decHudTimer()", 100);
+            window.setTimeout(this.name + ".#decHudTimer()", 100);
         } else {
-            this._hideInfo();
+            this.#hideInfo();
             this.iRemoveTimer = false;
         }
     };
@@ -880,13 +901,12 @@ var mcPlayer = function () {
      * @param {string}  sBaseId    sBaseId of the div and the button; one of download|playlist|about
      * @return {boolean}
      */
-    this._togglehelperGetDiv = function (sBaseId) {
+    #togglehelperGetDiv(sBaseId) {
         return (this.cfg.aPlayer.buttons[sBaseId] && this.cfg.aPlayer.buttons[sBaseId].box)
-                ? document.getElementById(this.cfg.aPlayer.buttons[sBaseId].box)
-                : (sBaseId === 'player')
+            ? document.getElementById(this.cfg.aPlayer.buttons[sBaseId].box)
+            : (sBaseId === 'player')
                 ? document.getElementById('mcpwrapper')
-                : false
-                ;
+                : false;
     };
 
     /**
@@ -896,8 +916,8 @@ var mcPlayer = function () {
      * @param {boolean}  bFast     flag to override speed in css transistion
      * @return {boolean}
      */
-    this.toggleBoxAndButton = function (sBaseId, sMode, bFast) {
-        var oDiv = this._togglehelperGetDiv(sBaseId);
+    toggleBoxAndButton(sBaseId, sMode, bFast) {
+        var oDiv = this.#togglehelperGetDiv(sBaseId);
 
         var oBtn = document.getElementById('mcpopt' + sBaseId);
         if (!sMode) {
@@ -940,9 +960,9 @@ var mcPlayer = function () {
      * @param {string}  sBaseId    sBaseId of the div and the button; one of download|playlist|about
      * @returns {Boolean}
      */
-    this.isVisibleBox = function (sBaseId) {
-        // var oDiv=this._togglehelperGetDiv(sBaseId);
-        var sId = sBaseId === 'player' ? 'mcpmaximize' : 'mcpopt' + sBaseId
+    isVisibleBox(sBaseId) {
+        // var oDiv=this.#togglehelperGetDiv(sBaseId);
+        var sId = sBaseId === 'player' ? 'mcpmaximize' : 'mcpopt' + sBaseId;
         var oBtn = document.getElementById(sId);
         return oBtn ? !!oBtn.className : false;
     };
@@ -951,7 +971,7 @@ var mcPlayer = function () {
      * return if about dialog box is visible
      * @returns {Boolean}
      */
-    this.isVisibleBoxAbout = function () {
+    isVisibleBoxAbout() {
         return this.isVisibleBox('about');
     };
 
@@ -959,7 +979,7 @@ var mcPlayer = function () {
      * return if download dialog box is visible
      * @returns {Boolean}
      */
-    this.isVisibleBoxDownload = function () {
+    isVisibleBoxDownload() {
         return this.isVisibleBox('download');
     };
 
@@ -967,7 +987,7 @@ var mcPlayer = function () {
      * return if playlist dialog box is visible
      * @returns {Boolean}
      */
-    this.isVisibleBoxPlaylist = function () {
+    isVisibleBoxPlaylist() {
         return this.isVisibleBox('playlist');
     };
 
@@ -976,7 +996,7 @@ var mcPlayer = function () {
      * @since v0.30
      * @returns {Boolean}
      */
-    this.isVisiblePlayer = function () {
+    isVisiblePlayer() {
         return this.isVisibleBox('player');
     };
 
@@ -985,7 +1005,7 @@ var mcPlayer = function () {
      * @since v0.33
      * @returns {Boolean}
      */
-    this.isVisibleStatusbar = function () {
+    isVisibleStatusbar() {
         return this.cfg.settings.showstatusbar;
     };
 
@@ -994,7 +1014,7 @@ var mcPlayer = function () {
      * toggle playing option repeat playlist
      * @returns {undefined}
      */
-    this.toggleRepeat = function () {
+    toggleRepeat() {
         if (this.isRepeatlist()) {
             return this.disableRepeat();
         } else {
@@ -1006,7 +1026,7 @@ var mcPlayer = function () {
      * enable playing option repeat playlist
      * @returns {undefined}
      */
-    this.enableRepeat = function () {
+    enableRepeat() {
         this.cfg.settings.repeatlist = true;
         this.toggleBoxAndButton('repeat', 'maximize');
     };
@@ -1015,7 +1035,7 @@ var mcPlayer = function () {
      * disable playing option repeat playlist
      * @returns {undefined}
      */
-    this.disableRepeat = function () {
+    disableRepeat() {
         this.cfg.settings.repeatlist = false;
         this.toggleBoxAndButton('repeat', 'minimize');
     };
@@ -1025,7 +1045,7 @@ var mcPlayer = function () {
      * toggle playing option shuffle playlist
      * @returns {undefined}
      */
-    this.toggleShuffle = function () {
+    toggleShuffle() {
         if (this.isShuffled()) {
             return this.disableShuffle();
         } else {
@@ -1037,9 +1057,9 @@ var mcPlayer = function () {
      * enable playing option shuffle playlist
      * @returns {undefined}
      */
-    this.enableShuffle = function () {
+    enableShuffle() {
         this.cfg.settings.shuffle = true;
-        this._generatePlayorder();
+        this.#generatePlayorder();
         this.toggleBoxAndButton('shuffle', 'maximize');
     };
 
@@ -1047,14 +1067,13 @@ var mcPlayer = function () {
      * disable playing option shuffle playlist
      * @returns {undefined}
      */
-    this.disableShuffle = function () {
+    disableShuffle() {
         this.cfg.settings.shuffle = false;
-        this._generatePlayorder();
+        this.#generatePlayorder();
         this.toggleBoxAndButton('shuffle', 'minimize');
     };
 
     // ----------------------------------------------------------------------
-
     /**
      * set visibility of status bar
      * @private
@@ -1062,11 +1081,11 @@ var mcPlayer = function () {
      * @param {boolean} bVisibility  flag; true or false
      * @returns {booleab}
      */
-    this._setStatusbar = function (bVisibility) {
+    #setStatusbar(bVisibility) {
         this.cfg.settings.showstatusbar = !!bVisibility;
         this.toggleBoxAndButton('statusbar', (bVisibility ? 'maximize' : 'minimize'));
         document.getElementById('mcpstatusbar').className = (bVisibility ? 'active' : '');
-        this._playerheightAdjust();
+        this.#playerheightAdjust();
         return true;
     };
 
@@ -1075,8 +1094,8 @@ var mcPlayer = function () {
      * @since v0.33
      * @returns {boolean}
      */
-    this.enableStatusbar = function () {
-        return this._setStatusbar(true);
+    enableStatusbar() {
+        return this.#setStatusbar(true);
     };
 
     /**
@@ -1084,8 +1103,8 @@ var mcPlayer = function () {
      * @since v0.33
      * @returns {boolean}
      */
-    this.disableStatusbar = function () {
-        return this._setStatusbar(false);
+    disableStatusbar() {
+        return this.#setStatusbar(false);
     };
 
     /**
@@ -1093,7 +1112,7 @@ var mcPlayer = function () {
      * @since v0.33
      * @returns {boolean}
      */
-    this.toggleStatusbar = function () {
+    toggleStatusbar() {
         if (this.isVisibleStatusbar()) {
             return this.disableStatusbar();
         } else {
@@ -1104,14 +1123,14 @@ var mcPlayer = function () {
     // ----------------------------------------------------------------------
     /**
      * minimize a box; argument is a base id of a button or div
-     * 
+     *
      * @example
      * &lt;button onclick="oMcPlayer.minimizeBox('download')">hide Downloads&lt;/button>
      * @param {string}   sBaseId  name of the div ("download" | "playlist" | "about")
      * @param {boolean}  bFast    flag to override speed in css transistion
      * @return {boolean}
      */
-    this.minimizeBox = function (sBaseId, bFast) {
+    minimizeBox(sBaseId, bFast) {
         return this.toggleBoxAndButton(sBaseId, 'minimize', bFast);
     };
 
@@ -1123,7 +1142,7 @@ var mcPlayer = function () {
      * @param {boolean}  bFast    flag to override speed in css transistion
      * @return {boolean}
      */
-    this.maximizeBox = function (sBaseId, bFast) {
+    maximizeBox(sBaseId, bFast) {
         return this.toggleBoxAndButton(sBaseId, 'maximize', bFast);
     };
 
@@ -1135,7 +1154,7 @@ var mcPlayer = function () {
      * @param {string} sAction name of the action ("play" | "pause" | "stop" | "forward" | "backward" | "jumpprev" | "jumpnext")
      * @return nothing
      */
-    this.playeraction = function (sAction) {
+    playeraction(sAction) {
         if (!this.oAudio) {
             if (sAction === "play") {
                 this.setSong(this.aPlayorderList[0]);
@@ -1187,15 +1206,15 @@ var mcPlayer = function () {
     };
 
     /**
-     * Set a position of the currently playing audio; 
+     * Set a position of the currently playing audio;
      * It returns the set position; if there is no audio it retuns false
-     * @example 
+     * @example
      * &lt;button onclick="oMcPlayer.setAudioPosition(180.33);">oMcPlayer.setAudioPosition(180.33)&lt;/button>
-     * 
+     *
      * @param {float}  iTime   new position in seconds
      * @return {boolean}
      */
-    this.setAudioPosition = function (iTime) {
+    setAudioPosition(iTime) {
         if (!this.sCurrentChannel || this.oAudio.duration < iTime) {
             return false;
         }
@@ -1205,12 +1224,12 @@ var mcPlayer = function () {
     /**
      * start playing the previous song in playlist (if the current audio is
      * not the first played element)
-     * 
-     * @example 
+     *
+     * @example
      * &lt;button onclick="oMcPlayer.setPreviousSong();">previous song&lt;/button>
      * @return {boolean}
      */
-    this.setPreviousSong = function () {
+    setPreviousSong() {
         if (!this.aPlayorderList || !this.aPlayorderList.length) {
             return false;
         }
@@ -1225,12 +1244,12 @@ var mcPlayer = function () {
      * play next song in playlist; if the audio is the last element in the
      * playlist the playlist will be shuffled (if shuffling is enabled).
      * It starts the first audio if the playing option "repeat" is enabled.
-     * 
-     * @example 
+     *
+     * @example
      * &lt;button onclick="oMcPlayer.setNextSong();">next song&lt;/button>
      * @return {boolean}
      */
-    this.setNextSong = function () {
+    setNextSong() {
         if (!this.aPL || !this.aPL.length) {
             return false;
         }
@@ -1238,7 +1257,7 @@ var mcPlayer = function () {
             return this.setSong(this.aPlayorderList[this.iPlaylistId + 1]);
         } else {
             // if this.cfg.settings.shuffle is active then shuffle again
-            this._generatePlayorder();
+            this.#generatePlayorder();
             // repeat the list
             if (this.isRepeatlist()) {
                 this.setSong(this.aPlayorderList[(this.isShuffled() ? 1 : 0)]);
@@ -1249,16 +1268,16 @@ var mcPlayer = function () {
     /**
      * set a (new) song to play based on the position in document.
      * @see getPlaylist() to get all audios
-     * 
+     *
      * @example
      * &lt;a href="#" onclick="oMcPlayer.setSong(0); return false;"&gt;first song&lt;/a&gt;
      * &lt;a href="#" onclick="oMcPlayer.setSong(1); return false;"&gt;second song&lt;/a&gt;
-     * 
+     *
      * @param  {int}  sSongId  number of song to play; the first audio tag in the
      *                         html document has id 0
      * @return {boolean}
      */
-    this.setSong = function (sSongId) {
+    setSong(sSongId) {
 
         if (!this.aPL[sSongId]) {
             return false;
@@ -1273,6 +1292,10 @@ var mcPlayer = function () {
         var sLastChannel = false;
         var bLastChannelExist = false;
         var iChannels = 0;
+
+        var source = false;
+        var sourcesrc = false;
+        var oLink = false;
 
         // stop a current audio
         // TODO: fade out a song (if it was set)
@@ -1335,16 +1358,16 @@ var mcPlayer = function () {
         }
         document.getElementById("mcpchannels").innerHTML = sChannels;
         this.iCurrentSong = sSongId;
-        this._findPlaylistId();
+        this.#findPlaylistId();
 
         // update playlist: highlight correct song
-        document.getElementById("mcpplaylist").innerHTML = this._genPlaylist();
-        document.getElementById("mcpdownloads").innerHTML = this._genDownloads();
+        document.getElementById("mcpplaylist").innerHTML = this.#genPlaylist();
+        document.getElementById("mcpdownloads").innerHTML = this.#genDownloads();
 
-        this._playerheightSet();
-        var sSonginfos = this._genSonginfos();
+        this.#playerheightSet();
+        var sSonginfos = this.#genSonginfos();
         document.getElementById("mcpplayersonginfo").innerHTML = sSonginfos;
-        this._playerheightAdjust();
+        this.#playerheightAdjust();
 
         // document.getElementById("mcptitle").innerHTML = sSonginfos ? '' : this.getSongTitle();
         document.getElementById("mcptitle").innerHTML = this.getSongTitle();
@@ -1369,7 +1392,7 @@ var mcPlayer = function () {
         this.setChannel(sFirstChannel);
         this.playeraction("play", true);
 
-        this._showInfo((sSongId + 1) + "/ " + this.aPL.length + "<br>&laquo;" + this.aPL[sSongId]["title"] + "&raquo;");
+        this.#showInfo((sSongId + 1) + "/ " + this.aPL.length + "<br>&laquo;" + this.aPL[sSongId]["title"] + "&raquo;");
 
         if (this.cfg.settings.autoopen) {
             this.maximize();
@@ -1385,7 +1408,7 @@ var mcPlayer = function () {
      * is no change - it means: the window size increases simply downwards
      * @returns {undefined}
      */
-    this._playerheightAdjust = function () {
+    #playerheightAdjust() {
         // remark: by default the position is fixed with css bottom attribute;
         // without drag and drop it resizes automatically
         if (typeof addi !== 'undefined' && this.cfg.settings.movable) {
@@ -1398,28 +1421,32 @@ var mcPlayer = function () {
                 var iHeightDelta = o.clientHeight - this._iHeightPlayerWindow;
                 o.style.top = (iMidOfWindow > 2 * iHeight / 3 ? (iTop - iHeightDelta) : (iTop - iHeightDelta / 2)) + 'px';
             }
-            this._playerheightSet();
+            this.#playerheightSet();
         }
-    }
+    };
 
     /**
      * store height oft player main window; called after initilaizing the player
-     * and in _playerheightAdjust for updates
+     * and in #playerheightAdjust for updates
      * @returns {undefined}
      */
-    this._playerheightSet = function () {
+    #playerheightSet() {
         this._iHeightPlayerWindow = document.getElementById("mcpwrapper").clientHeight;
-    }
+    };
 
     // ----------------------------------------------------------------------
     /**
      * set channels to switch between stereo/ surround
      * @see getAllAudioChannels() to get all valid channels for a song
-     * 
+     *
      * @param  {string}  sChannelId  number of audiochannels; typically one of "2.0" or "5.1"
      * @return {boolean}
      */
-    this.setChannel = function (sChannelId) {
+    setChannel(sChannelId) {
+
+        var oALI = false;
+        var oLI2 = false;
+
         // Link deaktivieren
         var oDiv = document.getElementById("mcpchannels");
         var oLI = oDiv.getElementsByTagName("LI");
@@ -1429,7 +1456,7 @@ var mcPlayer = function () {
                 if (oALI && oALI.length > 0) {
                     oALI[0].className = "";
                     if (oALI[0].innerHTML && oALI[0].innerHTML === sChannelId) {
-                        var oLI2 = oALI[0].parentNode;
+                        oLI2 = oALI[0].parentNode;
                         oALI[0].className = "active";
                     }
                 }
@@ -1439,7 +1466,7 @@ var mcPlayer = function () {
         if (oLI2) {
             oLI2.className = "active";
         }
-        var bIsPlaying=this.isPlaying();
+        var bIsPlaying = this.isPlaying();
 
         if (this.sCurrentChannel === sChannelId) {
             return false;
@@ -1453,21 +1480,22 @@ var mcPlayer = function () {
             this.iCurrentTime = this.oAudio.currentTime;
             this.getVolume();
 
-            this._fadeOut(this.sCurrentChannel);
+            this.#fadeOut(this.sCurrentChannel);
+            // this.oAudio.volume = 0;
             // oAudio.pause();
         }
 
         this.oAudio = false;
         if (sChannelId) {
             // document.getElementById("lnkaudio"+id).className="active";
-            oAudioTmp = document.getElementById("mcp" + sChannelId);
-            oAudioTmp.idurationchange = 0;
-            oAudioTmp.isStream = false;
-            oAudioTmp.lastDuration = false;
-            this.oAudio = oAudioTmp;
+            oAudioTmp4ChannelSwitch = document.getElementById("mcp" + sChannelId);
+            oAudioTmp4ChannelSwitch.idurationchange = 0;
+            oAudioTmp4ChannelSwitch.isStream = false;
+            oAudioTmp4ChannelSwitch.lastDuration = false;
+            this.oAudio = oAudioTmp4ChannelSwitch;
             if (this.oAudio) {
-                if(bIsPlaying){
-                    this._wait4Audio(this.oAudio, this.iCurrentTime);
+                if (bIsPlaying) {
+                    this.#wait4Audio(this.oAudio, this.iCurrentTime);
                 }
 
                 this.oAudio.volume = this.cfg.settings.volume;
@@ -1479,45 +1507,45 @@ var mcPlayer = function () {
                 // --------------------------------------------------
                 // draw / update time display
                 // --------------------------------------------------
-                oAudioTmp.addEventListener("durationchange", function () {
-                    if (oAudioTmp.duration === Infinity) {
-                        oAudioTmp.isStream = true;
+                this.oAudio.addEventListener("durationchange", function () {
+                    if (oAudioTmp4ChannelSwitch.duration === Infinity) {
+                        oAudioTmp4ChannelSwitch.isStream = true;
                     } else {
-                        if (oAudioTmp.lastDuration !== oAudioTmp.duration) {
-                            oAudioTmp.idurationchange++;
-                            oAudioTmp.lastDuration = oAudioTmp.duration;
-                            if (oAudioTmp.idurationchange > 3) {
-                                oAudioTmp.isStream = true;
+                        if (oAudioTmp4ChannelSwitch.lastDuration !== oAudioTmp4ChannelSwitch.duration) {
+                            oAudioTmp4ChannelSwitch.idurationchange++;
+                            oAudioTmp4ChannelSwitch.lastDuration = oAudioTmp4ChannelSwitch.duration;
+                            if (oAudioTmp4ChannelSwitch.idurationchange > 3) {
+                                oAudioTmp4ChannelSwitch.isStream = true;
                             }
                         }
                     }
                 });
-                oAudioTmp.addEventListener("timeupdate", function () {
+                oAudioTmp4ChannelSwitch.addEventListener("timeupdate", function () {
 
-                    document.getElementById('mcpprogressdiv').style.display = oAudioTmp.isStream ? 'none' : '';
-                    document.getElementById('mcptime').style.display = oAudioTmp.isStream ? 'none' : 'block';
+                    document.getElementById('mcpprogressdiv').style.display = oAudioTmp4ChannelSwitch.isStream ? 'none' : '';
+                    document.getElementById('mcptime').style.display = oAudioTmp4ChannelSwitch.isStream ? 'none' : 'block';
 
                     // player buttons
-                    document.getElementById('mcppause').style.display = oAudioTmp.isStream ? 'none' : 'block';
-                    document.getElementById('mcpbackward').style.display = oAudioTmp.isStream ? 'none' : 'block';
-                    document.getElementById('mcpforward').style.display = oAudioTmp.isStream ? 'none' : 'block';
+                    document.getElementById('mcppause').style.display = oAudioTmp4ChannelSwitch.isStream ? 'none' : 'block';
+                    document.getElementById('mcpbackward').style.display = oAudioTmp4ChannelSwitch.isStream ? 'none' : 'block';
+                    document.getElementById('mcpforward').style.display = oAudioTmp4ChannelSwitch.isStream ? 'none' : 'block';
 
-                    if (!oAudioTmp.currentTime) {
+                    if (!oAudioTmp4ChannelSwitch.currentTime) {
                         document.getElementById('mcptimeplayed').innerHTML = '-:--';
                         document.getElementById('mcptimetotal').innerHTML = '-:--';
                         return false;
                     }
-                    if (oAudioTmp.isStream) {
+                    if (oAudioTmp4ChannelSwitch.isStream) {
                         return false;
                     }
 
-                    var s = parseInt(oAudioTmp.currentTime % 60);
-                    var m = parseInt((oAudioTmp.currentTime / 60) % 60);
+                    var s = parseInt(oAudioTmp4ChannelSwitch.currentTime % 60);
+                    var m = parseInt((oAudioTmp4ChannelSwitch.currentTime / 60) % 60);
                     if (s < 10) {
                         s = "0" + s;
                     }
-                    var s2 = parseInt(oAudioTmp.duration % 60);
-                    var m2 = parseInt((oAudioTmp.duration / 60) % 60);
+                    var s2 = parseInt(oAudioTmp4ChannelSwitch.duration % 60);
+                    var m2 = parseInt((oAudioTmp4ChannelSwitch.duration / 60) % 60);
                     if (s2 < 10) {
                         s2 = "0" + s2;
                     }
@@ -1526,17 +1554,17 @@ var mcPlayer = function () {
 
                     // since v1.1: div instead canvas
                     var oProgressbar = document.getElementById('mcpprogressbar');
-                    if(oProgressbar){
-                        oProgressbar.style.width=oAudioTmp.currentTime / oAudioTmp.duration*100 + '%';
+                    if (oProgressbar) {
+                        oProgressbar.style.width = oAudioTmp4ChannelSwitch.currentTime / oAudioTmp4ChannelSwitch.duration * 100 + '%';
                     }
                     /*
                     var canvas = document.getElementById('mcpprogresscanvas');
                     if (canvas.getContext) {
                         var ctx = canvas.getContext("2d");
                         ctx.clearRect(0, 0, canvas.width, canvas.height);
-                        var iAlpha = 0.05 + oAudioTmp.currentTime / oAudioTmp.duration / 10 * 1;
+                        var iAlpha = 0.05 + oAudioTmp4ChannelSwitch.currentTime / oAudioTmp4ChannelSwitch.duration / 10 * 1;
                         ctx.fillStyle = "rgba(0,0,0, " + iAlpha + ")";
-                        var fWidth = Math.round((oAudioTmp.currentTime / oAudioTmp.duration) * (canvas.width));
+                        var fWidth = Math.round((oAudioTmp4ChannelSwitch.currentTime / oAudioTmp4ChannelSwitch.duration) * (canvas.width));
                         if (fWidth > 0) {
                             ctx.fillRect(0, 0, fWidth, canvas.height);
 
@@ -1549,7 +1577,6 @@ var mcPlayer = function () {
                         }
                     }
                     */
-
                 }, false);
 
                 // --------------------------------------------------
@@ -1557,26 +1584,26 @@ var mcPlayer = function () {
                 // --------------------------------------------------
                 document.getElementById('mcpprogressdiv').addEventListener("click", function (event) {
                     if (event.x !== undefined && event.y !== undefined) {
-                        x = event.x;
+                        var x = event.x;
                     } else {
-                        x = event.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+                        var x = event.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
                     }
                     var oSelf = document.getElementById('mcpprogressdiv');
                     var oWrapper = document.getElementById('mcpwrapper');
                     x -= oSelf.offsetLeft + oWrapper.offsetLeft;
-                    if (oAudioTmp && oAudioTmp.currentTime) {
-                        oAudioTmp.currentTime = oAudioTmp.duration * (x / oSelf.clientWidth);
+                    if (oAudioTmp4ChannelSwitch && oAudioTmp4ChannelSwitch.currentTime) {
+                        oAudioTmp4ChannelSwitch.currentTime = oAudioTmp4ChannelSwitch.duration * (x / oSelf.clientWidth);
                     }
                 }, true);
 
                 // --------------------------------------------------
                 // draw / update volumebar
                 // --------------------------------------------------
-                oAudioTmp.addEventListener("volumechange", function () {
+                oAudioTmp4ChannelSwitch.addEventListener("volumechange", function () {
                     // since v1.1: div instead canvas
                     var oProgressbar = document.getElementById('mcpvolumebar');
-                    if(oProgressbar){
-                        oProgressbar.style.width=oAudioTmp.volume * 100 + '%';
+                    if (oProgressbar) {
+                        oProgressbar.style.width = oAudioTmp4ChannelSwitch.volume * 100 + '%';
                     }
                     /*
                     var canvasV = document.getElementById('mcpvolumecanvas');
@@ -1584,9 +1611,9 @@ var mcPlayer = function () {
                     if (canvasV.getContext) {
                         var ctxV = canvasV.getContext("2d");
                         ctxV.clearRect(0, 0, canvasV.width, canvasV.height);
-                        var iAlpha = 0.05 + oAudioTmp.volume / 10 * 1;
+                        var iAlpha = 0.05 + oAudioTmp4ChannelSwitch.volume / 10 * 1;
                         ctxV.fillStyle = "rgba(0,0,0, " + iAlpha + ")";
-                        var fWidthV = Math.round(oAudioTmp.volume * canvasV.width);
+                        var fWidthV = Math.round(oAudioTmp4ChannelSwitch.volume * canvasV.width);
                         if (fWidthV > 0) {
                             ctxV.fillRect(0, 0, fWidthV, canvasV.height);
 
@@ -1599,13 +1626,11 @@ var mcPlayer = function () {
                         }
                     }
                     */
-
-
                 }, false);
-                
+
                 // change volume 
-                this.oAudio.volume=this.cfg.settings.volume-0.01;
-                this.oAudio.volume=this.cfg.settings.volume;
+                this.oAudio.volume = this.cfg.settings.volume - 0.01;
+                this.oAudio.volume = this.cfg.settings.volume;
 
 
                 // --------------------------------------------------
@@ -1613,16 +1638,17 @@ var mcPlayer = function () {
                 // --------------------------------------------------
                 document.getElementById('mcpvolumediv').addEventListener("click", function (event) {
                     if (event.x !== undefined && event.y !== undefined) {
-                        x = event.x;
+                        var x = event.x;
                     } else {
-                        x = event.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+                        var x = event.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
                     }
+                    
                     var oSelf = document.getElementById('mcpvolumediv');
                     var oWrapper = document.getElementById('mcpwrapper');
                     x -= oSelf.offsetLeft + oWrapper.offsetLeft;
                     try {
                         localStorage.setItem("amcp.volume", x / oSelf.clientWidth);
-                        oAudioTmp.volume = (x / oSelf.clientWidth);
+                        oAudioTmp4ChannelSwitch.volume = (x / oSelf.clientWidth);
                     } catch (err) {
                         console.error("Error:" + err);
                     }
@@ -1643,17 +1669,16 @@ var mcPlayer = function () {
                     x -= canvas.offsetLeft + wrapper.offsetLeft;
                     try {
                         localStorage.setItem("amcp.volume", x / canvas.clientWidth);
-                        oAudioTmp.volume = (x / canvas.clientWidth);
+                        oAudioTmp4ChannelSwitch.volume = (x / canvas.clientWidth);
                     } catch (err) {
                         console.error("Error:" + err);
                     }
                 }, true);
                 */
-
                 // --------------------------------------------------
                 // set up audio event
                 // --------------------------------------------------
-                oAudioTmp.addEventListener('ended', function () {
+                oAudioTmp4ChannelSwitch.addEventListener('ended', function () {
                     document.getElementById('mcpjumpnext').click();
                     // mcPlayer.prototype.setNextSong();
                 }, false);
@@ -1669,12 +1694,12 @@ var mcPlayer = function () {
     // ----------------------------------------------------------------------
     /**
      * set config; override default vars
-     * 
+     *
      * @since v0.30
      * @param {array} aCfg  array with config items
      * @return {boolean}
      */
-    this.setConfig = function (aCfg) {
+    setConfig(aCfg) {
         this.cfg = realMerge(this.cfg, aCfg);
     };
 
@@ -1683,11 +1708,11 @@ var mcPlayer = function () {
      * set volume; it works only if a song is playing
      * @example
      * &lt;button onclick="oMcPlayer.setVolume(0.75)">75%&lt;/button>
-     * 
+     *
      * @param {float} iNewVol volume (0..1)
      * @return {boolean}
      */
-    this.setVolume = function (iNewVol) {
+    setVolume(iNewVol) {
         this.cfg.settings.volume = iNewVol;
         localStorage.setItem("amcp.volume", this.cfg.settings.volume);
         if (this.oAudio) {
@@ -1704,7 +1729,7 @@ var mcPlayer = function () {
      * @param  {audio_object} oAudio       audioobject
      * @param  {integer}      iStartTime   timestamp where to start the audio
      */
-    this._wait4Audio = function (oAudio, iStartTime) {
+    #wait4Audio(oAudio, iStartTime) {
 
         oAudio.volume = 0.001;
         oAudio.play();
@@ -1717,25 +1742,24 @@ var mcPlayer = function () {
 
     /**
      * fade an audio in or out to a given final volume
-     * @private
      * @param  {float}    finalVolume     final volume (0 = muted or 1 = max)
      * @param  {string}   sChannelId      number of audio ... one of "2.0" | "5.1"
      * @return {boolean}
      */
-    this._fade = function (finalVolume, sChannelId) {
+    fade(finalVolume, sChannelId) {
 
         this.bIsFading = true;
-        o = document.getElementById("mcp" + sChannelId);
+        var o = document.getElementById("mcp" + sChannelId);
         if (!o) {
             return false;
         }
-        iVol = o.volume;
-        iInc = (finalVolume < iVol ? -this.iVolInc : this.iVolInc);
+        var iVol = o.volume;
+        var iInc = (finalVolume < iVol ? -this.iVolInc : this.iVolInc);
 
         iVol += iInc;
         if ((finalVolume === 0 && iVol > 0) || (finalVolume > 0 && iVol < finalVolume)) {
             o.volume = iVol;
-            window.setTimeout(this.name + "._fade(" + finalVolume + ", \'" + sChannelId + "\')", this.iTimer);
+            window.setTimeout(this.name + ".fade(" + finalVolume + ", \'" + sChannelId + "\')", this.iTimer);
         } else {
             this.bIsFading = false;
             o.volume = finalVolume;
@@ -1752,37 +1776,35 @@ var mcPlayer = function () {
      * @param  {string}   sChannelId      number of audio ... one of "2.0" | "5.1"
      * @return {boolean}
      */
-    this._fadeOut = function (sChannelId) {
-        this._fade(0, sChannelId);
+    #fadeOut(sChannelId) {
+        this.fade(0, sChannelId);
     };
 
 
 
-// --------------------------------------------------------------------------------
-// GETTER
-// --------------------------------------------------------------------------------
-
-
+    // --------------------------------------------------------------------------------
+    // GETTER
+    // --------------------------------------------------------------------------------
     // ----------------------------------------------------------------------
     /**
      * get current count of channels of the current song
      * you typically get "2.0" for stereo or "5.1" for surround
-     * 
+     *
      * @see getAllAudioChannels() to get the available channels of a song
-     * 
+     *
      * @return {integer}
      */
-    this.getAudioChannels = function () {
+    getAudioChannels() {
         return this.sCurrentChannel;
     };
 
     /**
      * get an array of valid channels of the current song; if no song is active
      * it returns false.
-     * 
+     *
      * @return {float}
      */
-    this.getAllAudioChannels = function () {
+    getAllAudioChannels() {
         var oSong = this.getSong();
         if (!oSong) {
             return false;
@@ -1798,7 +1820,7 @@ var mcPlayer = function () {
      * get duration in [sec] of the current song
      * @return {float}
      */
-    this.getAudioDuration = function () {
+    getAudioDuration() {
         if (!this.sCurrentChannel) {
             return false;
         }
@@ -1810,7 +1832,7 @@ var mcPlayer = function () {
      * https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/networkState
      * @returns {Integer|false}
      */
-    this.getAudioNetworkstate = function () {
+    getAudioNetworkstate() {
         var oAudioTmp = this.oAudio ? this.oAudio : document.getElementById("mcp" + this.getAudioChannels());
         return oAudioTmp ? oAudioTmp.networkState : false;
     };
@@ -1819,7 +1841,7 @@ var mcPlayer = function () {
      * get position in [sec] of the current song
      * @return {float}
      */
-    this.getAudioPosition = function () {
+    getAudioPosition() {
         if (!this.sCurrentChannel) {
             return false;
         }
@@ -1831,7 +1853,7 @@ var mcPlayer = function () {
      * https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/readyState
      * @returns {Integer|false}
      */
-    this.getAudioReadystate = function () {
+    getAudioReadystate() {
         var oAudioTmp = this.oAudio ? this.oAudio : document.getElementById("mcp" + this.getAudioChannels());
         return oAudioTmp ? oAudioTmp.readyState : false;
     };
@@ -1840,7 +1862,7 @@ var mcPlayer = function () {
      * get used source url of the current song
      * @return {float}
      */
-    this.getAudioSrc = function () {
+    getAudioSrc() {
         if (!this.sCurrentChannel) {
             return false;
         }
@@ -1851,7 +1873,7 @@ var mcPlayer = function () {
      * get current volume (a value between 0..1)
      * @return {float}
      */
-    this.getVolume = function () {
+    getVolume() {
         if (this.oAudio) {
             this.cfg.settings.volume = this.oAudio.volume;
             return this.cfg.settings.volume;
@@ -1863,7 +1885,7 @@ var mcPlayer = function () {
      * get playlist with all songtitles and its sources
      * @return {array}
      */
-    this.getPlaylist = function () {
+    getPlaylist() {
         return (!this.aPL || !this.aPL.length) ? false : this.aPL;
     };
 
@@ -1871,7 +1893,7 @@ var mcPlayer = function () {
      * get playlist with all songtitles and its sources
      * @return {array}
      */
-    this.getPlaylistCount = function () {
+    getPlaylistCount() {
         return (this.aPL ? this.aPL.length : false);
     };
 
@@ -1879,7 +1901,7 @@ var mcPlayer = function () {
      * get playlist with all songtitles and its sources
      * @return {array}
      */
-    this.getPlayorder = function () {
+    getPlayorder() {
         return this.aPlayorderList;
     };
 
@@ -1888,7 +1910,7 @@ var mcPlayer = function () {
      * all its audio sources and mime types
      * @return {array}
      */
-    this.getSong = function () {
+    getSong() {
         if (!this.aPL || !this.aPL.length) {
             return false;
         }
@@ -1900,7 +1922,7 @@ var mcPlayer = function () {
      * value -1 means player did not start to play yet.
      * @returns {Number}
      */
-    this.getSongId = function () {
+    getSongId() {
         return this.iCurrentSong;
     };
 
@@ -1910,7 +1932,7 @@ var mcPlayer = function () {
      * @param  {string}   sKey   key of song item; one of title|artist|album|year|image
      * @returns {string}
      */
-    this._getSongItem = function (sKey) {
+    _getSongItem(sKey) {
         var oSong = this.getSong();
         return oSong ? oSong[sKey] : false;
     };
@@ -1919,7 +1941,7 @@ var mcPlayer = function () {
      * get title of the currently active song
      * @returns {string}
      */
-    this.getSongTitle = function () {
+    getSongTitle() {
         return this._getSongItem('title');
     };
 
@@ -1927,7 +1949,7 @@ var mcPlayer = function () {
      * get artist of the currently active song
      * @returns {string}
      */
-    this.getSongArtist = function () {
+    getSongArtist() {
         return this._getSongItem('artist');
     };
 
@@ -1935,7 +1957,7 @@ var mcPlayer = function () {
      * get album of the currently active song
      * @returns {string}
      */
-    this.getSongAlbum = function () {
+    getSongAlbum() {
         return this._getSongItem('album');
     };
 
@@ -1943,7 +1965,7 @@ var mcPlayer = function () {
      * get publishing year of the currently active song
      * @returns {string}
      */
-    this.getSongYear = function () {
+    getSongYear() {
         return this._getSongItem('year');
     };
 
@@ -1951,7 +1973,7 @@ var mcPlayer = function () {
      * get publishing year of the currently active song
      * @returns {string}
      */
-    this.getSongImage = function () {
+    getSongImage() {
         return this._getSongItem('image');
     };
 
@@ -1959,7 +1981,7 @@ var mcPlayer = function () {
      * get publishing year of the currently active song
      * @returns {string}
      */
-    this.getSongGenre = function () {
+    getSongGenre() {
         return this._getSongItem('genre');
     };
 
@@ -1967,7 +1989,7 @@ var mcPlayer = function () {
      * get publishing year of the currently active song
      * @returns {string}
      */
-    this.getSongBpm = function () {
+    getSongBpm() {
         return this._getSongItem('bpm');
     };
 
@@ -1975,17 +1997,17 @@ var mcPlayer = function () {
      * get url for the song i.e. where to buy it
      * @returns {string}
      */
-    this.getSongUrl = function () {
+    getSongUrl() {
         return this._getSongItem('url');
     };
 
     /**
      * get id of the currently active song in the playlist (if shuffled)
      * @see getSongId() to get the song based on position in document
-     * 
+     *
      * @returns {Number}
      */
-    this.getPlaylistId = function () {
+    getPlaylistId() {
         return this.iPlaylistId;
     };
 
@@ -1993,7 +2015,7 @@ var mcPlayer = function () {
      * get boolean value - volume is muted?
      * @returns {Boolean}
      */
-    this.isMuted = function () {
+    isMuted() {
         return (this.oAudio && (this.oAudio.muted || !this.oAudio.volume));
     };
 
@@ -2001,7 +2023,7 @@ var mcPlayer = function () {
      * get boolean value - playing audio is paused?
      * @returns {Boolean}
      */
-    this.isPaused = function () {
+    isPaused() {
         return (this.oAudio && this.oAudio.paused && this.oAudio.currentTime !== 0);
     };
     /**
@@ -2009,32 +2031,32 @@ var mcPlayer = function () {
      * playing and false if paused or stopped.
      * @returns {Boolean}
      */
-    this.isPlaying = function () {
+    isPlaying() {
         return (this.oAudio && !this.oAudio.paused);
     };
     /**
      * get boolean value - is shuffling mode on?
      * @returns {Boolean}
      */
-    this.isRepeatlist = function () {
+    isRepeatlist() {
         return (this.cfg.settings.repeatlist
-                ? !!this.cfg.settings.repeatlist
-                : false);
+            ? !!this.cfg.settings.repeatlist
+            : false);
     };
     /**
      * get boolean value - is shuffling mode on?
      * @returns {Boolean}
      */
-    this.isShuffled = function () {
+    isShuffled() {
         return (this.cfg.settings.shuffle
-                ? this.cfg.settings.shuffle
-                : false);
+            ? this.cfg.settings.shuffle
+            : false);
     };
     /**
      * get boolean value - playing audio is stopped
      * @returns {Boolean}
      */
-    this.isStopped = function () {
+    isStopped() {
         return (!this.oAudio || this.oAudio.currentTime === 0);
     };
     /**
@@ -2044,17 +2066,16 @@ var mcPlayer = function () {
      * @since 0.33
      * @returns {Boolean}
      */
-    this.isStream = function () {
+    isStream() {
         return (this.oAudio && this.oAudio.isStream);
     };
 
     // ----------------------------------------------------------------------
-
     /**
      * update window positions if the browser is resized.
      * @returns {undefined}
      */
-    this.updateOnResize = function () {
+    updateOnResize() {
         var sCurrent = document.documentElement.clientWidth + ' x ' + document.documentElement.clientHeight;
         if (this.sScreensize && sCurrent == this.sScreensize) {
             // no resize detected
@@ -2066,7 +2087,7 @@ var mcPlayer = function () {
         var aWindowsNames = ['player', 'about', 'download', 'playlist'];
         for (var i = 0; i < aWindowsNames.length; i++) {
             var sBaseId = aWindowsNames[i];
-            var oDiv = this._togglehelperGetDiv(sBaseId);
+            var oDiv = this.#togglehelperGetDiv(sBaseId);
             var iTop = oDiv.style.top.replace('px', '') / 1;
             var iLeft = oDiv.style.left.replace('px', '') / 1;
 
@@ -2076,8 +2097,8 @@ var mcPlayer = function () {
                     // player-window: put on buttom side
                     // others: remove top to use css default
                     oDiv.style.top = sBaseId === 'player'
-                            ? (document.documentElement.clientHeight - oDiv.clientHeight - 50) + 'px'
-                            : '';
+                        ? (document.documentElement.clientHeight - oDiv.clientHeight - 50) + 'px'
+                        : '';
                     // TODO: remove position in localstore 
                 }
                 if (iLeft > (document.documentElement.clientWidth - oDiv.clientWidth)) {
@@ -2102,7 +2123,7 @@ var mcPlayer = function () {
      * @since 0.33
      * @returns {Boolean}
      */
-    this.updateStatus = function () {
+    updateStatus() {
         var iNet = this.getAudioNetworkstate();
         if (iNet) {
             var iStatus = this.getAudioReadystate();
@@ -2122,15 +2143,15 @@ var mcPlayer = function () {
      * it detects the name of the ocject variable that initialized the player
      * i.e. on var oMcPlayer=new mcPlayer();
      * it returns "oMcPlayer"
-     * 
+     *
      * @private
      * @returns {string}
      */
-    this._getName = function () {
+    #getName() {
         // search through the global object for a name that resolves to this object
-        for (var name in this.global){
+        for (var name in this.global) {
             if (this.global[name] === this) {
-                return this._setName(name);
+                return this.#setName(name);
             }
         }
     };
@@ -2142,7 +2163,7 @@ var mcPlayer = function () {
      * @param {string} sName  name of the player object
      * @returns {string}
      */
-    this._setName = function (sName) {
+    #setName(sName) {
         this.name = sName;
         return this.name;
     };
@@ -2150,18 +2171,16 @@ var mcPlayer = function () {
     // ----------------------------------------------------------------------
     // init
     // ----------------------------------------------------------------------
-
-    // ----------------------------------------------------------------------
     /**
      * initialize player
      * @param {string} sContainerId  id of a div where to put the player. if false player will be added to body
      * @return {boolean}
      */
-    this.init = function (sContainerId) {
+     init(sContainerId) {
         this._sContainerId=sContainerId;
-        this._getName();            // detect name of the object variable that initialized the player
-        this._generatePlaylist();   // scan audios on webpage
-        this._initHtml();           // generate html for the player        
+        this.#getName();            // detect name of the object variable that initialized the player
+        this.#generatePlaylist();   // scan audios on webpage
+        this.#initHtml();           // generate html for the player        
         if (typeof addi !== 'undefined') {
             addi.init();
         }
@@ -2172,28 +2191,9 @@ var mcPlayer = function () {
         return true;
     };
 
+}
 
-
-    // ----------------------------------------------------------------------
-    // MAIN
-    // ----------------------------------------------------------------------
-
-    if (arguments[0]) {
-        this.setConfig(arguments[0]);
-    }
-
-    this.canPlaySurround();
-    try {
-        this.sCurrentChannel = localStorage.getItem("amcp.channels") ? localStorage.getItem("amcp.channels") : false;
-        this.cfg.settings.volume = localStorage.getItem("amcp.volume")/1 ? localStorage.getItem("amcp.volume")/1 : 1;
-    } catch (e) {
-        // nop
-    }
-
-    return true;
-
-};
-
+var oAudioTmp4ChannelSwitch = false;
 mcPlayer.prototype.global = this; // required for getName()
 
 // --------------------------------------------------------------------------------
