@@ -41,6 +41,7 @@
  * @this mcPlayer
  * 
  * @example
+ * <pre>
  * // --- #1
  * oMcPlayer=new mcPlayer();
  * oMcPlayer.init();         // draw player gui
@@ -55,6 +56,7 @@
  * });
  * oMcPlayer.init();     // draw player gui
  * oMcPlayer.minimize(); // ... and hide the gui
+ * </pre>
  * 
  * @constructor
  * @return nothing
@@ -263,8 +265,12 @@ class mcPlayer {
     playlink = '[title]';
 
     /**
-     * initialize player
-     * @param {string} sContainerId  id of a div where to put the player. if false player will be added to body
+     * constructor of the player
+     * 
+     * @see setConfig
+     * @see init
+     * 
+     * @param {object}  configuation data to override defaults using 
      * @return {boolean}
      */
     constructor(oConfig) {
@@ -311,8 +317,9 @@ class mcPlayer {
     /**
      * scan AUDIO tags and its sources in a document to create an
      * object with all current songs
+     * 
      * @private
-     * @return {Array}
+     * @return {array}
      */
     #scanAudios() {
         var oAudioList = document.getElementsByTagName("AUDIO");
@@ -376,9 +383,13 @@ class mcPlayer {
 
 
     /**
-     * add a song to the playlist
+     * Add a song to the playlist.
+     * This method is called on init too if all audios are scanned.
+     * 
+     * @param {array} aSong  data for a single song object
      * @example
-     *      {
+     * <pre>
+     * oMcplayer=addAudio({
      *       "title": "Ticker",
      *       "sources": {
      *         "2.0": [
@@ -402,8 +413,8 @@ class mcPlayer {
      *           }
      *         ]
      *       }
-     *     }
-     * @param {array} aSong
+     *     });
+     * </pre>
      * @returns {Boolean}
      */
     addAudio(aSong) {
@@ -420,8 +431,9 @@ class mcPlayer {
 
     /**
      * get default html code of player controls
+     * 
      * @private
-     * @return {html_code}
+     * @return {string}  html code
      */
     #genPlayer() {
         var s = '';
@@ -513,6 +525,7 @@ class mcPlayer {
 
     /**
      * generate html code for about box
+     * 
      * @private
      * @return {html_code}
      */
@@ -533,6 +546,7 @@ class mcPlayer {
 
     /**
      * generate html code for the playlist
+     * 
      * @private
      * @return {html_code}
      */
@@ -562,6 +576,7 @@ class mcPlayer {
 
     /**
      * generate html code details of then current song
+     * 
      * @private
      * @return {html_code}
      */
@@ -714,6 +729,12 @@ class mcPlayer {
         return this.iPlaylistId;
     };
 
+    /**
+     * add html code in the player div
+     * 
+     * @private
+     * @param {string} sHtml  html code to add
+     */
     #addHtml(sHtml) {
         var oContainer = document.getElementById(this._sContainerId) ? document.getElementById(this._sContainerId) : document.getElementsByTagName("BODY")[0];
         if (oContainer) {
@@ -724,6 +745,7 @@ class mcPlayer {
     // ----------------------------------------------------------------------
     /**
      * init html code of the player - by creating all missing elements
+     * 
      * @private
      * @return nothing
      */
@@ -783,7 +805,9 @@ class mcPlayer {
     /**
      * minimize player GUI and show a maximize icon
      * @example
+     * <pre>
      * &lt;a href="#" onclick="oMcPlayer.minimize(); return false;"&gt;hide player&lt;/a&gt;
+     * </pre>
      * @param {boolean}  bFast     flag to override speed in css transistion
      * @return nothing
      */
@@ -832,7 +856,9 @@ class mcPlayer {
     /**
      * show/ maximize the player GUI
      * @example
+     * <pre>
      * &lt;a href="#" onclick="oMcPlayer.maximize(); return false;"&gt;show the player&lt;/a&gt;
+     * </pre>
      *
      * @return nothing
      */
@@ -1125,7 +1151,9 @@ class mcPlayer {
      * minimize a box; argument is a base id of a button or div
      *
      * @example
+     * <pre>
      * &lt;button onclick="oMcPlayer.minimizeBox('download')">hide Downloads&lt;/button>
+     * </pre>
      * @param {string}   sBaseId  name of the div ("download" | "playlist" | "about")
      * @param {boolean}  bFast    flag to override speed in css transistion
      * @return {boolean}
@@ -1137,7 +1165,9 @@ class mcPlayer {
     /**
      * maximize a box; argument is a base id of a button or div
      * @example
+     * <pre>
      * &lt;button onclick="oMcPlayer.maximizeBox('download')">show Downloads&lt;/button>
+     * </pre>
      * @param {string}   sBaseId  name of the div ("download" | "playlist" | "about")
      * @param {boolean}  bFast    flag to override speed in css transistion
      * @return {boolean}
@@ -1209,7 +1239,9 @@ class mcPlayer {
      * Set a position of the currently playing audio;
      * It returns the set position; if there is no audio it retuns false
      * @example
+     * <pre>
      * &lt;button onclick="oMcPlayer.setAudioPosition(180.33);">oMcPlayer.setAudioPosition(180.33)&lt;/button>
+     * </pre>
      *
      * @param {float}  iTime   new position in seconds
      * @return {boolean}
@@ -1226,7 +1258,9 @@ class mcPlayer {
      * not the first played element)
      *
      * @example
+     * <pre>
      * &lt;button onclick="oMcPlayer.setPreviousSong();">previous song&lt;/button>
+     * </pre>
      * @return {boolean}
      */
     setPreviousSong() {
@@ -1246,7 +1280,9 @@ class mcPlayer {
      * It starts the first audio if the playing option "repeat" is enabled.
      *
      * @example
+     * <pre>
      * &lt;button onclick="oMcPlayer.setNextSong();">next song&lt;/button>
+     * </pre>
      * @return {boolean}
      */
     setNextSong() {
@@ -1270,8 +1306,10 @@ class mcPlayer {
      * @see getPlaylist() to get all audios
      *
      * @example
+     * <pre>
      * &lt;a href="#" onclick="oMcPlayer.setSong(0); return false;"&gt;first song&lt;/a&gt;
      * &lt;a href="#" onclick="oMcPlayer.setSong(1); return false;"&gt;second song&lt;/a&gt;
+     * </pre>
      *
      * @param  {int}  sSongId  number of song to play; the first audio tag in the
      *                         html document has id 0
@@ -1380,7 +1418,7 @@ class mcPlayer {
                 oLink.className = 'songbtn icon-play';
             }
         }
-        o = document.getElementById('mcpaudioPlay' + sSongId).className += ' songbtnactive';
+        var o = document.getElementById('mcpaudioPlay' + sSongId).className += ' songbtnactive';
 
         // play
         this.iCurrentTime = false;
@@ -1406,6 +1444,8 @@ class mcPlayer {
      * in the lower third top property will be decreased by the delta; in the
      * middle third it will be decreased by the half delta. In the upper delta there
      * is no change - it means: the window size increases simply downwards
+     * 
+     * @private
      * @returns {undefined}
      */
     #playerheightAdjust() {
@@ -1428,6 +1468,8 @@ class mcPlayer {
     /**
      * store height oft player main window; called after initilaizing the player
      * and in #playerheightAdjust for updates
+     * 
+     * @private
      * @returns {undefined}
      */
     #playerheightSet() {
@@ -1707,7 +1749,9 @@ class mcPlayer {
     /**
      * set volume; it works only if a song is playing
      * @example
+     * <pre>
      * &lt;button onclick="oMcPlayer.setVolume(0.75)">75%&lt;/button>
+     * </pre>
      *
      * @param {float} iNewVol volume (0..1)
      * @return {boolean}
@@ -1792,7 +1836,7 @@ class mcPlayer {
      *
      * @see getAllAudioChannels() to get the available channels of a song
      *
-     * @return {integer}
+     * @return {string}
      */
     getAudioChannels() {
         return this.sCurrentChannel;
@@ -1802,7 +1846,7 @@ class mcPlayer {
      * get an array of valid channels of the current song; if no song is active
      * it returns false.
      *
-     * @return {float}
+     * @return {array}
      */
     getAllAudioChannels() {
         var oSong = this.getSong();
