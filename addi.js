@@ -11,16 +11,14 @@
  * @this addi
  * 
  * @example
- * <code>
+ * <pre>
  * // make all divs with class "draggable" be movable on screen<br>
  * addi.init();
- * </code>
+ * </pre>
  * 
  * @constructor
  * @return nothing
  */
-
-
 var addi = function(){
 
     return {
@@ -54,7 +52,7 @@ var addi = function(){
          * @param {string} sClass  optional: class of draggable elements; default: "draggable"
          * @returns {undefined}
          */
-        init: function(sClass){
+        init(sClass){
             if(sClass){
                 this._dragClass=sClass;
             }
@@ -80,7 +78,7 @@ var addi = function(){
          * @param {type} ypos
          * @returns {object}
          */
-        _fixVisiblePosition : function(oDiv2Drag,xpos,ypos){
+        _fixVisiblePosition(oDiv2Drag,xpos,ypos){
             
             this._updateFence(oDiv2Drag.style.paddingLeft);
             var aStyles = window.getComputedStyle(oDiv2Drag);
@@ -121,7 +119,7 @@ var addi = function(){
          * @param {string} s   id of movable element
          * @returns {String}
          */
-        _getVarname : function(s){
+        _getVarname(s){
             return 'addi.saveddiv-'+s;
         },
         /**
@@ -131,7 +129,7 @@ var addi = function(){
          * @param {object} oDiv2Drag  movable object
          * @returns {undefined}
          */
-         _save : function(oDiv2Drag){
+         _save(oDiv2Drag){
             aData={
                 left: oDiv2Drag.style.left.replace('px',''),
                 top:  oDiv2Drag.style.top.replace('px','')
@@ -148,7 +146,7 @@ var addi = function(){
          * @param {object} oDiv2Drag  movable object
          * @returns {Boolean}
          */
-        _styleSave : function(oDiv2Drag){
+        _styleSave(oDiv2Drag){
             var aStyles = window.getComputedStyle(oDiv2Drag);
             // create subitem for div id
             if(this._saveData[oDiv2Drag.id] === undefined){
@@ -169,7 +167,7 @@ var addi = function(){
          * @param {object} oDiv2Drag  movable object
          * @returns {Boolean}
          */
-        _styleRestore : function(oDiv2Drag){
+        _styleRestore(oDiv2Drag){
             for (var sAttr in this._savstyles){
                 oDiv2Drag.style[sAttr]=this._saveData[oDiv2Drag.id][sAttr];
             }
@@ -182,7 +180,7 @@ var addi = function(){
          * @private
          * @returns {undefined}
          */
-        _updateFence : function(){
+        _updateFence(){
             if(this.oFence.bFullscreen){
                 this.oFence={
                     bFullscreen: true,
@@ -207,7 +205,7 @@ var addi = function(){
          * @param {object} oDiv2Click  optional: clickable object
          * @returns {undefined}
          */
-        initDiv: function(oDiv2Drag,oDiv2Click){
+        initDiv(oDiv2Drag,oDiv2Click){
             var sDivId=oDiv2Drag.id;
             if(!sDivId){
                 // oDiv2Drag.id=''
@@ -236,7 +234,7 @@ var addi = function(){
          * @param {object} oDiv2Drag  movable object
          * @returns {Array|Object|Boolean}
          */
-         load : function(oDiv2Drag){
+         load(oDiv2Drag){
             var id=this._getVarname(oDiv2Drag.id);
 
             // detect the highest z-index
@@ -262,7 +260,7 @@ var addi = function(){
          * @param {boolean} bNoFix    flag: skip fixing the position based on window size (is set to true in the load method)
          * @returns {undefined}
          */
-        move : function(oDiv2Drag,xpos,ypos, bNoFix){
+        move(oDiv2Drag,xpos,ypos, bNoFix){
             oDiv2Drag.style.bottom = 'auto';
             
             var aPos=bNoFix ? { 'xpos':xpos, 'ypos':ypos } : this._fixVisiblePosition(oDiv2Drag,xpos,ypos);
@@ -279,7 +277,7 @@ var addi = function(){
          * @param {object} evt        event
          * @returns {undefined}
          */
-        startMoving : function(oDiv2Drag,evt){
+        startMoving(oDiv2Drag,evt){
             if (oDiv2Drag.className.indexOf(this._dragClass)===false){
                 return false;
             }
@@ -322,7 +320,7 @@ var addi = function(){
          * @param {object} oDiv2Drag  movable object
          * @returns {undefined}
          */
-        stopMoving : function(oDiv2Drag){
+        stopMoving(oDiv2Drag){
             oDiv2Drag.style.cursor='default';
             // retore styles
             this._styleRestore(oDiv2Drag);
@@ -343,7 +341,7 @@ var addi = function(){
          * @param {bool}   bRemoveLocalstorage  flag: remove saved local variable too
          * @returns {undefined}
          */
-        XXreset : function(sClass,bRemoveLocalstorage){
+        reset(sClass,bRemoveLocalstorage){
             if(!sClass){
                 sClass=this._dragClass;
             }
@@ -363,7 +361,7 @@ var addi = function(){
          * @param {bool}   bRemoveLocalstorage  flag: remove saved local variable too
          * @returns {undefined}
          */
-        _resetDiv : function(oDiv2Drag, bRemoveLocalstorage){
+        _resetDiv(oDiv2Drag, bRemoveLocalstorage){
             oDiv2Drag.onmousemove = null;
             oDiv2Drag.onmouseup = null;
             oDiv2Drag.onmousedown = null;
