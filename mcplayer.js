@@ -33,7 +33,7 @@
 
 
 /** 
- * mcPlayer ... Multi Channel Player
+ * mcPlayer ... Axels Multi Channel Player
  * 
  * @author    Axel Hahn
  * @version   1.04
@@ -42,20 +42,21 @@
  * 
  * @example
  * <pre>
- * // --- #1
- * oMcPlayer=new mcPlayer();
- * oMcPlayer.init();         // draw player gui
- * oMcPlayer.minimize(true); // ... and hide the gui without animation
- * 
- * // --- #2
- * var oMcPlayer = new mcPlayer({
+ * // --- #1<br>
+ * oMcPlayer=new mcPlayer();<br>
+ * oMcPlayer.init();         // draw player gui<br>
+ * <br>
+ * oMcPlayer.minimize(true); // ... and hide the gui without animation<br>
+ * <br>
+ * // --- #2<br>
+ * var oMcPlayer = new mcPlayer({<br>
  *   settings:{
  *     autoopen: true,
  *     repeatlist: false
  *   }
- * });
- * oMcPlayer.init();     // draw player gui
- * oMcPlayer.minimize(); // ... and hide the gui
+ * });<br>
+ * oMcPlayer.init();     // draw player gui<br>
+ * oMcPlayer.minimize(); // ... and hide the gui<br>
  * </pre>
  * 
  * @constructor
@@ -264,8 +265,13 @@ class mcPlayer {
 
     playlink = '[title]';
 
+    // ----------------------------------------------------------------------
+    // INIT
+    // ----------------------------------------------------------------------
+
     /**
-     * constructor of the player
+     * Constructor of the player.
+     * Do not forget to run the init() method.
      * 
      * @see setConfig
      * @see init
@@ -289,143 +295,57 @@ class mcPlayer {
 
         return true;
     }
-    // **********************************************************************
+
     /**
-     * Check: does the browser support 5.1 channels?<br>
-     * tablets and mobile devices: false<br>
-     * older Opera versions: false<br>
-     * all other: true<br>
-     *
+     * initialize player: generate the player windows
+     * 
+     * @param {string} sContainerId  id of a div where to put the player. if false player will be added to body
      * @return {boolean}
      */
-    canPlaySurround() {
-        var bReturn = true;
-        // older Opera makes a stereo downmixing of surround media
-        if (navigator.userAgent.indexOf("Presto/") >= 0) {
-            bReturn = false;
+     init(sContainerId) {
+        this._sContainerId=sContainerId;
+        this.#getName();            // detect name of the object variable that initialized the player
+        this.#generatePlaylist();   // scan audios on webpage
+        this.#initHtml();           // generate html for the player        
+        if (typeof addi !== 'undefined') {
+            addi.init();
         }
-        // tablets and other mobile, ... devices
-        // see https://stackoverflow.com/questions/11381673/detecting-a-mobile-browser#11381730
-        (function (a) {
-            if (/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino|android|ipad|playbook|silk/i.test(a) || /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0, 4)))
-                bReturn = false;
-        })(navigator.userAgent || navigator.vendor || window.opera);
+        this.minimizeBox('about', true);
+        this.minimizeBox('download', true);
+        this.minimizeBox('playlist', true);
+        window.setInterval(this.name + ".updateStatus()", 500);
+        return true;
+    };
 
-        return bReturn;
-    }
+    // ----------------------------------------------------------------------
+    //
+    // private methods
+    //
+    // ----------------------------------------------------------------------
+
 
     /**
-     * scan AUDIO tags and its sources in a document to create an
-     * object with all current songs
+     * add html code in the player div
      * 
      * @private
-     * @return {array}
+     * @param {string} sHtml  html code to add
      */
-    #scanAudios() {
-        var oAudioList = document.getElementsByTagName("AUDIO");
-        var a = new Array();
-        var aSource = false;
-        var sChannels = false;
-        var aSong = false;
-        var o = false;
-        var dummy = false;
-
-        for (var i = 0; i < oAudioList.length; i++) {
-            oAudioList[i].style.display = "none";
-            aSong = {
-                title: oAudioList[i].dataset.title
-                    ? oAudioList[i].dataset.title
-                    : oAudioList[i].title
-                        ? oAudioList[i].title
-                        : '',
-
-                artist: oAudioList[i].dataset.artist ? oAudioList[i].dataset.artist : false,
-                album: oAudioList[i].dataset.album ? oAudioList[i].dataset.album : false,
-                year: oAudioList[i].dataset.year ? oAudioList[i].dataset.year : false,
-                image: oAudioList[i].dataset.image ? oAudioList[i].dataset.image : false,
-                genre: oAudioList[i].dataset.genre ? oAudioList[i].dataset.genre : false,
-                bpm: oAudioList[i].dataset.bpm ? oAudioList[i].dataset.bpm : false,
-                url: oAudioList[i].dataset.url ? oAudioList[i].dataset.url : false,
-                sources: {}
-            };
-            for (var j = 0; j < oAudioList[i].children.length; j++) {
-                o = oAudioList[i].children[j];
-                if (o.tagName === "SOURCE") {
-                    sChannels = "any";
-                    // if (o.dataset && o.dataset.ch)sChannels=o.dataset.ch;
-                    if (o.title) {
-                        sChannels = o.title;
-                    }
-                    aSource = {
-                        src: o.src,
-                        type: o.type
-                    };
-                    if (!aSong["sources"][sChannels])
-                        dummy = aSong["sources"][sChannels] = new Array();
-                    dummy = aSong["sources"][sChannels].push(aSource);
-                }
-            }
-            // add it to playlist
-            this.addAudio(aSong);
-
-            var newA = document.createElement("A");
-            newA.href = '#';
-            newA.title = this.cfg.links.play.title + ': ' + aSong.title;
-            // newA.innerHTML= this.playlink.replace('[title]', sTitle);
-            newA.innerHTML = this.playlink.replace('[title]', "");
-            newA.setAttribute('onclick', this.name + '.setSong(' + i + '); /* ' + this.name + '.maximize(); */ return false;');
-            newA.setAttribute('class', 'songbtn icon-play');
-            newA.setAttribute('id', 'mcpaudioPlay' + i);
-            oAudioList[i].parentNode.appendChild(newA);
+     #addHtml(sHtml) {
+        var oContainer = document.getElementById(this._sContainerId) ? document.getElementById(this._sContainerId) : document.getElementsByTagName("BODY")[0];
+        if (oContainer) {
+            oContainer.innerHTML += sHtml;
         }
-        return a;
-    }
-
+    };
 
     /**
-     * Add a song to the playlist.
-     * This method is called on init too if all audios are scanned.
+     * fadeout an audio
      * 
-     * @param {array} aSong  data for a single song object
-     * @example
-     * <pre>
-     * oMcplayer=addAudio({
-     *       "title": "Ticker",
-     *       "sources": {
-     *         "2.0": [
-     *           {
-     *             "src": "https://www.axel-hahn.de/axel/download/ticker_2.0_.ogg",
-     *             "type": "audio/ogg"
-     *           },
-     *           {
-     *             "src": "https://www.axel-hahn.de/axel/download/ticker_2.0_.mp3",
-     *             "type": "audio/mp3"
-     *           }
-     *         ],
-     *         "5.1": [
-     *           {
-     *             "src": "https://www.axel-hahn.de/axel/download/ticker_5.1_.m4a",
-     *             "type": "audio/mp4"
-     *           },
-     *           {
-     *             "src": "https://www.axel-hahn.de/axel/download/ticker_5.1_.ogg",
-     *             "type": "audio/ogg"
-     *           }
-     *         ]
-     *       }
-     *     });
-     * </pre>
-     * @returns {Boolean}
+     * @private
+     * @param  {string}   sChannelId      number of audio ... one of "2.0" | "5.1"
+     * @return {boolean}
      */
-    addAudio(aSong) {
-        if (!aSong["sources"]) {
-            return false;
-        }
-        if (!aSong.title) {
-            aSong.title = 'audio ' + (this.aPL.length + 1);
-        }
-        this.aPL.push(aSong);
-        this.#generatePlayorder();
+     #fadeOut(sChannelId) {
+        this.fade(0, sChannelId);
     };
 
 
@@ -609,6 +529,7 @@ class mcPlayer {
     /**
      * scan AUDIO tags and its sources in a document to create an
      * object with all current songs
+     * 
      * @private
      * @return {html_code}
      */
@@ -667,6 +588,7 @@ class mcPlayer {
 
     /**
      * read all audio tags in the page and create playlist
+     * 
      * @private
      * @returns {undefined}
      */
@@ -677,11 +599,30 @@ class mcPlayer {
     };
 
     /**
-     * helper function for generatePlayorder; shuffle javascript array
+     * internal helper function - called in init()
+     * it detects the name of the ocject variable that initialized the player
+     * i.e. on var oMcPlayer=new mcPlayer();
+     * it returns "oMcPlayer"
+     *
      * @private
-     * @param {type} a
-     * @param {type} b
-     * @returns {Number}
+     * @returns {string}
+     */
+     #getName() {
+        // search through the global object for a name that resolves to this object
+        for (var name in this.global) {
+            if (this.global[name] === this) {
+                return this.#setName(name);
+            }
+        }
+    };
+    
+    /**
+     * helper function for generatePlayorder; shuffle javascript array
+     * 
+     * @private
+     * @param {type} a  first value
+     * @param {type} b  2nd value
+     * @returns {float}
      */
     #randomSort(a, b) {
         return (parseInt(Math.random() * 10) % 2);
@@ -689,6 +630,7 @@ class mcPlayer {
 
     /**
      * update playorder list with/ without shuffling
+     * 
      * @private
      * @returns {undefined}
      */
@@ -713,7 +655,20 @@ class mcPlayer {
     };
 
     /**
+     * get array element of the currently active song
+     * 
+     * @private
+     * @param  {string}   sKey   key of song item; one of title|artist|album|year|image
+     * @returns {string}
+     */
+     #getSongItem(sKey) {
+        var oSong = this.getSong();
+        return oSong ? oSong[sKey] : false;
+    };
+    
+    /**
      * get id in the playlist that matches the current song id
+     * 
      * @private
      * @returns {Number|Boolean}
      */
@@ -729,20 +684,6 @@ class mcPlayer {
         return this.iPlaylistId;
     };
 
-    /**
-     * add html code in the player div
-     * 
-     * @private
-     * @param {string} sHtml  html code to add
-     */
-    #addHtml(sHtml) {
-        var oContainer = document.getElementById(this._sContainerId) ? document.getElementById(this._sContainerId) : document.getElementsByTagName("BODY")[0];
-        if (oContainer) {
-            oContainer.innerHTML += sHtml;
-        }
-    };
-
-    // ----------------------------------------------------------------------
     /**
      * init html code of the player - by creating all missing elements
      * 
@@ -801,27 +742,757 @@ class mcPlayer {
         this.#playerheightSet();
     };
 
-    // ----------------------------------------------------------------------
     /**
-     * minimize player GUI and show a maximize icon
-     * @example
-     * <pre>
-     * &lt;a href="#" onclick="oMcPlayer.minimize(); return false;"&gt;hide player&lt;/a&gt;
-     * </pre>
-     * @param {boolean}  bFast     flag to override speed in css transistion
+     * hide HUD div
+     * 
+     * @private
      * @return nothing
      */
-    minimize(bFast) {
-        o = document.getElementById("mcpwrapper");
-        o.style['transition-duration'] = bFast ? '0s' : '';
-        o.style.top = (document.documentElement.clientHeight + this._iMinDelta) + 'px';
-
-        this.minimizeBox('about');
-        this.minimizeBox('download');
-        this.minimizeBox('playlist');
-
-        document.getElementById("mcpmaximize").className = '';
+    #hideInfo() {
+        var o = document.getElementById("mcphud");
+        o.className = '';
+        return true;
     };
+
+    /**
+     * decrease time to display HUD; if it is zero then call hideInfo()
+     * 
+     * @private
+     * @return nothing
+     */
+    #decHudTimer() {
+        this.iRemoveTimer = this.iRemoveTimer - 100;
+        // this.showInfo(this.iRemoveTimer);
+        if (this.iRemoveTimer > 0) {
+            window.setTimeout(this.name + ".#decHudTimer()", 100);
+        } else {
+            this.#hideInfo();
+            this.iRemoveTimer = false;
+        }
+    };
+
+    /**
+     * adjust player window after resize by showing other song content or status bar.
+     * in the lower third top property will be decreased by the delta; in the
+     * middle third it will be decreased by the half delta. In the upper delta there
+     * is no change - it means: the window size increases simply downwards
+     * 
+     * @private
+     * @returns {undefined}
+     */
+     #playerheightAdjust() {
+        // remark: by default the position is fixed with css bottom attribute;
+        // without drag and drop it resizes automatically
+        if (typeof addi !== 'undefined' && this.cfg.settings.movable) {
+            // show songinfos with adjusting the client height of player window
+            var o = document.getElementById("mcpwrapper");
+            var iTop = o.style.top.replace('px', '') / 1;
+            var iMidOfWindow = iTop + o.clientHeight / 2;
+            var iHeight = document.documentElement.clientHeight;
+            if (iMidOfWindow > iHeight / 3) {
+                var iHeightDelta = o.clientHeight - this._iHeightPlayerWindow;
+                o.style.top = (iMidOfWindow > 2 * iHeight / 3 ? (iTop - iHeightDelta) : (iTop - iHeightDelta / 2)) + 'px';
+            }
+            this.#playerheightSet();
+        }
+    };
+
+    /**
+     * store height oft player main window; called after initilaizing the player
+     * and in #playerheightAdjust for updates
+     * 
+     * @private
+     * @returns {undefined}
+     */
+    #playerheightSet() {
+        this._iHeightPlayerWindow = document.getElementById("mcpwrapper").clientHeight;
+    };
+
+
+    /**
+     * scan AUDIO tags and its sources in a document to create an
+     * object with all current songs
+     * 
+     * @private
+     * @return {array}
+     */
+     #scanAudios() {
+        var oAudioList = document.getElementsByTagName("AUDIO");
+        var a = new Array();
+        var aSource = false;
+        var sChannels = false;
+        var aSong = false;
+        var o = false;
+        var dummy = false;
+
+        for (var i = 0; i < oAudioList.length; i++) {
+            oAudioList[i].style.display = "none";
+            aSong = {
+                title: oAudioList[i].dataset.title
+                    ? oAudioList[i].dataset.title
+                    : oAudioList[i].title
+                        ? oAudioList[i].title
+                        : '',
+
+                artist: oAudioList[i].dataset.artist ? oAudioList[i].dataset.artist : false,
+                album: oAudioList[i].dataset.album ? oAudioList[i].dataset.album : false,
+                year: oAudioList[i].dataset.year ? oAudioList[i].dataset.year : false,
+                image: oAudioList[i].dataset.image ? oAudioList[i].dataset.image : false,
+                genre: oAudioList[i].dataset.genre ? oAudioList[i].dataset.genre : false,
+                bpm: oAudioList[i].dataset.bpm ? oAudioList[i].dataset.bpm : false,
+                url: oAudioList[i].dataset.url ? oAudioList[i].dataset.url : false,
+                sources: {}
+            };
+            for (var j = 0; j < oAudioList[i].children.length; j++) {
+                o = oAudioList[i].children[j];
+                if (o.tagName === "SOURCE") {
+                    sChannels = "any";
+                    // if (o.dataset && o.dataset.ch)sChannels=o.dataset.ch;
+                    if (o.title) {
+                        sChannels = o.title;
+                    }
+                    aSource = {
+                        src: o.src,
+                        type: o.type
+                    };
+                    if (!aSong["sources"][sChannels])
+                        dummy = aSong["sources"][sChannels] = new Array();
+                    dummy = aSong["sources"][sChannels].push(aSource);
+                }
+            }
+            // add it to playlist
+            this.addAudio(aSong);
+
+            var newA = document.createElement("A");
+            newA.href = '#';
+            newA.title = this.cfg.links.play.title + ': ' + aSong.title;
+            // newA.innerHTML= this.playlink.replace('[title]', sTitle);
+            newA.innerHTML = this.playlink.replace('[title]', "");
+            newA.setAttribute('onclick', this.name + '.setSong(' + i + '); /* ' + this.name + '.maximize(); */ return false;');
+            newA.setAttribute('class', 'songbtn icon-play');
+            newA.setAttribute('id', 'mcpaudioPlay' + i);
+            oAudioList[i].parentNode.appendChild(newA);
+        }
+        return a;
+    }
+
+    /**
+     * internal helper function - called in getName()
+     * set internal varible
+     * 
+     * @private
+     * @param {string} sName  name of the player object
+     * @returns {string}
+     */
+     #setName(sName) {
+        this.name = sName;
+        return this.name;
+    };
+
+    /**
+     * set visibility of status bar
+     * 
+     * @private
+     * @since v0.33
+     * @param {boolean} bVisibility  flag; true or false
+     * @returns {booleab}
+     */
+     #setStatusbar(bVisibility) {
+        this.cfg.settings.showstatusbar = !!bVisibility;
+        this.toggleBoxAndButton('statusbar', (bVisibility ? 'maximize' : 'minimize'));
+        document.getElementById('mcpstatusbar').className = (bVisibility ? 'active' : '');
+        this.#playerheightAdjust();
+        return true;
+    };
+
+    /**
+     * show info in HUD div if
+     * - option showhud was set
+     * - option autoopen is false
+     * - player is invisible (minimized)
+     *
+     * @private
+     * @param  {string}  sMsg  message to show in hud
+     * @return {boolean}
+     */
+     #showInfo(sMsg) {
+        if (!this.cfg.settings.showhud || this.cfg.settings.autoopen || this.isVisiblePlayer()) {
+            return false;
+        }
+        var o = document.getElementById("mcphud");
+        this.iRemoveTimer = this.iHudTimer * 1000;
+        o.className = 'active';
+        o.innerHTML = sMsg;
+        this.#decHudTimer();
+        return true;
+    };
+
+
+    /**
+     * helper function for visible boxes
+     * 
+     * @see toggleBoxAndButton()
+     * @private
+     * @param {string}  sBaseId    sBaseId of the div and the button; one of download|playlist|about
+     * @return {boolean}
+     */
+     #togglehelperGetDiv(sBaseId) {
+        return (this.cfg.aPlayer.buttons[sBaseId] && this.cfg.aPlayer.buttons[sBaseId].box)
+            ? document.getElementById(this.cfg.aPlayer.buttons[sBaseId].box)
+            : (sBaseId === 'player')
+                ? document.getElementById('mcpwrapper')
+                : false;
+    };
+
+    /**
+     * wait for other audio until it reaches the given timestamp
+     * 
+     * @private
+     * @param  {audio_object} oAudio       audioobject
+     * @param  {integer}      iStartTime   timestamp where to start the audio
+     */
+     #wait4Audio(oAudio, iStartTime) {
+
+        oAudio.volume = 0.001;
+        oAudio.play();
+
+        if (iStartTime) {
+            oAudio.currentTime = iStartTime;
+        }
+        return true;
+    };
+
+    // **********************************************************************
+    /**
+     * Add a song to the playlist.
+     * This method is called on init too if all audios are scanned.
+     * 
+     * @param {array} aSong  data for a single song object
+     * @example
+     * <pre>
+     * oMcplayer=addAudio({<br>
+     *       "title": "Ticker",
+     *       "sources": {
+     *         "2.0": [
+     *           {
+     *             "src": "https://www.axel-hahn.de/axel/download/ticker_2.0_.ogg",
+     *             "type": "audio/ogg"
+     *           },
+     *           {
+     *             "src": "https://www.axel-hahn.de/axel/download/ticker_2.0_.mp3",
+     *             "type": "audio/mp3"
+     *           }
+     *         ],
+     *         "5.1": [
+     *           {
+     *             "src": "https://www.axel-hahn.de/axel/download/ticker_5.1_.m4a",
+     *             "type": "audio/mp4"
+     *           },
+     *           {
+     *             "src": "https://www.axel-hahn.de/axel/download/ticker_5.1_.ogg",
+     *             "type": "audio/ogg"
+     *           }
+     *         ]
+     *       }
+     *     });
+     * </pre>
+     * @returns {Boolean}
+     */
+    addAudio(aSong) {
+        if (!aSong["sources"]) {
+            return false;
+        }
+        if (!aSong.title) {
+            aSong.title = 'audio ' + (this.aPL.length + 1);
+        }
+        this.aPL.push(aSong);
+        this.#generatePlayorder();
+    };
+
+    /**
+     * Check: does the browser support 5.1 channels?<br>
+     * * tablets and mobile devices: false<br>
+     * * older Opera versions: false<br>
+     * * all other: true<br>
+     * Remark: there is no browser method to detect abilities of a system.
+     * This is just guessing.
+     *
+     * @return {boolean}
+     */
+     canPlaySurround() {
+        var bReturn = true;
+        // older Opera makes a stereo downmixing of surround media
+        if (navigator.userAgent.indexOf("Presto/") >= 0) {
+            bReturn = false;
+        }
+        // tablets and other mobile, ... devices
+        // see https://stackoverflow.com/questions/11381673/detecting-a-mobile-browser#11381730
+        (function (a) {
+            if (/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino|android|ipad|playbook|silk/i.test(a) || /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0, 4)))
+                bReturn = false;
+        })(navigator.userAgent || navigator.vendor || window.opera);
+
+        return bReturn;
+    }
+
+
+    /**
+     * disable playing option repeat playlist
+     * 
+     * @returns {undefined}
+     */
+     disableRepeat() {
+        this.cfg.settings.repeatlist = false;
+        this.toggleBoxAndButton('repeat', 'minimize');
+    };
+
+    /**
+     * disable playing option shuffle playlist
+     * 
+     * @returns {undefined}
+     */
+    disableShuffle() {
+        this.cfg.settings.shuffle = false;
+        this.#generatePlayorder();
+        this.toggleBoxAndButton('shuffle', 'minimize');
+    };
+
+    /**
+     * disable playing option shuffle playlist
+     * 
+     * @since v0.33
+     * @returns {boolean}
+     */
+     disableStatusbar() {
+        return this.#setStatusbar(false);
+    };
+
+
+    /**
+     * enable playing option repeat playlist
+     * 
+     * @returns {undefined}
+     */
+     enableRepeat() {
+        this.cfg.settings.repeatlist = true;
+        this.toggleBoxAndButton('repeat', 'maximize');
+    };
+
+    /**
+     * enable playing option shuffle playlist
+     * 
+     * @returns {undefined}
+     */
+     enableShuffle() {
+        this.cfg.settings.shuffle = true;
+        this.#generatePlayorder();
+        this.toggleBoxAndButton('shuffle', 'maximize');
+    };
+
+    /**
+     * enable playing option shuffle playlist
+     * 
+     * @since v0.33
+     * @returns {boolean}
+     */
+     enableStatusbar() {
+        return this.#setStatusbar(true);
+    };
+
+
+    /**
+     * fade an audio in or out to a given final volume
+     * 
+     * @param  {float}    finalVolume     final volume (0 = muted or 1 = max)
+     * @param  {string}   sChannelId      number of audio ... one of "2.0" | "5.1"
+     * @return {boolean}
+     */
+     fade(finalVolume, sChannelId) {
+
+        this.bIsFading = true;
+        var o = document.getElementById("mcp" + sChannelId);
+        if (!o) {
+            return false;
+        }
+        var iVol = o.volume;
+        var iInc = (finalVolume < iVol ? -this.iVolInc : this.iVolInc);
+
+        iVol += iInc;
+        if ((finalVolume === 0 && iVol > 0) || (finalVolume > 0 && iVol < finalVolume)) {
+            o.volume = iVol;
+            window.setTimeout(this.name + ".fade(" + finalVolume + ", \'" + sChannelId + "\')", this.iTimer);
+        } else {
+            this.bIsFading = false;
+            o.volume = finalVolume;
+            if (iVol <= 0) {
+                o.pause();
+            }
+        }
+        return true;
+    };
+    // --------------------------------------------------------------------------------
+    // GETTER
+    // --------------------------------------------------------------------------------
+    /**
+     * get current count of channels of the current song
+     * you typically get "2.0" for stereo or "5.1" for surround
+     *
+     * @see getAllAudioChannels() to get the available channels of a song
+     *
+     * @return {string}
+     */
+     getAudioChannels() {
+        return this.sCurrentChannel;
+    };
+
+    /**
+     * get an array of valid channels of the current song; if no song is active
+     * it returns false.
+     *
+     * @return {array}
+     */
+    getAllAudioChannels() {
+        var oSong = this.getSong();
+        if (!oSong) {
+            return false;
+        }
+        var aReturn = [];
+        for (var sChannel in oSong['sources']) {
+            aReturn.push(sChannel);
+        }
+        return aReturn;
+    };
+
+    /**
+     * get duration in [sec] of the current song
+     * 
+     * @return {float}
+     */
+    getAudioDuration() {
+        if (!this.sCurrentChannel) {
+            return false;
+        }
+        return this.oAudio.duration;
+    };
+
+    /**
+     * get network state of current audio (i.e. loading / idle)
+     * https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/networkState
+     * 
+     * @returns {Integer|false}
+     */
+    getAudioNetworkstate() {
+        var oAudioTmp = this.oAudio ? this.oAudio : document.getElementById("mcp" + this.getAudioChannels());
+        return oAudioTmp ? oAudioTmp.networkState : false;
+    };
+
+    /**
+     * get position in [sec] of the current song
+     * 
+     * @return {float}
+     */
+    getAudioPosition() {
+        if (!this.sCurrentChannel) {
+            return false;
+        }
+        return this.oAudio.currentTime;
+    };
+
+    /**
+     * get document state of current audio
+     * https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/readyState
+     * 
+     * @returns {Integer|false}
+     */
+    getAudioReadystate() {
+        var oAudioTmp = this.oAudio ? this.oAudio : document.getElementById("mcp" + this.getAudioChannels());
+        return oAudioTmp ? oAudioTmp.readyState : false;
+    };
+
+    /**
+     * get used source url of the current song
+     * 
+     * @return {float}
+     */
+    getAudioSrc() {
+        if (!this.sCurrentChannel) {
+            return false;
+        }
+        return this.oAudio.currentSrc;
+    };
+
+    /**
+     * get current volume (a value between 0..1)
+     * 
+     * @return {float}
+     */
+    getVolume() {
+        if (this.oAudio) {
+            this.cfg.settings.volume = this.oAudio.volume;
+            return this.cfg.settings.volume;
+        }
+        return false;
+    };
+
+    /**
+     * get playlist with all songtitles and its sources
+     * 
+     * @return {array}
+     */
+    getPlaylist() {
+        return (!this.aPL || !this.aPL.length) ? false : this.aPL;
+    };
+
+    /**
+     * get playlist with all songtitles and its sources
+     * 
+     * @return {array}
+     */
+    getPlaylistCount() {
+        return (this.aPL ? this.aPL.length : false);
+    };
+
+    /**
+     * get playlist with all songtitles and its sources
+     * 
+     * @return {array}
+     */
+    getPlayorder() {
+        return this.aPlayorderList;
+    };
+
+    /**
+     * get current song; you get an array with the song title and
+     * all its audio sources and mime types
+     * 
+     * @return {array}
+     */
+    getSong() {
+        if (!this.aPL || !this.aPL.length) {
+            return false;
+        }
+        return this.aPL[this.iCurrentSong];
+    };
+
+    /**
+     * get id of the currently active song; first song starts with 0;
+     * value -1 means player did not start to play yet.
+     * 
+     * @returns {Number}
+     */
+    getSongId() {
+        return this.iCurrentSong;
+    };
+
+
+    /**
+     * get title of the currently active song
+     * 
+     * @returns {string}
+     */
+    getSongTitle() {
+        return this.#getSongItem('title');
+    };
+
+    /**
+     * get artist of the currently active song
+     * 
+     * @returns {string}
+     */
+    getSongArtist() {
+        return this.#getSongItem('artist');
+    };
+
+    /**
+     * get album of the currently active song
+     * 
+     * @returns {string}
+     */
+    getSongAlbum() {
+        return this.#getSongItem('album');
+    };
+
+    /**
+     * get publishing year of the currently active song
+     * 
+     * @returns {string}
+     */
+    getSongYear() {
+        return this.#getSongItem('year');
+    };
+
+    /**
+     * get publishing year of the currently active song
+     * 
+     * @returns {string}
+     */
+    getSongImage() {
+        return this.#getSongItem('image');
+    };
+
+    /**
+     * get publishing year of the currently active song
+     * 
+     * @returns {string}
+     */
+    getSongGenre() {
+        return this.#getSongItem('genre');
+    };
+
+    /**
+     * get publishing year of the currently active song
+     * 
+     * @returns {string}
+     */
+    getSongBpm() {
+        return this.#getSongItem('bpm');
+    };
+
+    /**
+     * get url for the song i.e. where to buy it
+     * 
+     * @returns {string}
+     */
+    getSongUrl() {
+        return this.#getSongItem('url');
+    };
+
+    /**
+     * get id of the currently active song in the playlist (if shuffled)
+     * 
+     * @see getSongId() to get the song based on position in document
+     *
+     * @returns {Number}
+     */
+    getPlaylistId() {
+        return this.iPlaylistId;
+    };
+
+    /**
+     * get boolean value - volume is muted?
+     * @returns {Boolean}
+     */
+     isMuted() {
+        return (this.oAudio && (this.oAudio.muted || !this.oAudio.volume));
+    };
+
+    /**
+     * get boolean value - playing audio is paused?
+     * 
+     * @returns {Boolean}
+     */
+    isPaused() {
+        return (this.oAudio && this.oAudio.paused && this.oAudio.currentTime !== 0);
+    };
+    /**
+     * get boolean value - audio is playing? It returns true if audio is
+     * playing and false if paused or stopped.
+     * 
+     * @returns {Boolean}
+     */
+    isPlaying() {
+        return (this.oAudio && !this.oAudio.paused);
+    };
+    /**
+     * get boolean value - is shuffling mode on?
+     * 
+     * @returns {Boolean}
+     */
+    isRepeatlist() {
+        return (this.cfg.settings.repeatlist
+            ? !!this.cfg.settings.repeatlist
+            : false);
+    };
+    /**
+     * get boolean value - is shuffling mode on?
+     * 
+     * @returns {Boolean}
+     */
+    isShuffled() {
+        return (this.cfg.settings.shuffle
+            ? this.cfg.settings.shuffle
+            : false);
+    };
+    /**
+     * get boolean value - playing audio is stopped
+     * 
+     * @returns {Boolean}
+     */
+    isStopped() {
+        return (!this.oAudio || this.oAudio.currentTime === 0);
+    };
+    /**
+     * get boolean value - is the curemt played audio a stream?
+     * remark: it is detected by audio.duration == Infinity (Chrome)
+     * or count of durationchange events (used in Firefox)
+     * 
+     * @since 0.33
+     * @returns {Boolean}
+     */
+    isStream() {
+        return (this.oAudio && this.oAudio.isStream);
+    };
+
+    /**
+     * return if a dialog box is visible
+     * 
+     * @param {string}  sBaseId    sBaseId of the div and the button; one of download|playlist|about
+     * @returns {Boolean}
+     */
+     isVisibleBox(sBaseId) {
+        // var oDiv=this.#togglehelperGetDiv(sBaseId);
+        var sId = sBaseId === 'player' ? 'mcpmaximize' : 'mcpopt' + sBaseId;
+        var oBtn = document.getElementById(sId);
+        return oBtn ? !!oBtn.className : false;
+    };
+
+    /**
+     * return if about dialog box is visible
+     * 
+     * @returns {Boolean}
+     */
+    isVisibleBoxAbout() {
+        return this.isVisibleBox('about');
+    };
+
+    /**
+     * return if download dialog box is visible
+     * 
+     * @returns {Boolean}
+     */
+    isVisibleBoxDownload() {
+        return this.isVisibleBox('download');
+    };
+
+    /**
+     * return if playlist dialog box is visible
+     * 
+     * @returns {Boolean}
+     */
+    isVisibleBoxPlaylist() {
+        return this.isVisibleBox('playlist');
+    };
+
+    /**
+     * return if player window is visible
+     * 
+     * @since v0.30
+     * @returns {Boolean}
+     */
+    isVisiblePlayer() {
+        return this.isVisibleBox('player');
+    };
+
+    /**
+     * return if player window is visible
+     * 
+     * @since v0.33
+     * @returns {Boolean}
+     */
+    isVisibleStatusbar() {
+        return this.cfg.settings.showstatusbar;
+    };
+
 
     /**
      * set if make the main player window is movable.
@@ -855,6 +1526,7 @@ class mcPlayer {
 
     /**
      * show/ maximize the player GUI
+     * 
      * @example
      * <pre>
      * &lt;a href="#" onclick="oMcPlayer.maximize(); return false;"&gt;show the player&lt;/a&gt;
@@ -872,281 +1544,42 @@ class mcPlayer {
     };
 
     /**
-     * show info in HUD div if
-     * - option showhud was set
-     * - option autoopen is false
-     * - player is invisible (minimized)
-     *
-     * @private
-     * @param  {string}  sMsg  message to show in hud
+     * maximize a box; argument is a base id of a button or div
+     * 
+     * @example
+     * <pre>
+     * &lt;button onclick="oMcPlayer.maximizeBox('download')">show Downloads&lt;/button>
+     * </pre>
+     * @param {string}   sBaseId  name of the div ("download" | "playlist" | "about")
+     * @param {boolean}  bFast    flag to override speed in css transistion
      * @return {boolean}
      */
-    #showInfo(sMsg) {
-        if (!this.cfg.settings.showhud || this.cfg.settings.autoopen || this.isVisiblePlayer()) {
-            return false;
-        }
-        var o = document.getElementById("mcphud");
-        this.iRemoveTimer = this.iHudTimer * 1000;
-        o.className = 'active';
-        o.innerHTML = sMsg;
-        this.#decHudTimer();
-        return true;
+     maximizeBox(sBaseId, bFast) {
+        return this.toggleBoxAndButton(sBaseId, 'maximize', bFast);
     };
 
     /**
-     * hide HUD div
-     * @private
-     * @return nothing
-     */
-    #hideInfo() {
-        var o = document.getElementById("mcphud");
-        o.className = '';
-        return true;
-    };
-
-    /**
-     * decrease time to display HUD; if it is zero then call hideInfo()
-     * @private
-     * @return nothing
-     */
-    #decHudTimer() {
-        this.iRemoveTimer = this.iRemoveTimer - 100;
-        // this.showInfo(this.iRemoveTimer);
-        if (this.iRemoveTimer > 0) {
-            window.setTimeout(this.name + ".#decHudTimer()", 100);
-        } else {
-            this.#hideInfo();
-            this.iRemoveTimer = false;
-        }
-    };
-
-    /**
-     * helper function for visible boxes
-     * @see toggleBoxAndButton()
-     * @private
-     * @param {string}  sBaseId    sBaseId of the div and the button; one of download|playlist|about
-     * @return {boolean}
-     */
-    #togglehelperGetDiv(sBaseId) {
-        return (this.cfg.aPlayer.buttons[sBaseId] && this.cfg.aPlayer.buttons[sBaseId].box)
-            ? document.getElementById(this.cfg.aPlayer.buttons[sBaseId].box)
-            : (sBaseId === 'player')
-                ? document.getElementById('mcpwrapper')
-                : false;
-    };
-
-    /**
-     * toggle visibility of a box (download, playlist, about)
-     * @param {string}   sBaseId   sBaseId of the div and the button; one of download|playlist|about
-     * @param {string}   sMode     optional: force action; one of minimize|maximize; default behaviuor is toggle
+     * minimize player GUI and show a maximize icon
+     * 
+     * @example
+     * <pre>
+     * &lt;a href="#" onclick="oMcPlayer.minimize(); return false;"&gt;hide player&lt;/a&gt;
+     * </pre>
      * @param {boolean}  bFast     flag to override speed in css transistion
-     * @return {boolean}
+     * @return nothing
      */
-    toggleBoxAndButton(sBaseId, sMode, bFast) {
-        var oDiv = this.#togglehelperGetDiv(sBaseId);
+     minimize(bFast) {
+        o = document.getElementById("mcpwrapper");
+        o.style['transition-duration'] = bFast ? '0s' : '';
+        o.style.top = (document.documentElement.clientHeight + this._iMinDelta) + 'px';
 
-        var oBtn = document.getElementById('mcpopt' + sBaseId);
-        if (!sMode) {
-            sMode = (oBtn.className.indexOf('active') < 0 ? 'maximize' : 'minimize');
-        }
+        this.minimizeBox('about');
+        this.minimizeBox('download');
+        this.minimizeBox('playlist');
 
-        if (oDiv) {
-            // set a transition duration of "0s" sets it into the style and
-            // overrides delay from css; using bFast flag on startup removes
-            // the flickering on page load
-            oDiv.style['transition-duration'] = bFast ? '0s' : '';
-        }
-
-        if (sMode === 'minimize') {
-            if (oDiv) {
-                oDiv.style.top = (document.documentElement.clientHeight + this._iMinDelta) + 'px';
-                oDiv.style.opacity = 0.1;
-            }
-            if (oBtn) {
-                oBtn.className = '';
-            }
-        } else if (sMode === 'maximize') {
-            if (oDiv) {
-                // oDiv.className += ' visible';
-                oDiv.setAttribute('style', '');
-                oDiv.style.opacity = 1;
-                if (typeof addi !== 'undefined') {
-                    addi.load(oDiv);
-                }
-            }
-            if (oBtn) {
-                oBtn.className = 'active';
-            }
-        }
-        return true;
+        document.getElementById("mcpmaximize").className = '';
     };
 
-    /**
-     * return if a dialog box is visible
-     * @param {string}  sBaseId    sBaseId of the div and the button; one of download|playlist|about
-     * @returns {Boolean}
-     */
-    isVisibleBox(sBaseId) {
-        // var oDiv=this.#togglehelperGetDiv(sBaseId);
-        var sId = sBaseId === 'player' ? 'mcpmaximize' : 'mcpopt' + sBaseId;
-        var oBtn = document.getElementById(sId);
-        return oBtn ? !!oBtn.className : false;
-    };
-
-    /**
-     * return if about dialog box is visible
-     * @returns {Boolean}
-     */
-    isVisibleBoxAbout() {
-        return this.isVisibleBox('about');
-    };
-
-    /**
-     * return if download dialog box is visible
-     * @returns {Boolean}
-     */
-    isVisibleBoxDownload() {
-        return this.isVisibleBox('download');
-    };
-
-    /**
-     * return if playlist dialog box is visible
-     * @returns {Boolean}
-     */
-    isVisibleBoxPlaylist() {
-        return this.isVisibleBox('playlist');
-    };
-
-    /**
-     * return if player window is visible
-     * @since v0.30
-     * @returns {Boolean}
-     */
-    isVisiblePlayer() {
-        return this.isVisibleBox('player');
-    };
-
-    /**
-     * return if player window is visible
-     * @since v0.33
-     * @returns {Boolean}
-     */
-    isVisibleStatusbar() {
-        return this.cfg.settings.showstatusbar;
-    };
-
-    // ----------------------------------------------------------------------
-    /**
-     * toggle playing option repeat playlist
-     * @returns {undefined}
-     */
-    toggleRepeat() {
-        if (this.isRepeatlist()) {
-            return this.disableRepeat();
-        } else {
-            return this.enableRepeat();
-        }
-    };
-
-    /**
-     * enable playing option repeat playlist
-     * @returns {undefined}
-     */
-    enableRepeat() {
-        this.cfg.settings.repeatlist = true;
-        this.toggleBoxAndButton('repeat', 'maximize');
-    };
-
-    /**
-     * disable playing option repeat playlist
-     * @returns {undefined}
-     */
-    disableRepeat() {
-        this.cfg.settings.repeatlist = false;
-        this.toggleBoxAndButton('repeat', 'minimize');
-    };
-
-    // ----------------------------------------------------------------------
-    /**
-     * toggle playing option shuffle playlist
-     * @returns {undefined}
-     */
-    toggleShuffle() {
-        if (this.isShuffled()) {
-            return this.disableShuffle();
-        } else {
-            return this.enableShuffle();
-        }
-    };
-
-    /**
-     * enable playing option shuffle playlist
-     * @returns {undefined}
-     */
-    enableShuffle() {
-        this.cfg.settings.shuffle = true;
-        this.#generatePlayorder();
-        this.toggleBoxAndButton('shuffle', 'maximize');
-    };
-
-    /**
-     * disable playing option shuffle playlist
-     * @returns {undefined}
-     */
-    disableShuffle() {
-        this.cfg.settings.shuffle = false;
-        this.#generatePlayorder();
-        this.toggleBoxAndButton('shuffle', 'minimize');
-    };
-
-    // ----------------------------------------------------------------------
-    /**
-     * set visibility of status bar
-     * @private
-     * @since v0.33
-     * @param {boolean} bVisibility  flag; true or false
-     * @returns {booleab}
-     */
-    #setStatusbar(bVisibility) {
-        this.cfg.settings.showstatusbar = !!bVisibility;
-        this.toggleBoxAndButton('statusbar', (bVisibility ? 'maximize' : 'minimize'));
-        document.getElementById('mcpstatusbar').className = (bVisibility ? 'active' : '');
-        this.#playerheightAdjust();
-        return true;
-    };
-
-    /**
-     * enable playing option shuffle playlist
-     * @since v0.33
-     * @returns {boolean}
-     */
-    enableStatusbar() {
-        return this.#setStatusbar(true);
-    };
-
-    /**
-     * disable playing option shuffle playlist
-     * @since v0.33
-     * @returns {boolean}
-     */
-    disableStatusbar() {
-        return this.#setStatusbar(false);
-    };
-
-    /**
-     * toggle playing option shuffle playlist
-     * @since v0.33
-     * @returns {boolean}
-     */
-    toggleStatusbar() {
-        if (this.isVisibleStatusbar()) {
-            return this.disableStatusbar();
-        } else {
-            return this.enableStatusbar();
-        }
-    };
-
-    // ----------------------------------------------------------------------
     /**
      * minimize a box; argument is a base id of a button or div
      *
@@ -1158,33 +1591,20 @@ class mcPlayer {
      * @param {boolean}  bFast    flag to override speed in css transistion
      * @return {boolean}
      */
-    minimizeBox(sBaseId, bFast) {
+     minimizeBox(sBaseId, bFast) {
         return this.toggleBoxAndButton(sBaseId, 'minimize', bFast);
-    };
-
-    /**
-     * maximize a box; argument is a base id of a button or div
-     * @example
-     * <pre>
-     * &lt;button onclick="oMcPlayer.maximizeBox('download')">show Downloads&lt;/button>
-     * </pre>
-     * @param {string}   sBaseId  name of the div ("download" | "playlist" | "about")
-     * @param {boolean}  bFast    flag to override speed in css transistion
-     * @return {boolean}
-     */
-    maximizeBox(sBaseId, bFast) {
-        return this.toggleBoxAndButton(sBaseId, 'maximize', bFast);
     };
 
     // ----------------------------------------------------------------------
     /**
      * handle actions of the player
+     * 
      * @exmple
      * &lt;button onclick="oMcPlayer.playeraction('play')">play&lt;/button>
      * @param {string} sAction name of the action ("play" | "pause" | "stop" | "forward" | "backward" | "jumpprev" | "jumpnext")
      * @return nothing
      */
-    playeraction(sAction) {
+     playeraction(sAction) {
         if (!this.oAudio) {
             if (sAction === "play") {
                 this.setSong(this.aPlayorderList[0]);
@@ -1235,9 +1655,13 @@ class mcPlayer {
         }
     };
 
+    // ----------------------------------------------------------------------
+
+
     /**
      * Set a position of the currently playing audio;
      * It returns the set position; if there is no audio it retuns false
+     * 
      * @example
      * <pre>
      * &lt;button onclick="oMcPlayer.setAudioPosition(180.33);">oMcPlayer.setAudioPosition(180.33)&lt;/button>
@@ -1254,237 +1678,13 @@ class mcPlayer {
     };
 
     /**
-     * start playing the previous song in playlist (if the current audio is
-     * not the first played element)
-     *
-     * @example
-     * <pre>
-     * &lt;button onclick="oMcPlayer.setPreviousSong();">previous song&lt;/button>
-     * </pre>
-     * @return {boolean}
-     */
-    setPreviousSong() {
-        if (!this.aPlayorderList || !this.aPlayorderList.length) {
-            return false;
-        }
-        if (this.iPlaylistId > 0) {
-            return this.setSong(this.aPlayorderList[this.iPlaylistId - 1]);
-        }
-        // go to last item ... but no randomize
-        return this.setSong(this.aPlayorderList[this.aPlayorderList.length - 1]);
-    };
-
-    /**
-     * play next song in playlist; if the audio is the last element in the
-     * playlist the playlist will be shuffled (if shuffling is enabled).
-     * It starts the first audio if the playing option "repeat" is enabled.
-     *
-     * @example
-     * <pre>
-     * &lt;button onclick="oMcPlayer.setNextSong();">next song&lt;/button>
-     * </pre>
-     * @return {boolean}
-     */
-    setNextSong() {
-        if (!this.aPL || !this.aPL.length) {
-            return false;
-        }
-        if (this.iPlaylistId < (this.aPlayorderList.length - 1)) {
-            return this.setSong(this.aPlayorderList[this.iPlaylistId + 1]);
-        } else {
-            // if this.cfg.settings.shuffle is active then shuffle again
-            this.#generatePlayorder();
-            // repeat the list
-            if (this.isRepeatlist()) {
-                this.setSong(this.aPlayorderList[(this.isShuffled() ? 1 : 0)]);
-            }
-        }
-    };
-
-    /**
-     * set a (new) song to play based on the position in document.
-     * @see getPlaylist() to get all audios
-     *
-     * @example
-     * <pre>
-     * &lt;a href="#" onclick="oMcPlayer.setSong(0); return false;"&gt;first song&lt;/a&gt;
-     * &lt;a href="#" onclick="oMcPlayer.setSong(1); return false;"&gt;second song&lt;/a&gt;
-     * </pre>
-     *
-     * @param  {int}  sSongId  number of song to play; the first audio tag in the
-     *                         html document has id 0
-     * @return {boolean}
-     */
-    setSong(sSongId) {
-
-        if (!this.aPL[sSongId]) {
-            return false;
-        }
-        if (this.bIsFading) {
-            return false;
-        }
-
-        var s = '';
-        var sChannels = '';
-        var sFirstChannel = false;
-        var sLastChannel = false;
-        var bLastChannelExist = false;
-        var iChannels = 0;
-
-        var source = false;
-        var sourcesrc = false;
-        var oLink = false;
-
-        // stop a current audio
-        // TODO: fade out a song (if it was set)
-        if (this.oAudio) {
-            this.getVolume();
-            this.oAudio.pause();
-            try {
-                this.oAudio.currentTime = 0;
-            } catch (e) {
-            }
-            this.oAudio = false;
-        }
-
-        // destroy current audiosources
-        this.oDivAudios.innerHTML = '';
-
-        // create audioobjects of new sources
-        var audioattributes = '';
-        for (var sChannel in this.aPL[sSongId]["sources"]) {
-            if (this.aPL[sSongId]["sources"][sChannel].length) {
-                if (!sFirstChannel) {
-                    sFirstChannel = sChannel;
-                }
-                if (sLastChannel !== sChannel) {
-
-                    iChannels++;
-                    sChannels += '<li>';
-                    if (this.canPlaySurround()) {
-                        sChannels += '<a href="#" onclick="' + this.name + '.setChannel(\'' + sChannel + '\'); return false;" title="' + this.cfg.aPlayer.buttons.audiochannels.title + ': ' + sChannel + '">' + sChannel + '</a>';
-                    } else {
-                        sChannels += '<a href="#" onclick="return false;" title="' + this.cfg.aPlayer.buttons.audiochannels.noswitch + '">' + sChannel + '</a>';
-                    }
-                    sChannels += '</li>';
-                    sLastChannel = sChannel;
-
-                    if (sChannel === this.sCurrentChannel) {
-                        bLastChannelExist = true;
-                    }
-                }
-
-                s += '<audio id="mcp' + sChannel + '" ' + audioattributes + ' >';
-                for (i = 0; i < this.aPL[sSongId]["sources"][sChannel].length; i++) {
-                    source = this.aPL[sSongId]["sources"][sChannel][i];
-                    // hack for chrome: source must contain a "?"
-                    sourcesrc = String(source.src);
-                    if (sourcesrc.indexOf("?") < 0)
-                        sourcesrc += "?";
-                    s += '<source src="' + sourcesrc + '" type="' + source.type + '">';
-                }
-                s += '</audio>';
-            }
-        }
-        if (iChannels === 1) {
-            // sChannels = '<li>' + sChannel + '</li>';
-            sChannels = '';
-        }
-        document.getElementById("mcpplayeraudios").innerHTML = s;
-        if (sChannels) {
-            sChannels = '<ul>' + sChannels + '</ul>';
-        }
-        document.getElementById("mcpchannels").innerHTML = sChannels;
-        this.iCurrentSong = sSongId;
-        this.#findPlaylistId();
-
-        // update playlist: highlight correct song
-        document.getElementById("mcpplaylist").innerHTML = this.#genPlaylist();
-        document.getElementById("mcpdownloads").innerHTML = this.#genDownloads();
-
-        this.#playerheightSet();
-        var sSonginfos = this.#genSonginfos();
-        document.getElementById("mcpplayersonginfo").innerHTML = sSonginfos;
-        this.#playerheightAdjust();
-
-        // document.getElementById("mcptitle").innerHTML = sSonginfos ? '' : this.getSongTitle();
-        document.getElementById("mcptitle").innerHTML = this.getSongTitle();
-
-        // update links in the document
-        var oAList = document.getElementsByTagName("A");
-        for (var i = 0; i < oAList.length; i++) {
-            oLink = oAList[i];
-            if (oLink.className === "songbtn icon-play songbtnactive") {
-                oLink.className = 'songbtn icon-play';
-            }
-        }
-        var o = document.getElementById('mcpaudioPlay' + sSongId).className += ' songbtnactive';
-
-        // play
-        this.iCurrentTime = false;
-
-        if (bLastChannelExist) {
-            sFirstChannel = this.sCurrentChannel;
-        }
-        this.sCurrentChannel = false;
-        this.setChannel(sFirstChannel);
-        this.playeraction("play", true);
-
-        this.#showInfo((sSongId + 1) + "/ " + this.aPL.length + "<br>&laquo;" + this.aPL[sSongId]["title"] + "&raquo;");
-
-        if (this.cfg.settings.autoopen) {
-            this.maximize();
-        }
-
-        return true;
-    };
-
-    /**
-     * adjust player window after resize by showing other song content or status bar.
-     * in the lower third top property will be decreased by the delta; in the
-     * middle third it will be decreased by the half delta. In the upper delta there
-     * is no change - it means: the window size increases simply downwards
-     * 
-     * @private
-     * @returns {undefined}
-     */
-    #playerheightAdjust() {
-        // remark: by default the position is fixed with css bottom attribute;
-        // without drag and drop it resizes automatically
-        if (typeof addi !== 'undefined' && this.cfg.settings.movable) {
-            // show songinfos with adjusting the client height of player window
-            var o = document.getElementById("mcpwrapper");
-            var iTop = o.style.top.replace('px', '') / 1;
-            var iMidOfWindow = iTop + o.clientHeight / 2;
-            var iHeight = document.documentElement.clientHeight;
-            if (iMidOfWindow > iHeight / 3) {
-                var iHeightDelta = o.clientHeight - this._iHeightPlayerWindow;
-                o.style.top = (iMidOfWindow > 2 * iHeight / 3 ? (iTop - iHeightDelta) : (iTop - iHeightDelta / 2)) + 'px';
-            }
-            this.#playerheightSet();
-        }
-    };
-
-    /**
-     * store height oft player main window; called after initilaizing the player
-     * and in #playerheightAdjust for updates
-     * 
-     * @private
-     * @returns {undefined}
-     */
-    #playerheightSet() {
-        this._iHeightPlayerWindow = document.getElementById("mcpwrapper").clientHeight;
-    };
-
-    // ----------------------------------------------------------------------
-    /**
      * set channels to switch between stereo/ surround
      * @see getAllAudioChannels() to get all valid channels for a song
      *
      * @param  {string}  sChannelId  number of audiochannels; typically one of "2.0" or "5.1"
      * @return {boolean}
      */
-    setChannel(sChannelId) {
+     setChannel(sChannelId) {
 
         var oALI = false;
         var oLI2 = false;
@@ -1745,9 +1945,197 @@ class mcPlayer {
         this.cfg = realMerge(this.cfg, aCfg);
     };
 
+    /**
+     * play next song in playlist; if the audio is the last element in the
+     * playlist the playlist will be shuffled (if shuffling is enabled).
+     * It starts the first audio if the playing option "repeat" is enabled.
+     *
+     * @example
+     * <pre>
+     * &lt;button onclick="oMcPlayer.setNextSong();">next song&lt;/button>
+     * </pre>
+     * @return {boolean}
+     */
+    setNextSong() {
+        if (!this.aPL || !this.aPL.length) {
+            return false;
+        }
+        if (this.iPlaylistId < (this.aPlayorderList.length - 1)) {
+            return this.setSong(this.aPlayorderList[this.iPlaylistId + 1]);
+        } else {
+            // if this.cfg.settings.shuffle is active then shuffle again
+            this.#generatePlayorder();
+            // repeat the list
+            if (this.isRepeatlist()) {
+                this.setSong(this.aPlayorderList[(this.isShuffled() ? 1 : 0)]);
+            }
+        }
+    };
+    /**
+     * start playing the previous song in playlist (if the current audio is
+     * not the first played element)
+     *
+     * @example
+     * <pre>
+     * &lt;button onclick="oMcPlayer.setPreviousSong();">previous song&lt;/button>
+     * </pre>
+     * @return {boolean}
+     */
+     setPreviousSong() {
+        if (!this.aPlayorderList || !this.aPlayorderList.length) {
+            return false;
+        }
+        if (this.iPlaylistId > 0) {
+            return this.setSong(this.aPlayorderList[this.iPlaylistId - 1]);
+        }
+        // go to last item ... but no randomize
+        return this.setSong(this.aPlayorderList[this.aPlayorderList.length - 1]);
+    };
+
+    /**
+     * set a (new) song to play based on the position in document.
+     * @see getPlaylist() to get all audios
+     *
+     * @example
+     * <pre>
+     * &lt;a href="#" onclick="oMcPlayer.setSong(0); return false;"&gt;first song&lt;/a&gt;
+     * &lt;a href="#" onclick="oMcPlayer.setSong(1); return false;"&gt;second song&lt;/a&gt;
+     * </pre>
+     *
+     * @param  {int}  sSongId  number of song to play; the first audio tag in the
+     *                         html document has id 0
+     * @return {boolean}
+     */
+    setSong(sSongId) {
+
+        if (!this.aPL[sSongId]) {
+            return false;
+        }
+        if (this.bIsFading) {
+            return false;
+        }
+
+        var s = '';
+        var sChannels = '';
+        var sFirstChannel = false;
+        var sLastChannel = false;
+        var bLastChannelExist = false;
+        var iChannels = 0;
+
+        var source = false;
+        var sourcesrc = false;
+        var oLink = false;
+
+        // stop a current audio
+        // TODO: fade out a song (if it was set)
+        if (this.oAudio) {
+            this.getVolume();
+            this.oAudio.pause();
+            try {
+                this.oAudio.currentTime = 0;
+            } catch (e) {
+            }
+            this.oAudio = false;
+        }
+
+        // destroy current audiosources
+        this.oDivAudios.innerHTML = '';
+
+        // create audioobjects of new sources
+        var audioattributes = '';
+        for (var sChannel in this.aPL[sSongId]["sources"]) {
+            if (this.aPL[sSongId]["sources"][sChannel].length) {
+                if (!sFirstChannel) {
+                    sFirstChannel = sChannel;
+                }
+                if (sLastChannel !== sChannel) {
+
+                    iChannels++;
+                    sChannels += '<li>';
+                    if (this.canPlaySurround()) {
+                        sChannels += '<a href="#" onclick="' + this.name + '.setChannel(\'' + sChannel + '\'); return false;" title="' + this.cfg.aPlayer.buttons.audiochannels.title + ': ' + sChannel + '">' + sChannel + '</a>';
+                    } else {
+                        sChannels += '<a href="#" onclick="return false;" title="' + this.cfg.aPlayer.buttons.audiochannels.noswitch + '">' + sChannel + '</a>';
+                    }
+                    sChannels += '</li>';
+                    sLastChannel = sChannel;
+
+                    if (sChannel === this.sCurrentChannel) {
+                        bLastChannelExist = true;
+                    }
+                }
+
+                s += '<audio id="mcp' + sChannel + '" ' + audioattributes + ' >';
+                for (i = 0; i < this.aPL[sSongId]["sources"][sChannel].length; i++) {
+                    source = this.aPL[sSongId]["sources"][sChannel][i];
+                    // hack for chrome: source must contain a "?"
+                    sourcesrc = String(source.src);
+                    if (sourcesrc.indexOf("?") < 0)
+                        sourcesrc += "?";
+                    s += '<source src="' + sourcesrc + '" type="' + source.type + '">';
+                }
+                s += '</audio>';
+            }
+        }
+        if (iChannels === 1) {
+            // sChannels = '<li>' + sChannel + '</li>';
+            sChannels = '';
+        }
+        document.getElementById("mcpplayeraudios").innerHTML = s;
+        if (sChannels) {
+            sChannels = '<ul>' + sChannels + '</ul>';
+        }
+        document.getElementById("mcpchannels").innerHTML = sChannels;
+        this.iCurrentSong = sSongId;
+        this.#findPlaylistId();
+
+        // update playlist: highlight correct song
+        document.getElementById("mcpplaylist").innerHTML = this.#genPlaylist();
+        document.getElementById("mcpdownloads").innerHTML = this.#genDownloads();
+
+        this.#playerheightSet();
+        var sSonginfos = this.#genSonginfos();
+        document.getElementById("mcpplayersonginfo").innerHTML = sSonginfos;
+        this.#playerheightAdjust();
+
+        // document.getElementById("mcptitle").innerHTML = sSonginfos ? '' : this.getSongTitle();
+        document.getElementById("mcptitle").innerHTML = this.getSongTitle();
+
+        // update links in the document
+        var oAList = document.getElementsByTagName("A");
+        for (var i = 0; i < oAList.length; i++) {
+            oLink = oAList[i];
+            if (oLink.className === "songbtn icon-play songbtnactive") {
+                oLink.className = 'songbtn icon-play';
+            }
+        }
+        var o = document.getElementById('mcpaudioPlay' + sSongId).className += ' songbtnactive';
+
+        // play
+        this.iCurrentTime = false;
+
+        if (bLastChannelExist) {
+            sFirstChannel = this.sCurrentChannel;
+        }
+        this.sCurrentChannel = false;
+        this.setChannel(sFirstChannel);
+        this.playeraction("play", true);
+
+        this.#showInfo((sSongId + 1) + "/ " + this.aPL.length + "<br>&laquo;" + this.aPL[sSongId]["title"] + "&raquo;");
+
+        if (this.cfg.settings.autoopen) {
+            this.maximize();
+        }
+
+        return true;
+    };
+
+    // ----------------------------------------------------------------------
+
     // ----------------------------------------------------------------------
     /**
      * set volume; it works only if a song is playing
+     * 
      * @example
      * <pre>
      * &lt;button onclick="oMcPlayer.setVolume(0.75)">75%&lt;/button>
@@ -1767,356 +2155,104 @@ class mcPlayer {
         return false;
     };
 
-    /**
-     * wait for other audio until it reaches the given timestamp
-     * @private
-     * @param  {audio_object} oAudio       audioobject
-     * @param  {integer}      iStartTime   timestamp where to start the audio
-     */
-    #wait4Audio(oAudio, iStartTime) {
-
-        oAudio.volume = 0.001;
-        oAudio.play();
-
-        if (iStartTime) {
-            oAudio.currentTime = iStartTime;
-        }
-        return true;
-    };
 
     /**
-     * fade an audio in or out to a given final volume
-     * @param  {float}    finalVolume     final volume (0 = muted or 1 = max)
-     * @param  {string}   sChannelId      number of audio ... one of "2.0" | "5.1"
+     * toggle visibility of a box (download, playlist, about)
+     * 
+     * @param {string}   sBaseId   sBaseId of the div and the button; one of download|playlist|about
+     * @param {string}   sMode     optional: force action; one of minimize|maximize; default behaviuor is toggle
+     * @param {boolean}  bFast     flag to override speed in css transistion
      * @return {boolean}
      */
-    fade(finalVolume, sChannelId) {
+     toggleBoxAndButton(sBaseId, sMode, bFast) {
+        var oDiv = this.#togglehelperGetDiv(sBaseId);
 
-        this.bIsFading = true;
-        var o = document.getElementById("mcp" + sChannelId);
-        if (!o) {
-            return false;
+        var oBtn = document.getElementById('mcpopt' + sBaseId);
+        if (!sMode) {
+            sMode = (oBtn.className.indexOf('active') < 0 ? 'maximize' : 'minimize');
         }
-        var iVol = o.volume;
-        var iInc = (finalVolume < iVol ? -this.iVolInc : this.iVolInc);
 
-        iVol += iInc;
-        if ((finalVolume === 0 && iVol > 0) || (finalVolume > 0 && iVol < finalVolume)) {
-            o.volume = iVol;
-            window.setTimeout(this.name + ".fade(" + finalVolume + ", \'" + sChannelId + "\')", this.iTimer);
-        } else {
-            this.bIsFading = false;
-            o.volume = finalVolume;
-            if (iVol <= 0) {
-                o.pause();
+        if (oDiv) {
+            // set a transition duration of "0s" sets it into the style and
+            // overrides delay from css; using bFast flag on startup removes
+            // the flickering on page load
+            oDiv.style['transition-duration'] = bFast ? '0s' : '';
+        }
+
+        if (sMode === 'minimize') {
+            if (oDiv) {
+                oDiv.style.top = (document.documentElement.clientHeight + this._iMinDelta) + 'px';
+                oDiv.style.opacity = 0.1;
+            }
+            if (oBtn) {
+                oBtn.className = '';
+            }
+        } else if (sMode === 'maximize') {
+            if (oDiv) {
+                // oDiv.className += ' visible';
+                oDiv.setAttribute('style', '');
+                oDiv.style.opacity = 1;
+                if (typeof addi !== 'undefined') {
+                    addi.load(oDiv);
+                }
+            }
+            if (oBtn) {
+                oBtn.className = 'active';
             }
         }
         return true;
     };
 
-    /**
-     * fadeout an audio
-     * @private
-     * @param  {string}   sChannelId      number of audio ... one of "2.0" | "5.1"
-     * @return {boolean}
-     */
-    #fadeOut(sChannelId) {
-        this.fade(0, sChannelId);
-    };
-
-
-
-    // --------------------------------------------------------------------------------
-    // GETTER
-    // --------------------------------------------------------------------------------
     // ----------------------------------------------------------------------
     /**
-     * get current count of channels of the current song
-     * you typically get "2.0" for stereo or "5.1" for surround
-     *
-     * @see getAllAudioChannels() to get the available channels of a song
-     *
-     * @return {string}
+     * toggle playing option repeat playlist
+     * 
+     * @returns {undefined}
      */
-    getAudioChannels() {
-        return this.sCurrentChannel;
-    };
-
-    /**
-     * get an array of valid channels of the current song; if no song is active
-     * it returns false.
-     *
-     * @return {array}
-     */
-    getAllAudioChannels() {
-        var oSong = this.getSong();
-        if (!oSong) {
-            return false;
+    toggleRepeat() {
+        if (this.isRepeatlist()) {
+            return this.disableRepeat();
+        } else {
+            return this.enableRepeat();
         }
-        var aReturn = [];
-        for (var sChannel in oSong['sources']) {
-            aReturn.push(sChannel);
+    };
+
+    // ----------------------------------------------------------------------
+    /**
+     * toggle playing option shuffle playlist
+     * 
+     * @returns {undefined}
+     */
+    toggleShuffle() {
+        if (this.isShuffled()) {
+            return this.disableShuffle();
+        } else {
+            return this.enableShuffle();
         }
-        return aReturn;
     };
 
+    // ----------------------------------------------------------------------
+
     /**
-     * get duration in [sec] of the current song
-     * @return {float}
+     * toggle playing option shuffle playlist
+     * 
+     * @since v0.33
+     * @returns {boolean}
      */
-    getAudioDuration() {
-        if (!this.sCurrentChannel) {
-            return false;
+    toggleStatusbar() {
+        if (this.isVisibleStatusbar()) {
+            return this.disableStatusbar();
+        } else {
+            return this.enableStatusbar();
         }
-        return this.oAudio.duration;
     };
 
-    /**
-     * get network state of current audio (i.e. loading / idle)
-     * https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/networkState
-     * @returns {Integer|false}
-     */
-    getAudioNetworkstate() {
-        var oAudioTmp = this.oAudio ? this.oAudio : document.getElementById("mcp" + this.getAudioChannels());
-        return oAudioTmp ? oAudioTmp.networkState : false;
-    };
 
-    /**
-     * get position in [sec] of the current song
-     * @return {float}
-     */
-    getAudioPosition() {
-        if (!this.sCurrentChannel) {
-            return false;
-        }
-        return this.oAudio.currentTime;
-    };
-
-    /**
-     * get document state of current audio
-     * https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/readyState
-     * @returns {Integer|false}
-     */
-    getAudioReadystate() {
-        var oAudioTmp = this.oAudio ? this.oAudio : document.getElementById("mcp" + this.getAudioChannels());
-        return oAudioTmp ? oAudioTmp.readyState : false;
-    };
-
-    /**
-     * get used source url of the current song
-     * @return {float}
-     */
-    getAudioSrc() {
-        if (!this.sCurrentChannel) {
-            return false;
-        }
-        return this.oAudio.currentSrc;
-    };
-
-    /**
-     * get current volume (a value between 0..1)
-     * @return {float}
-     */
-    getVolume() {
-        if (this.oAudio) {
-            this.cfg.settings.volume = this.oAudio.volume;
-            return this.cfg.settings.volume;
-        }
-        return false;
-    };
-
-    /**
-     * get playlist with all songtitles and its sources
-     * @return {array}
-     */
-    getPlaylist() {
-        return (!this.aPL || !this.aPL.length) ? false : this.aPL;
-    };
-
-    /**
-     * get playlist with all songtitles and its sources
-     * @return {array}
-     */
-    getPlaylistCount() {
-        return (this.aPL ? this.aPL.length : false);
-    };
-
-    /**
-     * get playlist with all songtitles and its sources
-     * @return {array}
-     */
-    getPlayorder() {
-        return this.aPlayorderList;
-    };
-
-    /**
-     * get current song; you get an array with the song title and
-     * all its audio sources and mime types
-     * @return {array}
-     */
-    getSong() {
-        if (!this.aPL || !this.aPL.length) {
-            return false;
-        }
-        return this.aPL[this.iCurrentSong];
-    };
-
-    /**
-     * get id of the currently active song; first song starts with 0;
-     * value -1 means player did not start to play yet.
-     * @returns {Number}
-     */
-    getSongId() {
-        return this.iCurrentSong;
-    };
-
-    /**
-     * get array element of the currently active song
-     * @private
-     * @param  {string}   sKey   key of song item; one of title|artist|album|year|image
-     * @returns {string}
-     */
-    _getSongItem(sKey) {
-        var oSong = this.getSong();
-        return oSong ? oSong[sKey] : false;
-    };
-
-    /**
-     * get title of the currently active song
-     * @returns {string}
-     */
-    getSongTitle() {
-        return this._getSongItem('title');
-    };
-
-    /**
-     * get artist of the currently active song
-     * @returns {string}
-     */
-    getSongArtist() {
-        return this._getSongItem('artist');
-    };
-
-    /**
-     * get album of the currently active song
-     * @returns {string}
-     */
-    getSongAlbum() {
-        return this._getSongItem('album');
-    };
-
-    /**
-     * get publishing year of the currently active song
-     * @returns {string}
-     */
-    getSongYear() {
-        return this._getSongItem('year');
-    };
-
-    /**
-     * get publishing year of the currently active song
-     * @returns {string}
-     */
-    getSongImage() {
-        return this._getSongItem('image');
-    };
-
-    /**
-     * get publishing year of the currently active song
-     * @returns {string}
-     */
-    getSongGenre() {
-        return this._getSongItem('genre');
-    };
-
-    /**
-     * get publishing year of the currently active song
-     * @returns {string}
-     */
-    getSongBpm() {
-        return this._getSongItem('bpm');
-    };
-
-    /**
-     * get url for the song i.e. where to buy it
-     * @returns {string}
-     */
-    getSongUrl() {
-        return this._getSongItem('url');
-    };
-
-    /**
-     * get id of the currently active song in the playlist (if shuffled)
-     * @see getSongId() to get the song based on position in document
-     *
-     * @returns {Number}
-     */
-    getPlaylistId() {
-        return this.iPlaylistId;
-    };
-
-    /**
-     * get boolean value - volume is muted?
-     * @returns {Boolean}
-     */
-    isMuted() {
-        return (this.oAudio && (this.oAudio.muted || !this.oAudio.volume));
-    };
-
-    /**
-     * get boolean value - playing audio is paused?
-     * @returns {Boolean}
-     */
-    isPaused() {
-        return (this.oAudio && this.oAudio.paused && this.oAudio.currentTime !== 0);
-    };
-    /**
-     * get boolean value - audio is playing? It returns true if audio is
-     * playing and false if paused or stopped.
-     * @returns {Boolean}
-     */
-    isPlaying() {
-        return (this.oAudio && !this.oAudio.paused);
-    };
-    /**
-     * get boolean value - is shuffling mode on?
-     * @returns {Boolean}
-     */
-    isRepeatlist() {
-        return (this.cfg.settings.repeatlist
-            ? !!this.cfg.settings.repeatlist
-            : false);
-    };
-    /**
-     * get boolean value - is shuffling mode on?
-     * @returns {Boolean}
-     */
-    isShuffled() {
-        return (this.cfg.settings.shuffle
-            ? this.cfg.settings.shuffle
-            : false);
-    };
-    /**
-     * get boolean value - playing audio is stopped
-     * @returns {Boolean}
-     */
-    isStopped() {
-        return (!this.oAudio || this.oAudio.currentTime === 0);
-    };
-    /**
-     * get boolean value - is the curemt played audio a stream?
-     * remark: it is detected by audio.duration == Infinity (Chrome)
-     * or count of durationchange events (used in Firefox)
-     * @since 0.33
-     * @returns {Boolean}
-     */
-    isStream() {
-        return (this.oAudio && this.oAudio.isStream);
-    };
 
     // ----------------------------------------------------------------------
     /**
      * update window positions if the browser is resized.
+     * 
      * @returns {undefined}
      */
     updateOnResize() {
@@ -2164,6 +2300,7 @@ class mcPlayer {
      * get boolean value - is the curemt played audio a stream?
      * remark: it is detected by audio.duration == Infinity (Chrome)
      * or count of durationchange events (used in Firefox)
+     * 
      * @since 0.33
      * @returns {Boolean}
      */
@@ -2182,58 +2319,7 @@ class mcPlayer {
     };
 
     // ----------------------------------------------------------------------
-    /**
-     * internal helper function - called in init()
-     * it detects the name of the ocject variable that initialized the player
-     * i.e. on var oMcPlayer=new mcPlayer();
-     * it returns "oMcPlayer"
-     *
-     * @private
-     * @returns {string}
-     */
-    #getName() {
-        // search through the global object for a name that resolves to this object
-        for (var name in this.global) {
-            if (this.global[name] === this) {
-                return this.#setName(name);
-            }
-        }
-    };
 
-    /**
-     * internal helper function - called in getName()
-     * set internal varible
-     * @private
-     * @param {string} sName  name of the player object
-     * @returns {string}
-     */
-    #setName(sName) {
-        this.name = sName;
-        return this.name;
-    };
-
-    // ----------------------------------------------------------------------
-    // init
-    // ----------------------------------------------------------------------
-    /**
-     * initialize player
-     * @param {string} sContainerId  id of a div where to put the player. if false player will be added to body
-     * @return {boolean}
-     */
-     init(sContainerId) {
-        this._sContainerId=sContainerId;
-        this.#getName();            // detect name of the object variable that initialized the player
-        this.#generatePlaylist();   // scan audios on webpage
-        this.#initHtml();           // generate html for the player        
-        if (typeof addi !== 'undefined') {
-            addi.init();
-        }
-        this.minimizeBox('about', true);
-        this.minimizeBox('download', true);
-        this.minimizeBox('playlist', true);
-        window.setInterval(this.name + ".updateStatus()", 500);
-        return true;
-    };
 
 }
 
@@ -2246,6 +2332,7 @@ mcPlayer.prototype.global = this; // required for getName()
 
 /**
  * merge 2 objects
+ * @private
  * @param  to    assoc array 1
  * @param  from  assoc array 2
  */
