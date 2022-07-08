@@ -6,30 +6,35 @@
  *   (named "draggable" by default - but you can use any other name)
  * 
  * @author    Axel Hahn
- * @version   0.03
+ * @version   0.04
  *
  * @this addi
  * 
  * @example
- * // make all divs with class "draggable" be movable on screen
+ * <code>
+ * // make all divs with class "draggable" be movable on screen<br>
  * addi.init();
+ * </code>
  * 
  * @constructor
  * @return nothing
  */
 
-// global value: highest z-index of related divs
-var _addi_zIndex=100;
 
 var addi = function(){
 
-    
     return {
         _saveData: [],
         _dragClass: 'draggable',
+
+        // opacity value during dragging
         _dragOpacity: 0.8,
+
+        // last z-index value of last activated div 
+        _addi_zIndex: 100,
         
-        oFence: {
+         // fixed rectangle earea whe a div can be moved
+         oFence: {
             bFullscreen: true,
             top: 0,
             left: 0,
@@ -49,7 +54,7 @@ var addi = function(){
          * @param {string} sClass  optional: class of draggable elements; default: "draggable"
          * @returns {undefined}
          */
-        init : function(sClass){
+        init: function(sClass){
             if(sClass){
                 this._dragClass=sClass;
             }
@@ -120,6 +125,21 @@ var addi = function(){
             return 'addi.saveddiv-'+s;
         },
         /**
+         * save position of the given dom object
+         * 
+         * @private
+         * @param {object} oDiv2Drag  movable object
+         * @returns {undefined}
+         */
+         _save : function(oDiv2Drag){
+            aData={
+                left: oDiv2Drag.style.left.replace('px',''),
+                top:  oDiv2Drag.style.top.replace('px','')
+            };
+            localStorage.setItem(this._getVarname(oDiv2Drag.id),JSON.stringify(aData));
+        },
+
+        /**
          * helper: save attributes in a variable: transition
          * it is used for dragging: a transition slows down all movements
          * @see _styleRestore()
@@ -159,6 +179,7 @@ var addi = function(){
          * helper: update size of this.oFence if it is set to fullscreen in 
          * case of resizing of the browser window
          * 
+         * @private
          * @returns {undefined}
          */
         _updateFence : function(){
@@ -182,7 +203,8 @@ var addi = function(){
          * - add listener and 
          * - restore last saved position (if class "saveposition" exists)
          * 
-         * @param {object} oDiv2Drag  movable object
+         * @param {object} oDiv2Drag   movable object
+         * @param {object} oDiv2Click  optional: clickable object
          * @returns {undefined}
          */
         initDiv: function(oDiv2Drag,oDiv2Click){
@@ -214,15 +236,15 @@ var addi = function(){
          * @param {object} oDiv2Drag  movable object
          * @returns {Array|Object|Boolean}
          */
-        load : function(oDiv2Drag){
+         load : function(oDiv2Drag){
             var id=this._getVarname(oDiv2Drag.id);
 
             // detect the highest z-index
             var aStyles = oDiv2Drag.currentStyle || window.getComputedStyle(oDiv2Drag);
             if(aStyles.zIndex && aStyles.zIndex>0){
-                _addi_zIndex=Math.max(parseInt(aStyles.zIndex), _addi_zIndex);
+                this._addi_zIndex=Math.max(parseInt(aStyles.zIndex), this._addi_zIndex);
             }
-            oDiv2Drag.style.zIndex=_addi_zIndex++;
+            oDiv2Drag.style.zIndex=this._addi_zIndex++;
 
             var aData=localStorage.getItem(id) ? JSON.parse(localStorage.getItem(id)) : false;
             if(aData && aData.left && aData.top){
@@ -232,7 +254,7 @@ var addi = function(){
         },
         /**
          * move obj to new position and store position in localstorage
-         * called from startMoving() and _load()
+         * called from startMoving() and load()
          * 
          * @param {object} oDiv2Drag  movable object
          * @param {integer} xpos      position x
@@ -246,21 +268,8 @@ var addi = function(){
             var aPos=bNoFix ? { 'xpos':xpos, 'ypos':ypos } : this._fixVisiblePosition(oDiv2Drag,xpos,ypos);
             oDiv2Drag.style.left = aPos['xpos'] + 'px';
             oDiv2Drag.style.top = aPos['ypos'] + 'px';            
-            this.save(oDiv2Drag);
+            this._save(oDiv2Drag);
             return true;
-        },
-        /**
-         * save position of the given dom object
-         * 
-         * @param {object} oDiv2Drag  movable object
-         * @returns {undefined}
-         */
-        save : function(oDiv2Drag){
-            aData={
-                left: oDiv2Drag.style.left.replace('px',''),
-                top:  oDiv2Drag.style.top.replace('px','')
-            };
-            localStorage.setItem(this._getVarname(oDiv2Drag.id),JSON.stringify(aData));
         },
 
         /**
@@ -290,7 +299,7 @@ var addi = function(){
             iDivHeight = parseInt(oDiv2Drag.style.height);
 
             oDiv2Drag.style.cursor='move';
-            oDiv2Drag.style.zIndex=_addi_zIndex++;
+            oDiv2Drag.style.zIndex=this._addi_zIndex++;
             
             iDivLeft = oDiv2Drag.style.left ? oDiv2Drag.style.left.replace('px','') : oDiv2Drag.offsetLeft;
             iDivTop  = oDiv2Drag.style.top? oDiv2Drag.style.top.replace('px','')  : oDiv2Drag.offsetTop;
@@ -329,11 +338,12 @@ var addi = function(){
         },
         /**
          * reset style, onmousedown, onmouseup to make divs unmovable
+         * 
          * @param {string} sClass  optional: class of draggable elements; default: "draggable"
          * @param {bool}   bRemoveLocalstorage  flag: remove saved local variable too
          * @returns {undefined}
          */
-        reset : function(sClass,bRemoveLocalstorage){
+        XXreset : function(sClass,bRemoveLocalstorage){
             if(!sClass){
                 sClass=this._dragClass;
             }
@@ -341,17 +351,19 @@ var addi = function(){
             var oList = document.getElementsByClassName(sClass);
             if(oList && oList.length){
                 for (var i = 0; i < oList.length; i++) {
-                    this.resetDiv(oList[i],bRemoveLocalstorage);
+                    this._resetDiv(oList[i],bRemoveLocalstorage);
                 }
             }
         },
         /**
          * reset a single div and make it unmovable
+         * 
+         * @private
          * @param {object} oDiv2Drag            movable object 
          * @param {bool}   bRemoveLocalstorage  flag: remove saved local variable too
          * @returns {undefined}
          */
-        resetDiv : function(oDiv2Drag, bRemoveLocalstorage){
+        _resetDiv : function(oDiv2Drag, bRemoveLocalstorage){
             oDiv2Drag.onmousemove = null;
             oDiv2Drag.onmouseup = null;
             oDiv2Drag.onmousedown = null;
