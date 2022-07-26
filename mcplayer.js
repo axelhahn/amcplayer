@@ -69,7 +69,7 @@ class mcPlayer {
     // ----------------------------------------------------------------------
     cfg = {
         about: {
-            version: '1.04-dev',
+            version: '1.04',
             label: 'AMC Player',
             description: '<strong>A</strong>xels <strong>M</strong>ulti <strong>C</strong>hannel <strong>Player</strong>.<br>This is a webbased HTML5 audio player.<br>It\'s focus is the handling of media in stereo and surround for a title.',
             labeldownload: 'Download:<br>',
