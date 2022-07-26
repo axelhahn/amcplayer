@@ -6,7 +6,7 @@
  *   (named "draggable" by default - but you can use any other name)
  * 
  * @author    Axel Hahn
- * @version   0.04
+ * @version   1.0
  *
  * @this addi
  * 
@@ -24,9 +24,7 @@ var addi = function(){
     return {
         _saveData: [],
         _dragClass: 'draggable',
-
-        // opacity value during dragging
-        _dragOpacity: 0.8,
+        _draggingClass: 'isdragging',
 
         // last z-index value of last activated div 
         _addi_zIndex: 100,
@@ -82,7 +80,7 @@ var addi = function(){
             
             this._updateFence(oDiv2Drag.style.paddingLeft);
             var aStyles = window.getComputedStyle(oDiv2Drag);
-            
+
             var divDeltaX=0
                 + parseInt(aStyles.borderLeftWidth)
                 + parseInt(aStyles.borderRightWidth)
@@ -90,21 +88,24 @@ var addi = function(){
                 + parseInt(aStyles.marginRight)
                 + parseInt(aStyles.paddingLeft)
                 + parseInt(aStyles.paddingRight)
+                - (window.innerWidth - document.documentElement.clientWidth) // scrollbar
                 ;
             var divDeltaY=0
                 + parseInt(aStyles.borderTopWidth)
                 + parseInt(aStyles.borderBottomWidth)
                 + parseInt(aStyles.marginTop)
                 + parseInt(aStyles.marginBottom)
-                + parseInt(aStyles.paddingTop)
-                + parseInt(aStyles.paddingBottom)
+                // + parseInt(aStyles.paddingTop)
+                //+ parseInt(aStyles.paddingBottom)
                 ;
 
             xpos=Math.max(this.oFence.left,xpos);
-            xpos=Math.min(this.oFence.left+this.oFence.width-oDiv2Drag.clientWidth-divDeltaX ,xpos);
-            
+            xpos=Math.min(this.oFence.left+this.oFence.width-oDiv2Drag.clientWidth-divDeltaX,xpos);
+
             ypos=Math.max(this.oFence.top,ypos);
-            ypos=Math.min(this.oFence.top+this.oFence.height-oDiv2Drag.clientHeight-divDeltaY ,ypos);
+            if (aStyles.position==='fixed') {                
+                ypos=Math.min(this.oFence.top+this.oFence.height-oDiv2Drag.clientHeight-divDeltaY,ypos);
+            }
             
             return {
                 xpos: xpos,
@@ -191,6 +192,21 @@ var addi = function(){
                 };
             };
         },
+
+        /**
+         * generate an id for a draggable div that has no id yet
+         * 
+         * @private
+         * @returns {string}
+         */
+        _generateId(){
+            var sPrefix='generatedId-';
+            var iCount=1;
+            while (document.getElementById(sPrefix+iCount)){
+                iCount++;
+            }
+            return sPrefix+iCount;
+        },
         
         // ------------------------------------------------------------
         // public functions
@@ -208,9 +224,18 @@ var addi = function(){
         initDiv(oDiv2Drag,oDiv2Click){
             var sDivId=oDiv2Drag.id;
             if(!sDivId){
-                // oDiv2Drag.id=''
-                return false;
+                sDivId=this._generateId();
+                oDiv2Drag.id=sDivId;
             }
+
+            // force position: fixed
+            var aStyles = oDiv2Drag.currentStyle || window.getComputedStyle(oDiv2Drag);
+
+            console.log(oDiv2Drag.id + ' position: ' + aStyles.position);
+            if(!aStyles.position || aStyles.position=='static'  /* || aStyles.position!='fixed' */){
+                // oDiv2Drag.style.position='fixed';
+            }
+
             // add events
             // using atributes instead of addEventListener
             o=(oDiv2Click ? oDiv2Click : oDiv2Drag);
@@ -289,6 +314,11 @@ var addi = function(){
             // save some styles
             this._styleSave(oDiv2Drag);
 
+
+            if(oDiv2Drag.className.indexOf(this._draggingClass)<0){
+                oDiv2Drag.className+= ' '+this._draggingClass;
+            }
+
             // for FF only:
             // if (navigator.appCodeName==='Mozilla' && navigator.userAgent.indexOf('Firefox/')>0){
             document.body.style.userSelect='none';
@@ -309,7 +339,6 @@ var addi = function(){
                     posY = evt.clientY,
                     aX = posX - diffX,
                     aY = posY - diffY;
-                oDiv2Drag.style.opacity=addi._dragOpacity;
                 addi.move(oDiv2Drag,aX,aY);
             };
             return true;
@@ -324,29 +353,36 @@ var addi = function(){
             oDiv2Drag.style.cursor='default';
             // retore styles
             this._styleRestore(oDiv2Drag);
-
-            // for FF only:
-            // if (navigator.appCodeName==='Mozilla' && navigator.userAgent.indexOf('Firefox/')>0){
             document.body.style.userSelect='auto';
-            oDiv2Drag.style.opacity=1;
-            // oDiv2Drag.style.transition=this._saveData[oDiv2Drag.id].transition;
-            // this._saveData[oDiv2Drag.id]=false;
+            oDiv2Drag.className=oDiv2Drag.className.replace(' '+this._draggingClass, '');
+            oDiv2Drag.className=oDiv2Drag.className.replace(this._draggingClass, '');
             
             document.onmousemove = function(){};
         },
         /**
-         * reset style, onmousedown, onmouseup to make divs unmovable
+         * reset position 
          * 
-         * @param {string} sClass  optional: class of draggable elements; default: "draggable"
          * @param {bool}   bRemoveLocalstorage  flag: remove saved local variable too
          * @returns {undefined}
          */
-        reset(sClass,bRemoveLocalstorage){
-            if(!sClass){
-                sClass=this._dragClass;
+         resetPos(){
+            var oList = document.getElementsByClassName(this._dragClass);
+            if(oList && oList.length){
+                for (var i = 0; i < oList.length; i++) {
+                    oList[i].style = '';
+                    this._save(oList[i]);
+                }
             }
+        },
+        /**
+         * reset style, onmousedown, onmouseup to make divs unmovable again
+         * 
+         * @param {bool}   bRemoveLocalstorage  flag: remove saved local variable too
+         * @returns {undefined}
+         */
+        reset(bRemoveLocalstorage){
             // scan all elements with class draggable and reset
-            var oList = document.getElementsByClassName(sClass);
+            var oList = document.getElementsByClassName(this._dragClass);
             if(oList && oList.length){
                 for (var i = 0; i < oList.length; i++) {
                     this._resetDiv(oList[i],bRemoveLocalstorage);
@@ -365,10 +401,9 @@ var addi = function(){
             oDiv2Drag.onmousemove = null;
             oDiv2Drag.onmouseup = null;
             oDiv2Drag.onmousedown = null;
-            // FF only
-            // oDiv2Drag.removeAttribute('draggable');
+            oDiv2Drag.style = '';
             if(bRemoveLocalstorage){
-                localStorage.delItem(this._getVarname(oDiv2Drag.id));
+                localStorage.removeItem(this._getVarname(oDiv2Drag.id));
             }
         }
     };
