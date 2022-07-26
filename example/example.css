@@ -1,4 +1,4 @@
-body{background:#fff; border: 2px solid #cde; box-shadow: 0 0 5em #cde; color:#666; font-family:"verdana","arial"; margin: 2em 10% 10em; padding: 1em;}
+body{background:#fff; /*border: 2px solid #cde; */ box-shadow: 0 0 5em #f0f4f8; color:#666; font-family:"verdana","arial"; margin: 2em 10% 10em; padding: 1em;}
 a{color:#339;}
 button{background:#f8f8f8; border-radius: 0.3em; border: 1px solid #ccc; padding: 0.3em 1em;}
 button:hover{background:#ccc; }
