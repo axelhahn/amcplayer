@@ -231,7 +231,7 @@ var addi = function(){
             // force position: fixed
             var aStyles = oDiv2Drag.currentStyle || window.getComputedStyle(oDiv2Drag);
 
-            console.log(oDiv2Drag.id + ' position: ' + aStyles.position);
+            // console.log(oDiv2Drag.id + ' position: ' + aStyles.position);
             if(!aStyles.position || aStyles.position=='static'  /* || aStyles.position!='fixed' */){
                 // oDiv2Drag.style.position='fixed';
             }
